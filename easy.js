@@ -1,17 +1,6 @@
-/* ═══════════════════════════════════════════════
-   APEX — APTITUDE QUESTIONS (Quantitative & Reasoning)
-   🟢 Tier 1 (55 Qs) · 🟡 Tier 2 (55 Qs) · 🔴 Tier 3 (55 Qs)
-   Topics: Number Series · Percentages · Profit & Loss
-           Ratio · Averages · SI/CI · Time & Work
-           TSD · Clocks · Coding-Decoding · Blood Relations
-           Syllogisms · DI · Verbal Reasoning & more
-═══════════════════════════════════════════════ */
+
 
 const EASY_QUESTIONS = {
-  /* ╔══════════════════════════════════════╗
-   ║     TIER 1 — BASIC (ELIMINATION)     ║
-   ║  55 Questions · Core Fundamentals    ║
-   ╚══════════════════════════════════════╝ */
   tier1: [
     /* ─────────────────────────────
    Q1 — Number Series
