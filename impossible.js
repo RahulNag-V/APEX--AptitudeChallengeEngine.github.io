@@ -1,8 +1,4 @@
-/* ═══════════════════════════════════════════════
-   APEX — IMPOSSIBLE MODE QUESTIONS
-   💀 Brutal · 15s per question · No mercy
-   Tier 1 = Hard. Tier 2 = Ruthless. Tier 3 = Legendary.
-═══════════════════════════════════════════════ */
+
 const IMPOSSIBLE_QUESTIONS = {
   tier1: [
     {
