@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>APEX — Welcome</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      /* ══════════════════════════════════
+         DESIGN TOKENS (mirrors style.css)
+      ══════════════════════════════════ */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #f4f6fb;
+        --bg2: #eef0f7;
+        --surface: #ffffff;
+        --surface2: #f0f2fa;
+        --border: #e2e6f0;
+        --border-hi: #c8cfe4;
+        --text: #1a1d2e;
+        --text2: #4a5068;
+        --muted: #8890aa;
+        --shadow: rgba(30,40,80,0.10);
+        --shadow-lg: rgba(30,40,80,0.18);
+        --accent: #6c63ff;
+        --accent2: #8b85ff;
+        --accent-glow: rgba(108,99,255,0.18);
+        --accent-soft: rgba(108,99,255,0.08);
+        --green: #22c55e;
+        --font-display: "Outfit", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+        --radius: 10px;
+        --radius-lg: 16px;
+        --radius-pill: 100px;
+        --transition: 0.22s cubic-bezier(0.22,1,0.36,1);
+      }
+
+      [data-theme="dark"] {
+        --bg: #0f1020;
+        --bg2: #151728;
+        --surface: #1c1f35;
+        --surface2: #222540;
+        --border: #2a2e4a;
+        --border-hi: #3d4268;
+        --text: #e8eaf6;
+        --text2: #9fa3c8;
+        --muted: #5a6088;
+        --shadow: rgba(0,0,0,0.35);
+        --shadow-lg: rgba(0,0,0,0.55);
+      }
+
+      /* ══════════════════════════════════
+         BODY & LAYOUT
+      ══════════════════════════════════ */
+      html, body {
+        height: 100%;
+        font-family: var(--font-display);
+        background: var(--bg);
+        color: var(--text);
+        transition: background var(--transition), color var(--transition);
+        overflow: hidden;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* ── Animated background grid ── */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 48px 48px;
+        opacity: 0.45;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── Glowing blobs ── */
+      .blob {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+        animation: blobFloat 8s ease-in-out infinite alternate;
+      }
+      .blob-1 {
+        width: 420px; height: 420px;
+        background: var(--accent-glow);
+        top: -120px; left: -100px;
+        animation-delay: 0s;
+      }
+      .blob-2 {
+        width: 300px; height: 300px;
+        background: rgba(34,197,94,0.12);
+        bottom: -80px; right: -60px;
+        animation-delay: 3s;
+      }
+      .blob-3 {
+        width: 220px; height: 220px;
+        background: rgba(251,191,36,0.10);
+        top: 40%; left: 60%;
+        animation-delay: 5s;
+      }
+      @keyframes blobFloat {
+        from { transform: translate(0,0) scale(1); }
+        to   { transform: translate(20px, 30px) scale(1.08); }
+      }
+
+      /* ══════════════════════════════════
+         CARD
+      ══════════════════════════════════ */
+      .login-card {
+        position: relative;
+        z-index: 1;
+        width: min(460px, calc(100vw - 32px));
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 22px;
+        box-shadow: 0 8px 48px var(--shadow-lg), 0 2px 12px var(--shadow);
+        padding: 40px 40px 36px;
+        animation: cardIn 0.55s cubic-bezier(0.22,1,0.36,1) both;
+      }
+      @keyframes cardIn {
+        from { opacity: 0; transform: translateY(28px) scale(0.97); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      /* ── Header ── */
+      .login-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .apex-wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+
+      .apex-icon {
+        width: 44px; height: 44px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: -1px;
+        box-shadow: 0 4px 14px var(--accent-glow);
+        flex-shrink: 0;
+      }
+
+      .apex-title {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: -1.2px;
+        color: var(--text);
+        line-height: 1;
+      }
+
+      .apex-sub {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        margin-top: 6px;
+      }
+
+      /* ── Avatar preview ── */
+      .avatar-preview-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 28px;
+        gap: 4px;
+      }
+
+      .avatar-preview {
+        width: 72px; height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 800;
+        color: #fff;
+        box-shadow: 0 4px 18px var(--accent-glow);
+        transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+        font-family: var(--font-display);
+        position: relative;
+        overflow: hidden;
+        letter-spacing: -1px;
+      }
+
+      .avatar-preview::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255,255,255,0.25);
+      }
+
+      .avatar-name-preview {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        transition: all 0.2s;
+        min-height: 22px;
+        text-align: center;
+      }
+
+      .avatar-prof-preview {
+        font-size: 11.5px;
+        color: var(--muted);
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        min-height: 18px;
+        text-align: center;
+        transition: all 0.2s;
+        font-family: var(--font-mono);
+      }
+
+      /* ── Form ── */
+      .form-row {
+        display: flex;
+        gap: 12px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 11px 14px;
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        background: var(--bg2);
+        color: var(--text);
+        font-family: var(--font-display);
+        font-size: 14.5px;
+        font-weight: 500;
+        outline: none;
+        transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+        -webkit-appearance: none;
+      }
+
+      .form-input:focus {
+        border-color: var(--accent);
+        background: var(--surface);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+      }
+
+      .form-input::placeholder {
+        color: var(--muted);
+        font-weight: 400;
+      }
+
+      .form-input.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239,68,68,0.10);
+        animation: inputShake 0.35s ease;
+      }
+
+      @keyframes inputShake {
+        0%,100% { transform: translateX(0); }
+        20%      { transform: translateX(-5px); }
+        60%      { transform: translateX(5px); }
+        80%      { transform: translateX(-3px); }
+      }
+
+      /* ── Divider ── */
+      .form-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 4px 0 16px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .form-divider::before, .form-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* ── CTA Button ── */
+      .btn-start {
+        width: 100%;
+        padding: 14px;
+        border-radius: var(--radius);
+        border: none;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        font-family: var(--font-display);
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        cursor: pointer;
+        transition: all var(--transition);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 18px var(--accent-glow);
+        margin-top: 4px;
+      }
+
+      .btn-start::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 60%);
+        pointer-events: none;
+      }
+
+      .btn-start:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px var(--accent-glow);
+      }
+
+      .btn-start:active {
+        transform: translateY(0px) scale(0.98);
+      }
+
+      .btn-start.loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      .btn-start .btn-inner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s;
+      }
+
+      /* ── Error message ── */
+      .error-msg {
+        font-size: 12px;
+        color: #ef4444;
+        font-weight: 600;
+        min-height: 16px;
+        margin-top: -8px;
+        margin-bottom: 4px;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: all 0.2s;
+      }
+      .error-msg.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ── Footer note ── */
+      .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 11.5px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .login-footer span {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      /* ── Theme toggle ── */
+      .theme-btn {
+        position: fixed;
+        top: 16px; right: 16px;
+        z-index: 10;
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        border: 1.5px solid var(--border);
+        background: var(--surface);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        box-shadow: 0 2px 10px var(--shadow);
+        transition: all var(--transition);
+        color: var(--text);
+      }
+      .theme-btn:hover {
+        transform: scale(1.1) rotate(18deg);
+        border-color: var(--accent);
+      }
+
+      /* ── Pulse ring on avatar when name typed ── */
+      .avatar-preview.pop {
+        animation: avatarPop 0.35s cubic-bezier(0.22,1,0.36,1);
+      }
+      @keyframes avatarPop {
+        0%   { transform: scale(1); }
+        50%  { transform: scale(1.12); }
+        100% { transform: scale(1); }
+      }
+
+      /* ── Success animation ── */
+      .login-card.success {
+        animation: successOut 0.5s 0.1s cubic-bezier(0.22,1,0.36,1) forwards;
+      }
+      @keyframes successOut {
+        to { opacity: 0; transform: scale(0.95) translateY(-16px); }
+      }
+
+      /* ── Badge chips ── */
+      .badge-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 2px;
+        margin-bottom: 16px;
+      }
+      .badge-chip {
+        padding: 4px 10px;
+        border-radius: 100px;
+        background: var(--bg2);
+        border: 1.5px solid var(--border);
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text2);
+        cursor: pointer;
+        transition: all 0.18s;
+        font-family: var(--font-display);
+        user-select: none;
+      }
+      .badge-chip:hover, .badge-chip.active {
+        background: var(--accent-soft);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* Subtle shimmer on card edge */
+      .login-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 22px;
+        background: linear-gradient(135deg, var(--accent-soft) 0%, transparent 50%);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- bg blobs -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- Theme toggle -->
+    <button class="theme-btn" id="btn-theme" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+
+    <!-- Login Card -->
+    <div class="login-card" id="login-card">
+
+      <!-- Header -->
+      <div class="login-header">
+        <div class="apex-wordmark">
+          <div class="apex-icon">AX</div>
+          <div class="apex-title">APEX</div>
+        </div>
+        <div class="apex-sub">Aptitude Performance &amp; Excellence eXperience</div>
+      </div>
+
+      <!-- Avatar preview -->
+      <div class="avatar-preview-wrap">
+        <div class="avatar-preview" id="avatar-preview">?</div>
+        <div class="avatar-name-preview" id="avatar-name-preview">Your Name</div>
+        <div class="avatar-prof-preview" id="avatar-prof-preview">Your Profession</div>
+      </div>
+
+      <!-- Name row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="inp-first">First Name</label>
+          <input class="form-input" id="inp-first" type="text" placeholder="e.g. Ravi" autocomplete="given-name" maxlength="30" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-last">Last Name</label>
+          <input class="form-input" id="inp-last" type="text" placeholder="e.g. Kumar" autocomplete="family-name" maxlength="30" />
+        </div>
+      </div>
+      <div class="error-msg" id="name-error">Please enter at least your first name.</div>
+
+      <!-- Profession -->
+      <div class="form-divider">Profession</div>
+
+      <div class="form-group">
+        <label class="form-label" for="inp-prof">What do you do?</label>
+        <input class="form-input" id="inp-prof" type="text" placeholder="e.g. Engineering Student" autocomplete="organization-title" maxlength="50" />
+      </div>
+
+      <!-- Quick-pick chips -->
+      <div class="badge-row" id="chip-row">
+        <div class="badge-chip" data-val="Engineering Student">🎓 Engineering Student</div>
+        <div class="badge-chip" data-val="MBA Student">📊 MBA Student</div>
+        <div class="badge-chip" data-val="Job Aspirant">💼 Job Aspirant</div>
+        <div class="badge-chip" data-val="Software Engineer">💻 Software Engineer</div>
+        <div class="badge-chip" data-val="Teacher">📚 Teacher</div>
+        <div class="badge-chip" data-val="Other">✨ Other</div>
+      </div>
+      <div class="error-msg" id="prof-error">Please enter or select your profession.</div>
+
+      <!-- CTA -->
+      <button class="btn-start" id="btn-enter">
+        <div class="btn-inner" id="btn-inner">
+          <span>⚡</span>
+          <span>Enter the Arena</span>
+        </div>
+      </button>
+
+      <!-- Footer note -->
+      <div class="login-footer">
+        Your profile is stored <span>locally</span> and never sent anywhere.<br/>
+        Reset anytime via <span>Settings → Reset All Progress</span>.
+      </div>
+
+    </div>
+
+    <script>
+      /* ══════════════════════════════════
+         STORAGE (same key as script.js)
+      ══════════════════════════════════ */
+      const KEY = "apex_v5";
+
+      function storageLoad() {
+        try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+        catch { return {}; }
+      }
+      function storageGet(k, def) {
+        const d = storageLoad();
+        return k in d ? d[k] : def;
+      }
+      function storageSet(k, v) {
+        const d = storageLoad();
+        d[k] = v;
+        try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {}
+      }
+
+      /* ── If already logged in, go straight to game ── */
+      (function checkExisting() {
+        const name = storageGet("playerName", "");
+        if (name && name !== "Player") {
+          window.location.replace("index.html");
+        }
+      })();
+
+      /* ══════════════════════════════════
+         THEME
+      ══════════════════════════════════ */
+      const root = document.documentElement;
+      const themeBtn = document.getElementById("btn-theme");
+      let isDark = storageGet("theme", "light") === "dark";
+
+      function applyTheme() {
+        root.setAttribute("data-theme", isDark ? "dark" : "light");
+        themeBtn.textContent = isDark ? "☀️" : "🌙";
+      }
+      applyTheme();
+
+      themeBtn.addEventListener("click", () => {
+        isDark = !isDark;
+        applyTheme();
+        storageSet("theme", isDark ? "dark" : "light");
+      });
+
+      /* ══════════════════════════════════
+         AVATAR LIVE PREVIEW
+      ══════════════════════════════════ */
+      const inpFirst   = document.getElementById("inp-first");
+      const inpLast    = document.getElementById("inp-last");
+      const inpProf    = document.getElementById("inp-prof");
+      const avatarEl   = document.getElementById("avatar-preview");
+      const nameEl     = document.getElementById("avatar-name-preview");
+      const profEl     = document.getElementById("avatar-prof-preview");
+
+      function updatePreview() {
+        const first = inpFirst.value.trim();
+        const last  = inpLast.value.trim();
+        const prof  = inpProf.value.trim();
+        const fullName = [first, last].filter(Boolean).join(" ");
+
+        // Avatar letter
+        const letter = first ? first[0].toUpperCase() : (last ? last[0].toUpperCase() : "?");
+        if (avatarEl.textContent !== letter) {
+          avatarEl.textContent = letter;
+          avatarEl.classList.remove("pop");
+          void avatarEl.offsetWidth;
+          avatarEl.classList.add("pop");
+        }
+
+        nameEl.textContent = fullName || "Your Name";
+        profEl.textContent = prof || "Your Profession";
+      }
+
+      inpFirst.addEventListener("input", updatePreview);
+      inpLast.addEventListener("input", updatePreview);
+      inpProf.addEventListener("input", () => {
+        // Deselect chips if manual
+        document.querySelectorAll(".badge-chip").forEach(c => c.classList.remove("active"));
+        updatePreview();
+      });
+
+      /* ══════════════════════════════════
+         PROFESSION CHIPS
+      ══════════════════════════════════ */
+      document.querySelectorAll(".badge-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          document.querySelectorAll(".badge-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          inpProf.value = chip.dataset.val;
+          updatePreview();
+          clearError("prof");
+        });
+      });
+
+      /* ══════════════════════════════════
+         VALIDATION & SUBMIT
+      ══════════════════════════════════ */
+      function showError(field, msg) {
+        const el = document.getElementById(field + "-error");
+        const inp = field === "name"
+          ? [inpFirst, inpLast]
+          : [inpProf];
+        el.textContent = msg;
+        el.classList.add("visible");
+        inp.forEach(i => i.classList.add("error"));
+      }
+      function clearError(field) {
+        const el = document.getElementById(field + "-error");
+        const inp = field === "name"
+          ? [inpFirst, inpLast]
+          : [inpProf];
+        el.classList.remove("visible");
+        inp.forEach(i => i.classList.remove("error"));
+      }
+
+      inpFirst.addEventListener("input", () => clearError("name"));
+      inpLast.addEventListener("input",  () => clearError("name"));
+      inpProf.addEventListener("input",  () => clearError("prof"));
+
+      document.getElementById("btn-enter").addEventListener("click", handleSubmit);
+
+      // Also allow Enter key
+      [inpFirst, inpLast, inpProf].forEach(inp => {
+        inp.addEventListener("keydown", e => { if (e.key === "Enter") handleSubmit(); });
+      });
+
+      function handleSubmit() {
+        const first = inpFirst.value.trim();
+        const last  = inpLast.value.trim();
+        const prof  = inpProf.value.trim();
+        const fullName = [first, last].filter(Boolean).join(" ");
+
+        let valid = true;
+
+        if (!first) {
+          showError("name", "Please enter at least your first name.");
+          valid = false;
+        }
+        if (!prof) {
+          showError("prof", "Please enter or select your profession.");
+          valid = false;
+        }
+        if (!valid) return;
+
+        // Save to localStorage (same structure as script.js)
+        storageSet("playerName", fullName);
+        storageSet("playerFirstName", first);
+        storageSet("playerLastName", last);
+        storageSet("playerProfession", prof);
+
+        // Success animation → redirect
+        const card = document.getElementById("login-card");
+        const btn  = document.getElementById("btn-enter");
+        btn.innerHTML = `<div class="btn-inner"><span>✓</span><span>Welcome, ${first}!</span></div>`;
+        btn.classList.add("loading");
+        card.classList.add("success");
+
+        setTimeout(() => {
+          window.location.replace("index.html");
+        }, 580);
+      }
+    </script>
+  </body>
+</html>

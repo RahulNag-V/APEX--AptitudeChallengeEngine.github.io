@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-mode="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>APEX — Aptitude Challenge</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Full-screen effect overlay (pointer-events:none, z-index:8000) -->
+    <div id="apex-fx-overlay"></div>
+
+    <!-- Snowflake canvas for freeze power-up -->
+    <canvas id="snow-canvas"></canvas>
+
+    <!-- End-game shockwave overlay -->
+    <div id="end-fx-overlay"></div>
+
+    <!-- Next-question warp overlay -->
+    <div id="next-fx-overlay"></div>
+
+    <!-- ═══════════════════════════════════════════
+     GLOBAL FLOATING BUTTONS (always visible)
+═══════════════════════════════════════════ -->
+    <div class="fab-cluster">
+      <button
+        id="fab-settings"
+        class="fab"
+        title="Settings"
+        aria-label="Open settings"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     SETTINGS PANEL — Professional Tabbed Drawer
+═══════════════════════════════════════════ -->
+    <div
+      id="settings-overlay"
+      class="settings-overlay hidden"
+      aria-modal="true"
+      role="dialog"
+    >
+      <div class="settings-drawer">
+        <!-- ── Header ── -->
+        <div class="settings-header">
+          <div class="sh-left">
+            <div class="sh-avatar" id="sh-avatar">A</div>
+            <div class="sh-info">
+              <span class="sh-name" id="sh-display-name">Player</span>
+              <span class="sh-sub" id="sh-profession-sub" style="display:block;font-size:11px;color:var(--muted);font-family:var(--font-mono,monospace);font-weight:500;letter-spacing:0.04em;margin-top:1px;"></span>
+            </div>
+          </div>
+          <button id="settings-close" class="settings-close" aria-label="Close">
+            ✕
+          </button>
+        </div>
+
+        <!-- ── Tab Bar ── -->
+        <div class="s-tabs">
+          <button class="s-tab active" data-tab="profile">👤 Profile</button>
+          <button class="s-tab" data-tab="comparison">📊 Stats</button>
+          <button class="s-tab" data-tab="appearance">🎨 Theme</button>
+          <button class="s-tab" data-tab="tips">💡 Tips</button>
+          <button class="s-tab" data-tab="faq">❓ FAQ</button>
+          <button class="s-tab" data-tab="feedback">💬 Feedback</button>
+        </div>
+
+        <!-- ════════════════════════════════
+             TAB: PROFILE
+        ════════════════════════════════ -->
+        <div class="s-panel active" id="tab-profile">
+          <!-- Avatar & Name -->
+          <div class="prof-hero">
+            <div class="prof-avatar-wrap">
+              <div class="prof-avatar" id="prof-avatar">A</div>
+              <div class="prof-avatar-ring"></div>
+            </div>
+            <div class="prof-name-block">
+              <div class="prof-field-label">Display Name</div>
+              <div class="prof-name-edit">
+                <input
+                  id="prof-name-input"
+                  class="prof-input"
+                  type="text"
+                  maxlength="20"
+                  placeholder="Enter your name…"
+                />
+                <button id="prof-name-save" class="prof-save-btn">Save</button>
+              </div>
+              <div id="prof-profession-display" style="font-size:11.5px;color:var(--muted);font-family:var(--font-mono,monospace);font-weight:500;letter-spacing:0.04em;margin-top:5px;"></div>
+            </div>
+          </div>
+
+          <!-- Quick Stats Strip -->
+          <div class="prof-stats-strip">
+            <div class="pss-item">
+              <span class="pss-val" id="pss-games">0</span>
+              <span class="pss-key">Games</span>
+            </div>
+            <div class="pss-item">
+              <span class="pss-val" id="pss-best">0</span>
+              <span class="pss-key">Best Score</span>
+            </div>
+            <div class="pss-item">
+              <span class="pss-val" id="pss-acc">0%</span>
+              <span class="pss-key">Avg Accuracy</span>
+            </div>
+            <div class="pss-item">
+              <span class="pss-val" id="pss-streak">0</span>
+              <span class="pss-key">Best Streak</span>
+            </div>
+          </div>
+
+          <!-- Sound -->
+          <div class="settings-section">
+            <div class="settings-section-label">SOUND</div>
+            <div class="settings-row">
+              <span class="settings-row-label"
+                ><span class="settings-row-icon">🔊</span> Sound Effects</span
+              >
+              <button id="btn-mute-toggle" class="toggle-pill" data-state="on">
+                <span class="toggle-pill-knob"></span>
+                <span class="toggle-pill-off">🔇 MUTED</span>
+                <span class="toggle-pill-on">🔊 ON</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Rules Accordion -->
+          <div class="settings-section">
+            <div class="settings-section-label">HOW TO PLAY</div>
+            <div class="rules-accordion">
+              <button class="rules-toggle" id="rules-toggle">
+                <span>📖 Game Rules</span><span class="rules-chevron">▾</span>
+              </button>
+              <div class="rules-body" id="rules-body">
+                <ul class="rules-list">
+                  <li>Select a mode and question count to begin.</li>
+                  <li>Answer before the timer runs out.</li>
+                  <li>Every 2 wrong answers = 1 heart lost.</li>
+                  <li>Consecutive correct answers build a combo multiplier.</li>
+                  <li>
+                    <strong>Freeze (F)</strong> — pauses the timer for 5 s.
+                  </li>
+                  <li><strong>50-50 (H)</strong> — removes 2 wrong options.</li>
+                  <li><strong>Skip (S)</strong> — skips without penalty.</li>
+                  <li>Infinite mode runs until all 5 hearts are lost.</li>
+                  <li>Review all questions on the results screen.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reset -->
+          <div class="settings-section">
+            <div class="settings-section-label">DATA</div>
+            <button id="btn-reset-data" class="danger-btn">
+              🗑 Reset All Progress
+            </button>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════
+             TAB: COMPARISON (Stats)
+        ════════════════════════════════ -->
+        <div class="s-panel" id="tab-comparison">
+          <div class="comp-head">
+            <span class="comp-title">📊 Your Performance History</span>
+            <span class="comp-sub">Compared across all sessions</span>
+          </div>
+
+          <!-- Best Scores per Mode -->
+          <div class="settings-section">
+            <div class="settings-section-label">BEST SCORES BY MODE</div>
+            <div class="comp-mode-grid" id="comp-mode-grid">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Accuracy Trend -->
+          <div class="settings-section">
+            <div class="settings-section-label">
+              ACCURACY TREND (LAST 10 GAMES)
+            </div>
+            <div class="comp-chart-wrap">
+              <canvas id="comp-chart" width="300" height="100"></canvas>
+            </div>
+          </div>
+
+          <!-- All-time Stats -->
+          <div class="settings-section">
+            <div class="settings-section-label">ALL-TIME STATS</div>
+            <div class="comp-alltime" id="comp-alltime">
+              <!-- filled by JS -->
+            </div>
+          </div>
+
+          <!-- Session History -->
+          <div class="settings-section">
+            <div class="settings-section-label">RECENT SESSIONS</div>
+            <div class="comp-history" id="comp-history">
+              <!-- filled by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════
+             TAB: APPEARANCE / THEME
+        ════════════════════════════════ -->
+        <div class="s-panel" id="tab-appearance">
+          <!-- Dark/Light Toggle -->
+          <div class="settings-section">
+            <div class="settings-section-label">APPEARANCE</div>
+            <div class="settings-row">
+              <span class="settings-row-label"
+                ><span class="settings-row-icon">🌓</span> Dark Mode</span
+              >
+              <button
+                id="btn-theme-toggle"
+                class="toggle-pill"
+                data-state="light"
+              >
+                <span class="toggle-pill-knob"></span>
+                <span class="toggle-pill-off">☀ LIGHT</span>
+                <span class="toggle-pill-on">🌙 DARK</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Accent Color Picker -->
+          <div class="settings-section">
+            <div class="settings-section-label">ACCENT COLOR</div>
+            <div class="color-palette">
+              <button
+                class="color-swatch active"
+                data-color="#6c63ff"
+                style="background: #6c63ff"
+                title="Violet (default)"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#3b82f6"
+                style="background: #3b82f6"
+                title="Blue"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#22c55e"
+                style="background: #22c55e"
+                title="Green"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#f59e0b"
+                style="background: #f59e0b"
+                title="Amber"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#ef4444"
+                style="background: #ef4444"
+                title="Red"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#ec4899"
+                style="background: #ec4899"
+                title="Pink"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#14b8a6"
+                style="background: #14b8a6"
+                title="Teal"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#f97316"
+                style="background: #f97316"
+                title="Orange"
+              ></button>
+            </div>
+            <div class="color-custom-row">
+              <span class="settings-row-label" style="font-size: 12px"
+                >Custom color</span
+              >
+              <input
+                type="color"
+                id="color-custom-picker"
+                class="color-custom-input"
+                value="#6c63ff"
+              />
+            </div>
+          </div>
+
+          <!-- Font Size -->
+          <div class="settings-section">
+            <div class="settings-section-label">QUESTION FONT SIZE</div>
+            <div class="font-size-row">
+              <button class="fs-btn" data-size="small">A<sub>s</sub></button>
+              <button class="fs-btn active" data-size="medium">A</button>
+              <button class="fs-btn" data-size="large">A<sup>+</sup></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════
+             TAB: TIPS
+        ════════════════════════════════ -->
+        <div class="s-panel" id="tab-tips">
+          <!-- Hero banner -->
+          <div class="tips-hero">
+            <div class="tips-hero-icon">💡</div>
+            <div class="tips-hero-text">
+              <strong>Pro Tips &amp; Strategy</strong>
+              <span>Master every mode with expert advice</span>
+            </div>
+          </div>
+
+          <!-- Mode selector -->
+          <div class="tips-mode-selector">
+            <button class="tips-mode-btn active" data-tips-mode="easy">
+              <span class="tips-mode-ico">🌿</span>
+              <span>EASY</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="medium">
+              <span class="tips-mode-ico">⚡</span>
+              <span>MEDIUM</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="hard">
+              <span class="tips-mode-ico">🔥</span>
+              <span>HARD</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="impossible">
+              <span class="tips-mode-ico">💀</span>
+              <span>IMPOSSIBLE</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="infinite">
+              <span class="tips-mode-ico">♾️</span>
+              <span>INFINITE</span>
+            </button>
+          </div>
+
+          <!-- Tips content panels -->
+          <div class="tips-content" id="tips-content">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════
+             TAB: FAQ
+        ════════════════════════════════ -->
+        <div class="s-panel" id="tab-faq">
+          <div class="faq-list" id="faq-list">
+            <!-- items injected by JS -->
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════
+             TAB: FEEDBACK
+        ════════════════════════════════ -->
+        <div class="s-panel" id="tab-feedback">
+          <div class="fb-hero">
+            <div class="fb-hero-icon">💬</div>
+            <div class="fb-hero-text">
+              <strong>Share your thoughts!</strong>
+              <span>Help us improve APEX</span>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-section-label">YOUR FEEDBACK</div>
+            <select id="fb-type" class="fb-select">
+              <option value="bug">🐛 Bug Report</option>
+              <option value="feature">💡 Feature Request</option>
+              <option value="general" selected>💬 General Feedback</option>
+              <option value="praise">🌟 Praise</option>
+            </select>
+            <textarea
+              id="fb-message"
+              class="fb-textarea"
+              rows="4"
+              placeholder="Write your feedback here…"
+              maxlength="500"
+            ></textarea>
+            <div class="fb-char-count"><span id="fb-char">0</span>/500</div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-section-label">SEND VIA</div>
+            <div class="fb-channels">
+              <a
+                class="fb-channel-btn fb-email"
+                id="fb-send-email"
+                href="#"
+                target="_blank"
+              >
+                <span class="fb-ch-icon">✉️</span>
+                <div class="fb-ch-info">
+                  <span class="fb-ch-name">Email</span>
+                  <span class="fb-ch-sub">Opens your mail app</span>
+                </div>
+                <span class="fb-ch-arrow">→</span>
+              </a>
+              <a
+                class="fb-channel-btn fb-whatsapp"
+                id="fb-send-wa"
+                href="#"
+                target="_blank"
+              >
+                <span class="fb-ch-icon">💚</span>
+                <div class="fb-ch-info">
+                  <span class="fb-ch-name">WhatsApp</span>
+                  <span class="fb-ch-sub">Opens WhatsApp</span>
+                </div>
+                <span class="fb-ch-arrow">→</span>
+              </a>
+              <a
+                class="fb-channel-btn fb-linkedin"
+                id="fb-send-li"
+                href="https://www.linkedin.com/in/rahulnagv"
+                target="_blank"
+              >
+                <span class="fb-ch-icon">💼</span>
+                <div class="fb-ch-info">
+                  <span class="fb-ch-name">LinkedIn</span>
+                  <span class="fb-ch-sub">Connect with the developer</span>
+                </div>
+                <span class="fb-ch-arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          APEX— Aptitude Engine &nbsp;·&nbsp; Made with ❤️
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     COUNTDOWN OVERLAY  (3-2-1-GO!)
+═══════════════════════════════════════════ -->
+    <div id="countdown-overlay" class="countdown-overlay hidden">
+      <div class="countdown-inner">
+        <div class="countdown-label">GET READY</div>
+        <div class="countdown-number" id="countdown-number">3</div>
+        <div class="countdown-mode-name" id="countdown-mode-name"></div>
+        <div class="countdown-particles" id="countdown-particles"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     HOME SCREEN
+═══════════════════════════════════════════ -->
+    <div id="screen-start" class="screen active">
+      <div class="home-wrap">
+        <!-- ═══ APEX LOGO SVG — top center ═══ -->
+        <div class="apex-logo-wrap">
+          <svg
+            class="apex-logo-svg"
+            viewBox="0 0 220 220"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-label="APEX Logo"
+          >
+            <!-- Outer glow ring -->
+            <circle
+              cx="110"
+              cy="110"
+              r="100"
+              fill="none"
+              stroke="url(#ringGrad)"
+              stroke-width="1.5"
+              opacity="0.35"
+              class="logo-svg-ring logo-svg-ring-1"
+            />
+            <circle
+              cx="110"
+              cy="110"
+              r="80"
+              fill="none"
+              stroke="url(#ringGrad)"
+              stroke-width="1"
+              opacity="0.25"
+              class="logo-svg-ring logo-svg-ring-2"
+            />
+            <!-- Shield base -->
+            <path
+              d="M110 18 L178 48 L178 115 Q178 160 110 195 Q42 160 42 115 L42 48 Z"
+              fill="url(#shieldFill)"
+              stroke="url(#shieldStroke)"
+              stroke-width="2.5"
+              stroke-linejoin="round"
+            />
+            <!-- Inner shield highlight -->
+            <path
+              d="M110 30 L166 55 L166 115 Q166 152 110 182 Q54 152 54 115 L54 55 Z"
+              fill="url(#shieldInner)"
+              opacity="0.5"
+            />
+            <!-- Lightning bolt accent -->
+            <path
+              d="M118 72 L98 110 L112 110 L102 148 L128 104 L113 104 Z"
+              fill="url(#boltGrad)"
+              filter="url(#boltGlow)"
+            />
+            <!-- Defs -->
+            <defs>
+              <linearGradient
+                id="shieldFill"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#6c63ff" stop-opacity="0.18" />
+                <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.08" />
+              </linearGradient>
+              <linearGradient
+                id="shieldStroke"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#a78bfa" />
+                <stop offset="100%" stop-color="#6c63ff" />
+              </linearGradient>
+              <linearGradient
+                id="shieldInner"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff" />
+                <stop offset="100%" stop-color="#a78bfa" />
+              </linearGradient>
+              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6c63ff" />
+                <stop offset="100%" stop-color="#a78bfa" />
+              </linearGradient>
+              <filter
+                id="boltGlow"
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+              >
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+          </svg>
+          <div class="apex-logo-text-wrap">
+            <span class="apex-logo-text">APEX</span>
+            <span class="apex-logo-sub">APTITUDE ENGINE</span>
+          </div>
+        </div>
+        <!-- ═══════════════════════════════════════ -->
+
+        <div class="home-logo" style="display: none">
+          <div class="logo-rings">
+            <div class="logo-ring r1"></div>
+            <div class="logo-ring r2"></div>
+            <div class="logo-ring r3"></div>
+          </div>
+          <span class="logo-text">APEX</span>
+          <span class="logo-ver">APTITUDE ENGINE</span>
+        </div>
+
+        <p class="home-tagline">
+          Challenge your mind. Beat the clock. Master every level.
+        </p>
+
+        <div class="mode-grid">
+          <button class="mode-card mode-easy" data-mode="easy">
+            <div class="mode-card-glow"></div>
+            <div class="mode-card-content">
+              <div class="mode-card-icon-wrap">
+                <span class="mode-card-icon">🌿</span>
+              </div>
+              <div class="mode-card-info">
+                <span class="mode-card-name">EASY</span>
+                <span class="mode-card-desc">20s · Adaptive · Beginner</span>
+              </div>
+              <span class="mode-card-tag">START</span>
+            </div>
+            <div class="mode-card-bar"></div>
+          </button>
+
+          <button class="mode-card mode-medium" data-mode="medium">
+            <div class="mode-card-glow"></div>
+            <div class="mode-card-content">
+              <div class="mode-card-icon-wrap">
+                <span class="mode-card-icon">⚡</span>
+              </div>
+              <div class="mode-card-info">
+                <span class="mode-card-name">MEDIUM</span>
+                <span class="mode-card-desc">60s · Adaptive · Challenger</span>
+              </div>
+              <span class="mode-card-tag">START</span>
+            </div>
+            <div class="mode-card-bar"></div>
+          </button>
+
+          <button class="mode-card mode-hard" data-mode="hard">
+            <div class="mode-card-glow"></div>
+            <div class="mode-card-content">
+              <div class="mode-card-icon-wrap">
+                <span class="mode-card-icon">🔥</span>
+              </div>
+              <div class="mode-card-info">
+                <span class="mode-card-name">HARD</span>
+                <span class="mode-card-desc">90s · Adaptive · Elite</span>
+              </div>
+              <span class="mode-card-tag">START</span>
+            </div>
+            <div class="mode-card-bar"></div>
+          </button>
+
+          <button class="mode-card mode-impossible" data-mode="impossible">
+            <div class="mode-card-glow"></div>
+            <div class="mode-card-content">
+              <div class="mode-card-icon-wrap">
+                <span class="mode-card-icon">💀</span>
+              </div>
+              <div class="mode-card-info">
+                <span class="mode-card-name">IMPOSSIBLE</span>
+                <span class="mode-card-desc">120s · Brutal · No Mercy</span>
+              </div>
+              <span class="mode-card-tag">START</span>
+            </div>
+            <div class="mode-card-bar"></div>
+          </button>
+
+          <button class="mode-card mode-infinite" data-mode="infinite">
+            <div class="mode-card-glow"></div>
+            <div class="mode-card-content">
+              <div class="mode-card-icon-wrap">
+                <span class="mode-card-icon">♾️</span>
+              </div>
+              <div class="mode-card-info">
+                <span class="mode-card-name">INFINITE</span>
+                <span class="mode-card-desc">30s · Survival · Apex</span>
+              </div>
+              <span class="mode-card-tag">START</span>
+            </div>
+            <div class="mode-card-bar"></div>
+          </button>
+        </div>
+
+        <!-- Q-Count (hidden for infinite) -->
+        <div id="qcount-block" class="qcount-block hidden">
+          <span class="qcount-label">QUESTIONS PER ROUND</span>
+          <div class="qcount-row">
+            <button class="qcount-btn active" data-count="10">10</button>
+            <button class="qcount-btn" data-count="20">20</button>
+            <button class="qcount-btn" data-count="30">30</button>
+            <button class="qcount-btn" data-count="50">50</button>
+          </div>
+        </div>
+
+        <button id="btn-start" class="btn-start-main" disabled>
+          <span class="btn-start-text">← SELECT A MODE</span>
+          <span class="btn-start-glow"></span>
+        </button>
+
+        <div class="home-shortcuts">
+          <span class="sc-item"><kbd>F</kbd> Freeze</span>
+          <span class="sc-sep">·</span>
+          <span class="sc-item"><kbd>H</kbd> 50-50</span>
+          <span class="sc-sep">·</span>
+          <span class="sc-item"><kbd>S</kbd> Skip</span>
+          <span class="sc-sep">·</span>
+          <span class="sc-item"><kbd>↵</kbd> Next</span>
+        </div>
+
+        <a href="about.html" class="home-about-link">ℹ About APEX →</a>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     GAME SCREEN
+═══════════════════════════════════════════ -->
+    <div id="screen-game" class="screen">
+      <!-- HUD -->
+      <header class="hud">
+        <div class="hud-group hud-left">
+          <div class="hud-chip">
+            <span class="hud-chip-label">SCORE</span>
+            <span class="hud-chip-val" id="hud-score">0</span>
+          </div>
+          <div class="hud-chip">
+            <span class="hud-chip-label">COMBO</span>
+            <span class="hud-chip-val combo-chip" id="hud-combo">×1</span>
+          </div>
+          <div class="hud-chip">
+            <span class="hud-chip-label">Q</span>
+            <span class="hud-chip-val" id="hud-qprogress">1/∞</span>
+          </div>
+        </div>
+
+        <div class="hud-group hud-center">
+          <div id="health-bar" class="health-bar-inner">
+            <span class="heart" data-i="0"
+              ><svg
+                class="heart-svg"
+                viewBox="0 0 32 30"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g class="heart-whole">
+                  <path
+                    class="heart-fill"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27Z"
+                  />
+                </g>
+                <g class="heart-crack-left" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 L16 27Z"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="4"
+                    x2="14"
+                    y2="12"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="14"
+                    y1="12"
+                    x2="16"
+                    y2="16"
+                    stroke-width="1"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="16"
+                    x2="13"
+                    y2="22"
+                    stroke-width="1"
+                  />
+                </g>
+                <g class="heart-crack-right" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27 L16 4.3Z"
+                  />
+                </g></svg
+            ></span>
+            <span class="heart" data-i="1"
+              ><svg
+                class="heart-svg"
+                viewBox="0 0 32 30"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g class="heart-whole">
+                  <path
+                    class="heart-fill"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27Z"
+                  />
+                </g>
+                <g class="heart-crack-left" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 L16 27Z"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="4"
+                    x2="14"
+                    y2="12"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="14"
+                    y1="12"
+                    x2="16"
+                    y2="16"
+                    stroke-width="1"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="16"
+                    x2="13"
+                    y2="22"
+                    stroke-width="1"
+                  />
+                </g>
+                <g class="heart-crack-right" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27 L16 4.3Z"
+                  />
+                </g></svg
+            ></span>
+            <span class="heart" data-i="2"
+              ><svg
+                class="heart-svg"
+                viewBox="0 0 32 30"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g class="heart-whole">
+                  <path
+                    class="heart-fill"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27Z"
+                  />
+                </g>
+                <g class="heart-crack-left" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 L16 27Z"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="4"
+                    x2="14"
+                    y2="12"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="14"
+                    y1="12"
+                    x2="16"
+                    y2="16"
+                    stroke-width="1"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="16"
+                    x2="13"
+                    y2="22"
+                    stroke-width="1"
+                  />
+                </g>
+                <g class="heart-crack-right" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27 L16 4.3Z"
+                  />
+                </g></svg
+            ></span>
+            <span class="heart" data-i="3"
+              ><svg
+                class="heart-svg"
+                viewBox="0 0 32 30"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g class="heart-whole">
+                  <path
+                    class="heart-fill"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27Z"
+                  />
+                </g>
+                <g class="heart-crack-left" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 L16 27Z"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="4"
+                    x2="14"
+                    y2="12"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="14"
+                    y1="12"
+                    x2="16"
+                    y2="16"
+                    stroke-width="1"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="16"
+                    x2="13"
+                    y2="22"
+                    stroke-width="1"
+                  />
+                </g>
+                <g class="heart-crack-right" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27 L16 4.3Z"
+                  />
+                </g></svg
+            ></span>
+            <span class="heart" data-i="4"
+              ><svg
+                class="heart-svg"
+                viewBox="0 0 32 30"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g class="heart-whole">
+                  <path
+                    class="heart-fill"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27Z"
+                  />
+                </g>
+                <g class="heart-crack-left" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 27 C16 27 3 18 3 10 C3 5.6 6.6 2 11 2 C13.2 2 15.2 3 16 4.3 L16 27Z"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="4"
+                    x2="14"
+                    y2="12"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="14"
+                    y1="12"
+                    x2="16"
+                    y2="16"
+                    stroke-width="1"
+                  />
+                  <line
+                    class="crack-line"
+                    x1="16"
+                    y1="16"
+                    x2="13"
+                    y2="22"
+                    stroke-width="1"
+                  />
+                </g>
+                <g class="heart-crack-right" style="display: none">
+                  <path
+                    class="heart-fill-half"
+                    d="M16 4.3 C16.8 3 18.8 2 21 2 C25.4 2 29 5.6 29 10 C29 18 16 27 16 27 L16 4.3Z"
+                  />
+                </g></svg
+            ></span>
+          </div>
+        </div>
+
+        <div class="hud-group hud-right">
+          <div class="hud-chip">
+            <span class="hud-chip-label">MODE</span>
+            <span class="hud-chip-val" id="hud-mode">—</span>
+          </div>
+          <div class="hud-chip">
+            <span class="hud-chip-label">TIER</span>
+            <span class="hud-chip-val" id="hud-tier">1</span>
+          </div>
+          <button id="btn-end" class="btn-end">⏹ END</button>
+        </div>
+      </header>
+
+      <!-- Timer -->
+      <div class="timer-wrap">
+        <div class="timer-track">
+          <div id="timer-bar" class="timer-fill"></div>
+        </div>
+        <span id="timer-label" class="timer-label">—</span>
+      </div>
+
+      <!-- Pressure -->
+      <div id="pressure-banner" class="pressure-banner hidden">
+        ⚡ PRESSURE EVENT — TIME HALVED
+      </div>
+
+      <!-- Side-by-side: Q+Options slide left, Explanation slides in right -->
+      <div class="game-main-row">
+        <!-- LEFT: Question + Options (stays same width, shifts left on answer) -->
+        <div class="game-q-col">
+          <main class="question-section">
+            <div class="q-meta-row">
+              <span id="q-category" class="q-cat-badge">—</span>
+              <span id="q-streak" class="q-streak-badge"></span>
+              <span id="q-mode-tag" class="q-mode-badge"></span>
+            </div>
+            <div id="question-text" class="question-text">Loading...</div>
+          </main>
+
+          <div id="options-grid" class="options-grid">
+            <button class="opt-btn" data-idx="0"></button>
+            <button class="opt-btn" data-idx="1"></button>
+            <button class="opt-btn" data-idx="2"></button>
+            <button class="opt-btn" data-idx="3"></button>
+          </div>
+        </div>
+
+        <!-- RIGHT: Explanation slides in from right after answer -->
+        <div id="explanation-panel" class="explanation-panel hidden">
+          <div class="exp-card">
+            <div class="exp-top">
+              <div class="exp-verdict-wrap">
+                <span id="exp-icon" class="exp-icon"></span>
+                <span id="exp-verdict" class="exp-verdict-text"></span>
+              </div>
+              <span id="exp-points" class="exp-pts"></span>
+            </div>
+            <div class="exp-answer-row">
+              <div class="exp-ans-item">
+                <span class="exp-ans-label">CORRECT ANSWER</span>
+                <span
+                  id="exp-correct-ans"
+                  class="exp-ans-val correct-val"
+                ></span>
+              </div>
+              <div class="exp-ans-divider"></div>
+              <div class="exp-ans-item">
+                <span class="exp-ans-label">YOUR ANSWER</span>
+                <span id="exp-your-ans" class="exp-ans-val"></span>
+              </div>
+            </div>
+            <div class="exp-divider"></div>
+            <div class="exp-explanation-wrap">
+              <span class="exp-label-tag">💡 EXPLANATION</span>
+              <div id="exp-body" class="exp-body-text"></div>
+            </div>
+            <button id="btn-next" class="btn-next">
+              NEXT QUESTION <span class="btn-next-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Power-ups -->
+      <footer id="powerups-bar" class="powerups-bar">
+        <button class="pu-btn pu-freeze" id="pu-freeze" title="Freeze Time (F)">
+          <span class="pu-ico">❄</span>
+          <span class="pu-lbl">FREEZE</span>
+          <kbd class="pu-key">F</kbd>
+        </button>
+        <button class="pu-btn pu-fifty" id="pu-fifty" title="50-50 (H)">
+          <span class="pu-ico">½</span>
+          <span class="pu-lbl">50-50</span>
+          <kbd class="pu-key">H</kbd>
+        </button>
+        <button class="pu-btn pu-skip" id="pu-skip" title="Skip (S)">
+          <span class="pu-ico">↷</span>
+          <span class="pu-lbl">SKIP</span>
+          <kbd class="pu-key">S</kbd>
+        </button>
+      </footer>
+
+      <div id="feedback" class="feedback hidden"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     RESULT SCREEN
+═══════════════════════════════════════════ -->
+    <div id="screen-result" class="screen">
+      <!-- Fixed top strip -->
+      <div class="result-topbar">
+        <div class="result-hero">
+          <div class="result-hero-ring">
+            <svg class="hero-svg" viewBox="0 0 120 120">
+              <circle class="hero-track" cx="60" cy="60" r="50" />
+              <circle
+                class="hero-fill"
+                id="hero-fill"
+                cx="60"
+                cy="60"
+                r="50"
+                stroke-dasharray="314.16"
+                stroke-dashoffset="314.16"
+              />
+            </svg>
+            <div class="hero-center">
+              <span class="hero-pct" id="result-pct">0%</span>
+              <span class="hero-label">ACCURACY</span>
+            </div>
+          </div>
+          <div class="result-hero-info">
+            <div class="rhi-top">
+              <span class="rhi-label">SESSION COMPLETE</span>
+              <span id="result-mode-badge" class="result-mode-badge"></span>
+            </div>
+            <div id="res-rank" class="res-rank"></div>
+            <div class="result-mini-grid">
+              <div class="rmc">
+                <span class="rmc-v" id="res-score">0</span
+                ><span class="rmc-k">SCORE</span>
+              </div>
+              <div class="rmc">
+                <span class="rmc-v" id="res-attempted">0</span
+                ><span class="rmc-k">ATTEMPTED</span>
+              </div>
+              <div class="rmc">
+                <span class="rmc-v" id="res-correct">0</span
+                ><span class="rmc-k">CORRECT</span>
+              </div>
+              <div class="rmc">
+                <span class="rmc-v" id="res-health">0</span
+                ><span class="rmc-k">HEALTH</span>
+              </div>
+            </div>
+            <div class="result-btn-row">
+              <button id="btn-home" class="result-btn-home">⌂ HOME</button>
+              <button id="btn-restart" class="result-btn-play">
+                ↺ PLAY AGAIN
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three-column body -->
+      <div class="result-body">
+        <!-- LEFT — Performance Feedback -->
+        <div class="result-col r-col-left">
+          <div class="rcol-header">📊 PERFORMANCE</div>
+          <div id="perf-fb-body" class="perf-body"></div>
+        </div>
+
+        <!-- CENTER — Visual Overview -->
+        <div class="result-col r-col-center">
+          <div class="rcol-header">📈 OVERVIEW</div>
+          <!-- Outcome bars -->
+          <div class="ov-section">
+            <div class="ov-section-title">OUTCOMES</div>
+            <div id="ov-bars" class="ov-bars"></div>
+          </div>
+          <!-- Category breakdown -->
+          <div class="ov-section">
+            <div class="ov-section-title">BY CATEGORY</div>
+            <div id="ov-cats" class="ov-cats"></div>
+          </div>
+          <!-- Best streak / high score -->
+          <div class="ov-section">
+            <div class="ov-section-title">SESSION BESTS</div>
+            <div id="ov-bests" class="ov-bests"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT — Question Review -->
+        <div class="result-col r-col-right">
+          <div class="rcol-header">
+            <span>📋 REVIEW</span>
+            <div class="review-legend-mini">
+              <span class="rl-dot rl-correct"></span>
+              <span class="rl-dot rl-wrong"></span>
+              <span class="rl-dot rl-timeout"></span>
+              <span class="rl-dot rl-skip"></span>
+            </div>
+          </div>
+          <div id="review-list" class="review-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     POPUP 1 — WARNING / CONFIRM
+═══════════════════════════════════════════ -->
+    <div id="rp-warn-overlay" class="rp-overlay rp-overlay-hidden">
+      <div class="rp-box" id="rp-warn-box">
+        <!-- Warning icon circle -->
+        <div class="rp-warn-icon-wrap">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </div>
+
+        <div class="rp-badge rp-badge-warn">⚠ WARNING</div>
+        <h2 class="rp-title">Reset All Progress?</h2>
+        <p class="rp-desc">
+          This will <strong>permanently delete</strong> all your saved data.
+          This action cannot be undone.
+        </p>
+
+        <div class="rp-warn-list">
+          <div class="rp-warn-row">
+            <span class="rp-warn-dot"></span>All session scores &amp; history
+          </div>
+          <div class="rp-warn-row">
+            <span class="rp-warn-dot"></span>Best scores &amp; accuracy records
+          </div>
+          <div class="rp-warn-row">
+            <span class="rp-warn-dot"></span>Combo streaks &amp; profile stats
+          </div>
+        </div>
+
+        <div class="rp-btn-row">
+          <button id="reset-popup-cancel" class="rp-btn rp-btn-ghost">
+            Cancel
+          </button>
+          <button id="reset-popup-confirm" class="rp-btn rp-btn-red">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+              <path d="M10 11v6M14 11v6" />
+            </svg>
+            Yes, Reset All
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+     POPUP 2 — SUCCESS / DONE
+═══════════════════════════════════════════ -->
+    <div id="rp-done-overlay" class="rp-overlay rp-overlay-hidden">
+      <div class="rp-box rp-box-done" id="rp-done-box">
+        <!-- Animated SVG checkmark ring -->
+        <div class="rp-check-wrap">
+          <svg viewBox="0 0 80 80" class="rp-check-svg">
+            <circle class="rp-check-track" cx="40" cy="40" r="34" />
+            <circle class="rp-check-ring" cx="40" cy="40" r="34" />
+            <polyline class="rp-check-tick" points="24,40 35,52 56,28" />
+          </svg>
+        </div>
+
+        <div class="rp-badge rp-badge-done">✓ COMPLETED</div>
+        <h2 class="rp-title">All Done!</h2>
+        <p class="rp-desc">
+          Your progress has been completely reset. You're starting fresh.
+        </p>
+
+        <!-- Cleared confirmation rows -->
+        <div class="rp-done-list">
+          <div class="rp-done-row" style="--d: 0.2s">
+            <span class="rp-done-tick">✓</span>
+            <span>Session scores &amp; history — cleared</span>
+          </div>
+          <div class="rp-done-row" style="--d: 0.32s">
+            <span class="rp-done-tick">✓</span>
+            <span>Best scores &amp; records — cleared</span>
+          </div>
+          <div class="rp-done-row" style="--d: 0.44s">
+            <span class="rp-done-tick">✓</span>
+            <span>Streaks &amp; profile stats — cleared</span>
+          </div>
+        </div>
+
+        <div class="rp-btn-row rp-btn-row-center">
+          <button id="reset-popup-ok" class="rp-btn rp-btn-green">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              width="15"
+              height="15"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .home-about-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 18px;
+        padding: 7px 18px;
+        border-radius: var(--radius-pill);
+        border: 1.5px solid var(--border-hi);
+        background: var(--surface2);
+        color: var(--muted);
+        font-size: 12.5px;
+        font-weight: 600;
+        font-family: var(--font-display);
+        text-decoration: none;
+        transition: all var(--transition);
+      }
+      .home-about-link:hover {
+        background: var(--accent-soft);
+        color: var(--accent);
+        border-color: var(--accent2);
+        transform: translateY(-1px);
+      }
+    </style>
+    <!-- Blob Cursor removed -->
+
+    <script>
+    /* ── Ripple Effect ── */
+    (function() {
+      document.addEventListener('click', e => {
+        const btn = e.target.closest('button, .mode-card, .qcount-btn, .opt-btn, .pu-btn, .color-swatch, .s-tab, .fs-btn');
+        if (!btn) return;
+        const rect = btn.getBoundingClientRect();
+        const r = document.createElement('span');
+        r.className = 'apex-ripple';
+        r.style.left = (e.clientX - rect.left) + 'px';
+        r.style.top  = (e.clientY - rect.top)  + 'px';
+        btn.appendChild(r);
+        setTimeout(() => r.remove(), 600);
+      });
+    })();
+    </script>
+
+    <script src="easy.js"></script>
+    <script src="medium.js"></script>
+    <script src="hard.js"></script>
+    <script src="impossible.js"></script>
+    <script src="infinite.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

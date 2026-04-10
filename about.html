@@ -1,0 +1,5232 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-mode="default">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>APEX — About</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ═══════════════════════════════════════════════════
+   APEX DESIGN TOKENS — Light (default)
+═══════════════════════════════════════════════════ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f4f6fb;
+        --bg2: #eef0f7;
+        --surface: #ffffff;
+        --surface2: #f0f2fa;
+        --border: #e2e6f0;
+        --border-hi: #c8cfe4;
+        --text: #1a1d2e;
+        --text2: #4a5068;
+        --muted: #8890aa;
+        --dim: #d4d8e8;
+        --shadow: rgba(30, 40, 80, 0.1);
+        --shadow-lg: rgba(30, 40, 80, 0.18);
+        --accent: #6c63ff;
+        --accent2: #8b85ff;
+        --accent-glow: rgba(108, 99, 255, 0.18);
+        --accent-soft: rgba(108, 99, 255, 0.08);
+        --green: #22c55e;
+        --red: #ef4444;
+        --yellow: #f59e0b;
+        --blue: #3b82f6;
+        --violet: #8b5cf6;
+        --orange: #f97316;
+        --teal: #14b8a6;
+        --font-display: "Outfit", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", "Courier New", monospace;
+        --radius: 10px;
+        --radius-lg: 16px;
+        --radius-pill: 100px;
+        --transition: 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      [data-theme="dark"] {
+        --bg: #0f1020;
+        --bg2: #151728;
+        --surface: #1c1f35;
+        --surface2: #222540;
+        --border: #2a2e4a;
+        --border-hi: #3d4268;
+        --text: #e8eaf6;
+        --text2: #9fa3c8;
+        --muted: #5a6088;
+        --dim: #272b48;
+        --shadow: rgba(0, 0, 0, 0.35);
+        --shadow-lg: rgba(0, 0, 0, 0.55);
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-display);
+        font-size: 14px;
+        line-height: 1.5;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        transition:
+          background var(--transition),
+          color var(--transition);
+      }
+
+      /* ═══════════════════════════════════════════════════
+   FAB CLUSTER
+═══════════════════════════════════════════════════ */
+      .fab-cluster {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 9000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+      }
+      .fab {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        color: var(--text2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px var(--shadow);
+        transition:
+          transform var(--transition),
+          box-shadow var(--transition),
+          border-color var(--transition),
+          color var(--transition);
+      }
+      .fab svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+      }
+      .fab:hover {
+        transform: scale(1.12) rotate(18deg);
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 8px 24px var(--accent-glow);
+      }
+
+      /* ═══════════════════════════════════════════════════
+   SETTINGS PANEL
+═══════════════════════════════════════════════════ */
+      .settings-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9100;
+        background: rgba(10, 12, 30, 0.55);
+        backdrop-filter: blur(6px);
+        display: flex;
+        justify-content: flex-end;
+        animation: fadeIn 0.2s ease;
+      }
+      .settings-overlay.hidden {
+        display: none;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .settings-drawer {
+        width: min(470px, 100vw);
+        height: 100%;
+        background: var(--surface);
+        border-left: 1.5px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        animation: slideInRight 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        overflow: hidden;
+        box-shadow: -8px 0 48px var(--shadow-lg);
+      }
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      .settings-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1.5px solid var(--border);
+        background: linear-gradient(135deg, var(--accent-soft), var(--bg2));
+        flex-shrink: 0;
+      }
+      .sh-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .sh-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #fff;
+        font-weight: 800;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px var(--accent-glow);
+        flex-shrink: 0;
+      }
+      .sh-info {
+        display: flex;
+        flex-direction: column;
+      }
+      .sh-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.2;
+      }
+      .sh-sub {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.12em;
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+      }
+      .settings-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: transparent;
+        border: 1.5px solid var(--border);
+        color: var(--muted);
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          border-color var(--transition),
+          color var(--transition),
+          background var(--transition);
+        flex-shrink: 0;
+      }
+      .settings-close:hover {
+        border-color: var(--red);
+        color: var(--red);
+        background: rgba(239, 68, 68, 0.07);
+      }
+
+      .s-tabs {
+        display: flex;
+        flex-shrink: 0;
+        border-bottom: 1.5px solid var(--border);
+        background: var(--bg2);
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .s-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .s-tab {
+        flex-shrink: 0;
+        padding: 10px 14px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        background: transparent;
+        border: none;
+        border-bottom: 2.5px solid transparent;
+        cursor: pointer;
+        font-family: var(--font-display);
+        transition:
+          color var(--transition),
+          border-color var(--transition),
+          background var(--transition);
+        white-space: nowrap;
+      }
+      .s-tab:hover {
+        color: var(--text2);
+        background: var(--accent-soft);
+      }
+      .s-tab.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+        background: var(--surface);
+      }
+
+      .s-panel {
+        display: none;
+        flex-direction: column;
+        flex: 1;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+      }
+      .s-panel.active {
+        display: flex;
+      }
+
+      .settings-section {
+        padding: 16px 20px 14px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .settings-section-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.4em;
+        color: var(--muted);
+      }
+      .settings-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .settings-row-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+      }
+      .settings-row-icon {
+        font-size: 16px;
+      }
+
+      .toggle-pill {
+        position: relative;
+        width: 100px;
+        height: 32px;
+        border-radius: var(--radius-pill);
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+        overflow: hidden;
+        transition:
+          border-color var(--transition),
+          background var(--transition);
+        flex-shrink: 0;
+      }
+      .toggle-pill[data-state="on"] {
+        background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+        border-color: var(--accent);
+      }
+      .toggle-pill-knob {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--muted);
+        transition:
+          left var(--transition),
+          background var(--transition);
+        pointer-events: none;
+        z-index: 1;
+        box-shadow: 0 2px 6px var(--shadow);
+      }
+      .toggle-pill[data-state="on"] .toggle-pill-knob {
+        left: 69px;
+        background: var(--accent);
+      }
+      .toggle-pill-off,
+      .toggle-pill-on {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        font-family: var(--font-mono);
+        transition: opacity var(--transition);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .toggle-pill-off {
+        left: 30px;
+        color: var(--muted);
+      }
+      .toggle-pill-on {
+        right: 8px;
+        color: var(--accent);
+      }
+      .toggle-pill[data-state="off"] .toggle-pill-on {
+        opacity: 0;
+      }
+      .toggle-pill[data-state="on"] .toggle-pill-off {
+        opacity: 0;
+      }
+      .toggle-pill[data-state="off"] .toggle-pill-off {
+        opacity: 1;
+      }
+      .toggle-pill[data-state="on"] .toggle-pill-on {
+        opacity: 1;
+      }
+
+      .rules-accordion {
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .rules-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 11px 14px;
+        background: var(--surface2);
+        border: none;
+        font-family: var(--font-display);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text2);
+        cursor: pointer;
+        transition: background var(--transition);
+      }
+      .rules-toggle:hover {
+        background: var(--bg2);
+      }
+      .rules-chevron {
+        font-size: 14px;
+        color: var(--muted);
+        transition: transform var(--transition);
+      }
+      .rules-toggle.open .rules-chevron {
+        transform: rotate(180deg);
+      }
+      .rules-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        background: var(--surface);
+      }
+      .rules-body.open {
+        max-height: 400px;
+      }
+      .rules-list {
+        list-style: none;
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .rules-list li {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.6;
+        padding-left: 14px;
+        position: relative;
+      }
+      .rules-list li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      .rules-list li strong {
+        color: var(--accent);
+      }
+
+      .prof-hero {
+        padding: 20px 20px 14px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      .prof-avatar-wrap {
+        position: relative;
+        flex-shrink: 0;
+      }
+      .prof-avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #fff;
+        font-weight: 900;
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 20px var(--accent-glow);
+      }
+      .prof-avatar-ring {
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        opacity: 0.4;
+        animation: ringPulse 2.5s ease infinite;
+      }
+      @keyframes ringPulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.4;
+        }
+        50% {
+          transform: scale(1.06);
+          opacity: 0.15;
+        }
+      }
+      .prof-name-block {
+        flex: 1;
+      }
+      .prof-field-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.35em;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .prof-name-edit {
+        display: flex;
+        gap: 8px;
+      }
+      .prof-input {
+        flex: 1;
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 8px 12px;
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        outline: none;
+        transition: border-color var(--transition);
+      }
+      .prof-input:focus {
+        border-color: var(--accent);
+      }
+      .prof-save-btn {
+        padding: 8px 14px;
+        border-radius: var(--radius);
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-family: var(--font-display);
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        letter-spacing: 0.05em;
+        transition:
+          opacity var(--transition),
+          transform var(--transition);
+      }
+      .prof-save-btn:hover {
+        opacity: 0.88;
+        transform: scale(0.97);
+      }
+
+      .prof-stats-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-bottom: 1px solid var(--border);
+      }
+      .pss-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px 6px;
+        gap: 4px;
+        border-right: 1px solid var(--border);
+      }
+      .pss-item:last-child {
+        border-right: none;
+      }
+      .pss-val {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--accent);
+        font-family: var(--font-mono);
+      }
+      .pss-key {
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .danger-btn {
+        width: 100%;
+        padding: 10px 16px;
+        border-radius: var(--radius);
+        background: rgba(239, 68, 68, 0.08);
+        border: 1.5px solid rgba(239, 68, 68, 0.3);
+        color: var(--red);
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          background var(--transition),
+          border-color var(--transition);
+      }
+      .danger-btn:hover {
+        background: rgba(239, 68, 68, 0.16);
+        border-color: var(--red);
+      }
+
+      .comp-head {
+        padding: 18px 20px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      .comp-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        display: block;
+      }
+      .comp-sub {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+        display: block;
+      }
+      .comp-mode-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .comp-mode-card {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: border-color var(--transition);
+      }
+      .comp-mode-card:hover {
+        border-color: var(--accent);
+      }
+      .cmc-mode {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        color: var(--muted);
+      }
+      .cmc-score {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--accent);
+        font-family: var(--font-mono);
+      }
+      .cmc-label {
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .comp-chart-wrap {
+        background: var(--surface2);
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        padding: 10px;
+        overflow: hidden;
+      }
+      .comp-chart-wrap canvas {
+        display: block;
+        width: 100% !important;
+      }
+      .comp-alltime {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .cat-item {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .cat-val {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text);
+        font-family: var(--font-mono);
+      }
+      .cat-key {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.25em;
+        color: var(--muted);
+      }
+      .comp-history {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .ch-item {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .chi-mode {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--accent);
+      }
+      .chi-date {
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .chi-right {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .chi-score {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--text);
+        font-family: var(--font-mono);
+      }
+      .comp-empty {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+        padding: 24px 0;
+        font-style: italic;
+      }
+
+      .color-palette {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .color-swatch {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 3px solid transparent;
+        cursor: pointer;
+        transition:
+          transform var(--transition),
+          border-color 0.15s;
+        outline: none;
+        flex-shrink: 0;
+      }
+      .color-swatch:hover {
+        transform: scale(1.15);
+      }
+      .color-swatch.active {
+        border-color: var(--text);
+        transform: scale(1.1);
+        box-shadow:
+          0 0 0 2px var(--surface),
+          0 0 0 4px var(--text);
+      }
+      .color-custom-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+      }
+      .color-custom-input {
+        width: 40px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+        padding: 2px;
+        background: var(--surface2);
+      }
+      .font-size-row {
+        display: flex;
+        gap: 10px;
+      }
+      .fs-btn {
+        flex: 1;
+        padding: 10px 0;
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        background: var(--surface2);
+        color: var(--text2);
+        font-family: var(--font-display);
+        font-weight: 700;
+        cursor: pointer;
+        transition: all var(--transition);
+      }
+      .fs-btn.active {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-soft);
+      }
+      .fs-btn:hover:not(.active) {
+        border-color: var(--border-hi);
+        color: var(--text);
+      }
+
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 12px 0;
+      }
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+      }
+      .faq-q {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px 20px;
+        background: transparent;
+        border: none;
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        cursor: pointer;
+        text-align: left;
+        transition: background var(--transition);
+      }
+      .faq-q:hover {
+        background: var(--accent-soft);
+      }
+      .faq-chevron {
+        font-size: 14px;
+        color: var(--muted);
+        flex-shrink: 0;
+        transition: transform var(--transition);
+      }
+      .faq-item.open .faq-chevron {
+        transform: rotate(180deg);
+      }
+      .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.35s ease,
+          padding 0.35s ease;
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.7;
+        padding: 0 20px;
+      }
+      .faq-item.open .faq-a {
+        max-height: 300px;
+        padding: 0 20px 14px;
+      }
+
+      .tips-hero {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: linear-gradient(135deg, var(--accent-soft), transparent);
+      }
+      .tips-hero-icon {
+        font-size: 32px;
+        line-height: 1;
+      }
+      .tips-hero-text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .tips-hero-text strong {
+        font-size: 14px;
+        color: var(--text);
+        font-weight: 700;
+      }
+      .tips-hero-text span {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .tips-mode-selector {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0;
+        border-bottom: 1.5px solid var(--border);
+        background: var(--surface2);
+      }
+      .tips-mode-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 4px;
+        border: none;
+        border-right: 1px solid var(--border);
+        border-bottom: 2.5px solid transparent;
+        background: transparent;
+        cursor: pointer;
+        font-family: var(--font-display);
+        font-size: 7px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        gap: 3px;
+        transition: all var(--transition);
+      }
+      .tips-mode-btn:last-child {
+        border-right: none;
+      }
+      .tips-mode-btn:hover {
+        color: var(--text2);
+        background: var(--accent-soft);
+      }
+      .tips-mode-btn.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+        background: var(--surface);
+      }
+      .tips-mode-ico {
+        font-size: 14px;
+      }
+      .tips-content {
+        flex: 1;
+        overflow-y: auto;
+      }
+      .tips-panel {
+        display: none;
+        flex-direction: column;
+      }
+      .tips-panel.active {
+        display: flex;
+      }
+      .tips-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 10px;
+        border-radius: var(--radius-pill);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+      }
+      .badge-easy {
+        background: rgba(22, 163, 74, 0.12);
+        color: #16a34a;
+      }
+      .badge-medium {
+        background: rgba(217, 119, 6, 0.12);
+        color: #d97706;
+      }
+      .badge-hard {
+        background: rgba(220, 38, 38, 0.12);
+        color: #dc2626;
+      }
+      .badge-impossible {
+        background: rgba(225, 29, 72, 0.12);
+        color: #e11d48;
+      }
+      .badge-inf {
+        background: rgba(124, 58, 237, 0.12);
+        color: #7c3aed;
+      }
+      .tips-panel-hero {
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .tips-panel-sub {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .tips-list {
+        padding: 14px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .tips-card {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px 14px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        transition: border-color var(--transition);
+      }
+      .tips-card:hover {
+        border-color: var(--accent2);
+      }
+      .tips-card-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+        line-height: 1;
+        margin-top: 1px;
+      }
+      .tips-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .tips-card-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .tips-card-desc {
+        font-size: 11px;
+        color: var(--text2);
+        line-height: 1.65;
+      }
+      .tips-card-desc strong {
+        color: var(--accent);
+      }
+      .tips-strategy-section {
+        padding: 14px 20px 20px;
+        border-top: 1px solid var(--border);
+      }
+      .tips-strategy-title {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.35em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .tips-strategy-list {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .tips-strategy-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.6;
+      }
+      .tips-strategy-num {
+        font-size: 9px;
+        font-weight: 800;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        background: var(--accent-soft);
+        border-radius: 4px;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      .fb-hero {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: linear-gradient(135deg, var(--accent-soft), transparent);
+      }
+      .fb-hero-icon {
+        font-size: 32px;
+      }
+      .fb-hero-text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .fb-hero-text strong {
+        font-size: 14px;
+        color: var(--text);
+        font-weight: 700;
+      }
+      .fb-hero-text span {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .fb-select {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 9px 12px;
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        cursor: pointer;
+        transition: border-color var(--transition);
+      }
+      .fb-select:focus {
+        border-color: var(--accent);
+      }
+      .fb-textarea {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px 12px;
+        font-family: var(--font-display);
+        font-size: 13px;
+        color: var(--text);
+        resize: vertical;
+        min-height: 90px;
+        outline: none;
+        transition: border-color var(--transition);
+      }
+      .fb-textarea:focus {
+        border-color: var(--accent);
+      }
+      .fb-char-count {
+        font-size: 10px;
+        color: var(--muted);
+        text-align: right;
+        font-family: var(--font-mono);
+      }
+      .fb-channels {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .fb-channel-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: var(--radius);
+        border: 1.5px solid var(--border);
+        background: var(--surface2);
+        text-decoration: none;
+        transition: all var(--transition);
+      }
+      .fb-channel-btn:hover {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        transform: translateX(2px);
+      }
+      .fb-ch-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      .fb-ch-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+      .fb-ch-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .fb-ch-sub {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .fb-ch-arrow {
+        font-size: 16px;
+        color: var(--muted);
+      }
+
+      .settings-footer {
+        padding: 14px 20px;
+        text-align: center;
+        font-size: 10px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        letter-spacing: 0.1em;
+        border-top: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      /* ═══════════════════════════════════════════════════
+   ABOUT PAGE LAYOUT — REDESIGNED & FULLY RESPONSIVE
+═══════════════════════════════════════════════════ */
+      .about-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      /* ── HERO SECTION ── */
+      .about-hero {
+        position: relative;
+        background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 60%);
+        padding: clamp(60px, 10vh, 100px) clamp(16px, 5vw, 48px)
+          clamp(48px, 8vh, 80px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: 100svh;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border);
+        justify-content: center;
+      }
+
+      /* animated bg grid */
+      .about-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.45;
+        animation: gridPan 20s linear infinite;
+      }
+      @keyframes gridPan {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(40px, 40px);
+        }
+      }
+
+      /* radial glow on hero */
+      .about-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 55% at 50% 40%,
+          var(--accent-glow),
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .about-hero-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(14px, 3vw, 24px);
+        width: 100%;
+      }
+
+      /* ── LOGO LARGE ── */
+      .about-logo-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        animation: logoEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      @keyframes logoEntrance {
+        from {
+          opacity: 0;
+          transform: translateY(-30px) scale(0.85);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .about-logo-svg {
+        width: clamp(80px, 15vw, 120px);
+        height: clamp(80px, 15vw, 120px);
+        filter: drop-shadow(0 0 24px var(--accent-glow));
+        animation: logoFloat 4s ease-in-out infinite;
+      }
+      @keyframes logoFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+          filter: drop-shadow(0 0 24px var(--accent-glow));
+        }
+        50% {
+          transform: translateY(-8px);
+          filter: drop-shadow(0 12px 32px var(--accent-glow));
+        }
+      }
+
+      .about-logo-rings {
+        position: absolute;
+        inset: -20px;
+        pointer-events: none;
+      }
+      .about-logo-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 1px solid var(--accent);
+      }
+      .about-logo-ring.r1 {
+        inset: 0;
+        opacity: 0.25;
+        animation: spinCW 12s linear infinite;
+      }
+      .about-logo-ring.r2 {
+        inset: 10px;
+        opacity: 0.15;
+        animation: spinCCW 9s linear infinite;
+      }
+      @keyframes spinCW {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinCCW {
+        to {
+          transform: rotate(-360deg);
+        }
+      }
+
+      .about-logo-svg-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .about-title-block {
+        animation: fadeUp 1s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .about-apex-text {
+        font-size: clamp(44px, 12vw, 86px);
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        background: linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2),
+          #c4b5fd
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        display: block;
+      }
+      .about-apex-full {
+        font-size: clamp(10px, 2vw, 14px);
+        font-family: var(--font-mono);
+        letter-spacing: 0.22em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-top: 6px;
+        display: block;
+      }
+      .about-hero-tagline {
+        font-size: clamp(13px, 2.5vw, 17px);
+        font-weight: 400;
+        color: var(--text2);
+        max-width: min(560px, 90vw);
+        line-height: 1.7;
+        animation: fadeUp 1s 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+        padding: 0 clamp(0px, 2vw, 16px);
+      }
+      .about-hero-tagline strong {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .about-badge-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 1s 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        padding: 0 clamp(0px, 2vw, 16px);
+      }
+      .about-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: var(--radius-pill);
+        border: 1.5px solid var(--border);
+        background: var(--surface);
+        font-size: clamp(9px, 1.8vw, 11px);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--text2);
+        font-family: var(--font-mono);
+        box-shadow: 0 2px 10px var(--shadow);
+        transition: all var(--transition);
+      }
+      .about-badge:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px var(--accent-glow);
+      }
+      .about-badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        animation: pulseDot 1.8s ease infinite;
+        flex-shrink: 0;
+      }
+      @keyframes pulseDot {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(0.7);
+        }
+      }
+
+      .about-hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 1s 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      .about-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px;
+        border-radius: var(--radius-pill);
+        border: 1.5px solid var(--border);
+        background: var(--surface);
+        color: var(--text2);
+        font-size: 13px;
+        font-weight: 700;
+        font-family: var(--font-display);
+        text-decoration: none;
+        transition: all var(--transition);
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      .about-back-btn:hover {
+        background: var(--accent-soft);
+        color: var(--accent);
+        border-color: var(--accent2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--accent-glow);
+      }
+
+      /* scroll hint arrow */
+      .about-scroll-hint {
+        position: absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        opacity: 0.45;
+        animation: scrollBounce 2s ease infinite;
+        pointer-events: none;
+      }
+      .about-scroll-hint span {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        color: var(--muted);
+        font-family: var(--font-mono);
+      }
+      .about-scroll-hint svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--muted);
+      }
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(6px);
+        }
+      }
+
+      /* ── CONTENT ── */
+      .about-content {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: clamp(40px, 6vh, 72px) clamp(16px, 5vw, 32px)
+          clamp(60px, 8vh, 100px);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(44px, 6vw, 72px);
+        width: 100%;
+      }
+
+      .about-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .about-section-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.45em;
+        color: var(--muted);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .about-section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .about-section-title {
+        font-size: clamp(20px, 4vw, 30px);
+        font-weight: 800;
+        color: var(--text);
+        line-height: 1.2;
+      }
+      .about-section-title span {
+        color: var(--accent);
+      }
+
+      /* Pillars grid */
+      .about-pillars {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+        gap: 14px;
+      }
+      .about-pillar {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: clamp(18px, 3vw, 26px) clamp(16px, 3vw, 22px);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: all var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+      .about-pillar::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .about-pillar:hover {
+        border-color: var(--accent2);
+        box-shadow: 0 8px 32px var(--accent-glow);
+        transform: translateY(-4px);
+      }
+      .about-pillar:hover::before {
+        transform: scaleX(1);
+      }
+      .about-pillar-icon {
+        font-size: 28px;
+        line-height: 1;
+      }
+      .about-pillar-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: 0.05em;
+      }
+      .about-pillar-desc {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.7;
+      }
+
+      /* Mode showcase */
+      .about-modes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+        gap: 12px;
+      }
+      .about-mode-card {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 18px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        transition: all var(--transition);
+        cursor: default;
+      }
+      .about-mode-card:hover {
+        box-shadow: 0 6px 24px var(--shadow-lg);
+        transform: translateY(-3px);
+      }
+      .about-mode-card.mc-easy {
+        border-color: rgba(22, 163, 74, 0.3);
+      }
+      .about-mode-card.mc-easy:hover {
+        border-color: #16a34a;
+        box-shadow: 0 6px 24px rgba(22, 163, 74, 0.2);
+      }
+      .about-mode-card.mc-medium {
+        border-color: rgba(217, 119, 6, 0.3);
+      }
+      .about-mode-card.mc-medium:hover {
+        border-color: #d97706;
+        box-shadow: 0 6px 24px rgba(217, 119, 6, 0.2);
+      }
+      .about-mode-card.mc-hard {
+        border-color: rgba(220, 38, 38, 0.3);
+      }
+      .about-mode-card.mc-hard:hover {
+        border-color: #dc2626;
+        box-shadow: 0 6px 24px rgba(220, 38, 38, 0.2);
+      }
+      .about-mode-card.mc-impossible {
+        border-color: rgba(225, 29, 72, 0.3);
+      }
+      .about-mode-card.mc-impossible:hover {
+        border-color: #e11d48;
+        box-shadow: 0 6px 24px rgba(225, 29, 72, 0.2);
+      }
+      .about-mode-card.mc-infinite {
+        border-color: rgba(124, 58, 237, 0.3);
+      }
+      .about-mode-card.mc-infinite:hover {
+        border-color: #7c3aed;
+        box-shadow: 0 6px 24px rgba(124, 58, 237, 0.2);
+      }
+      .about-mode-icon {
+        font-size: 24px;
+      }
+      .about-mode-name {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        color: var(--text);
+      }
+      .about-mode-timer {
+        font-size: 10px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+      }
+      .about-mode-desc {
+        font-size: 11px;
+        color: var(--text2);
+        line-height: 1.5;
+      }
+
+      /* Powerups */
+      .about-powerups {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .about-pu {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        transition: all var(--transition);
+      }
+      .about-pu:hover {
+        border-color: var(--accent2);
+        box-shadow: 0 4px 16px var(--accent-glow);
+      }
+      .about-pu-key {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 3px 10px var(--accent-glow);
+      }
+      .about-pu-info {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .about-pu-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .about-pu-desc {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.6;
+      }
+
+      /* Stats strip */
+      .about-stats {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(min(130px, calc(50% - 6px)), 1fr)
+        );
+        gap: 12px;
+      }
+      .about-stat {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        text-align: center;
+        transition: all var(--transition);
+      }
+      .about-stat:hover {
+        border-color: var(--accent);
+        box-shadow: 0 6px 20px var(--accent-glow);
+        transform: translateY(-3px);
+      }
+      .about-stat-num {
+        font-size: 28px;
+        font-weight: 900;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        line-height: 1;
+      }
+      .about-stat-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        color: var(--muted);
+      }
+
+      /* Developer card */
+      .about-dev {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: clamp(20px, 4vw, 32px) clamp(16px, 4vw, 28px);
+        display: flex;
+        align-items: flex-start;
+        gap: clamp(14px, 3vw, 24px);
+        transition: all var(--transition);
+        flex-wrap: wrap;
+      }
+      .about-dev:hover {
+        border-color: var(--accent2);
+        box-shadow: 0 8px 32px var(--accent-glow);
+      }
+      .about-dev-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 900;
+        color: #fff;
+        box-shadow: 0 6px 20px var(--accent-glow);
+        position: relative;
+      }
+      .about-dev-avatar-ring {
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        opacity: 0.35;
+        animation: ringPulse 2.5s ease infinite;
+      }
+      .about-dev-info {
+        flex: 1;
+      }
+      .about-dev-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text);
+      }
+      .about-dev-role {
+        font-size: 11px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        letter-spacing: 0.15em;
+        margin-top: 2px;
+      }
+      .about-dev-bio {
+        font-size: 12px;
+        color: var(--text2);
+        margin-top: 8px;
+        line-height: 1.7;
+      }
+      .about-dev-links {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .about-dev-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: var(--radius-pill);
+        border: 1.5px solid var(--border);
+        background: var(--surface2);
+        color: var(--text2);
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all var(--transition);
+      }
+      .about-dev-link:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-soft);
+      }
+
+      /* Ranking table */
+      .about-ranks {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .about-rank-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px 16px;
+        transition: all var(--transition);
+        flex-wrap: wrap;
+      }
+      .about-rank-row:hover {
+        border-color: var(--accent2);
+        transform: translateX(4px);
+      }
+      .about-rank-pct {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        width: 44px;
+        flex-shrink: 0;
+      }
+      .about-rank-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        flex: 1;
+      }
+      .about-rank-desc {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* Tech stack */
+      .about-tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+        gap: 12px;
+      }
+      .about-tech-item {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition: all var(--transition);
+      }
+      .about-tech-item:hover {
+        border-color: var(--accent2);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px var(--accent-glow);
+      }
+      .about-tech-icon {
+        font-size: 22px;
+        line-height: 1;
+      }
+      .about-tech-name {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: 0.05em;
+      }
+      .about-tech-desc {
+        font-size: 11px;
+        color: var(--text2);
+        line-height: 1.5;
+      }
+      .about-zero-dep {
+        display: flex;
+        justify-content: center;
+        margin-top: 4px;
+      }
+      .about-zero-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 18px;
+        border-radius: var(--radius-pill);
+        background: var(--accent-soft);
+        border: 1.5px solid var(--accent2);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        letter-spacing: 0.04em;
+        text-align: center;
+      }
+      @media (max-width: 480px) {
+        .about-tech-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about-zero-badge {
+          font-size: 10px;
+          padding: 7px 14px;
+          text-align: center;
+        }
+      }
+
+      /* ═══════════════════════════════════════════════════
+   FEATURED PLAN / ROADMAP
+═══════════════════════════════════════════════════ */
+      .roadmap-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+      }
+      .roadmap-grid::before {
+        content: "";
+        position: absolute;
+        left: 28px;
+        top: 20px;
+        bottom: 20px;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+        opacity: 0.25;
+        z-index: 0;
+      }
+      .roadmap-item {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        padding: 18px 0;
+        position: relative;
+        z-index: 1;
+        border-bottom: 1px solid var(--border);
+        transition: all var(--transition);
+      }
+      .roadmap-item:last-child { border-bottom: none; }
+      .roadmap-item:hover .roadmap-dot { transform: scale(1.25); box-shadow: 0 0 0 6px var(--accent-soft), 0 0 16px var(--accent-glow); }
+      .roadmap-dot-wrap {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding-top: 2px;
+      }
+      .roadmap-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--surface2);
+        border: 2.5px solid var(--border-hi);
+        transition: all var(--transition);
+        margin: 0 7px;
+        flex-shrink: 0;
+      }
+      .roadmap-dot.done {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+      }
+      .roadmap-dot.in-progress {
+        background: var(--yellow);
+        border-color: var(--yellow);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+        animation: pulseYellow 2s ease infinite;
+      }
+      @keyframes pulseYellow {
+        0%, 100% { box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15); }
+        50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.05); }
+      }
+      .roadmap-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .roadmap-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .roadmap-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .roadmap-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 9px;
+        border-radius: var(--radius-pill);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        font-family: var(--font-mono);
+      }
+      .tag-done { background: rgba(34, 197, 94, 0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+      .tag-in-progress { background: rgba(245, 158, 11, 0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
+      .tag-planned { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-glow); }
+      .tag-exploring { background: rgba(139, 92, 246, 0.1); color: var(--violet); border: 1px solid rgba(139,92,246,0.2); }
+      .roadmap-desc {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.7;
+        max-width: 680px;
+      }
+      .roadmap-meta {
+        font-size: 10px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        letter-spacing: 0.06em;
+      }
+      .roadmap-phase-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.35em;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        padding: 14px 0 8px 34px;
+        text-transform: uppercase;
+      }
+      .roadmap-phase-label:first-child { padding-top: 0; }
+
+      /* CTA */
+      .about-cta {
+        background: linear-gradient(135deg, var(--accent-soft), var(--bg2));
+        border: 1.5px solid var(--accent2);
+        border-radius: var(--radius-lg);
+        padding: clamp(28px, 5vw, 44px) clamp(20px, 5vw, 36px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .about-cta::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: -50%;
+        height: 200%;
+        background: conic-gradient(
+          from 0deg,
+          transparent,
+          var(--accent-glow),
+          transparent
+        );
+        animation: ctaSpin 8s linear infinite;
+        pointer-events: none;
+      }
+      @keyframes ctaSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .about-cta-inner {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .about-cta-title {
+        font-size: clamp(20px, 4vw, 26px);
+        font-weight: 900;
+        color: var(--text);
+      }
+      .about-cta-sub {
+        font-size: 14px;
+        color: var(--text2);
+      }
+      .about-cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 32px;
+        border-radius: var(--radius-pill);
+        background: var(--accent);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-family: var(--font-display);
+        box-shadow: 0 8px 28px var(--accent-glow);
+        transition: all var(--transition);
+      }
+      .about-cta-btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 14px 40px var(--accent-glow);
+        opacity: 0.93;
+      }
+
+      /* scroll fade-in */
+      .reveal {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+
+      /* Tablet */
+      @media (max-width: 768px) {
+        .about-pillars {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about-modes {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about-dev {
+          align-items: flex-start;
+        }
+      }
+
+      /* Large phone */
+      @media (max-width: 640px) {
+        .settings-drawer {
+          width: 100vw;
+        }
+        .s-tab {
+          padding: 9px 10px;
+          font-size: 9px;
+        }
+        .about-content {
+          padding: 36px 16px 60px;
+          gap: 44px;
+        }
+        .about-logo-svg {
+          width: 88px;
+          height: 88px;
+        }
+        .about-modes {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about-pillars {
+          grid-template-columns: 1fr;
+        }
+        .about-stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .about-dev {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .about-rank-desc {
+          display: none;
+        }
+        .about-cta {
+          padding: 28px 18px;
+        }
+      }
+
+      /* Small phone */
+      @media (max-width: 400px) {
+        .about-logo-svg {
+          width: 70px;
+          height: 70px;
+        }
+        .about-modes {
+          grid-template-columns: 1fr;
+        }
+        .about-badge-row {
+          gap: 6px;
+        }
+        .about-badge {
+          font-size: 9px;
+          padding: 5px 10px;
+        }
+        .about-dev-link {
+          font-size: 10px;
+          padding: 5px 11px;
+        }
+        .prof-stats-strip {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* Landscape small phone */
+      @media (max-height: 500px) and (orientation: landscape) {
+        .about-hero {
+          min-height: auto;
+          padding: 40px 24px 32px;
+        }
+        .about-scroll-hint {
+          display: none;
+        }
+      }
+
+      /* ═══════════════════════════════════════════════════
+   QUESTION BANK METER
+═══════════════════════════════════════════════════ */
+      .qbank-odometer-wrap {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px 28px 22px;
+        margin-bottom: 28px;
+        box-shadow: 0 4px 24px var(--shadow);
+      }
+      .qbank-odometer-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.35em;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        margin-bottom: 14px;
+      }
+      .qbank-odometer {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 28px;
+      }
+      .qbank-digit-col {
+        width: 62px;
+        height: 76px;
+        background: linear-gradient(135deg, var(--accent-soft), var(--bg2));
+        border: 1.5px solid var(--border-hi);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 2px 8px var(--shadow);
+      }
+      .qbank-digit-inner {
+        display: flex;
+        flex-direction: column;
+        transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .qbank-digit-inner span {
+        height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 44px;
+        font-weight: 900;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        flex-shrink: 0;
+        text-shadow: 0 0 20px var(--accent-glow);
+      }
+      /* fade edges */
+      .qbank-digit-col::before,
+      .qbank-digit-col::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 22px;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .qbank-digit-col::before {
+        top: 0;
+        background: linear-gradient(to bottom, var(--surface), transparent);
+      }
+      .qbank-digit-col::after {
+        bottom: 0;
+        background: linear-gradient(to top, var(--surface), transparent);
+      }
+
+      .qbank-plus {
+        width: auto;
+        background: none;
+        border: none;
+        box-shadow: none;
+      }
+      .qbank-plus span {
+        font-size: 44px;
+        font-weight: 900;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        line-height: 1;
+        opacity: 0.6;
+      }
+
+      /* ── Meter track ── */
+      .qbank-meter-wrap {
+        position: relative;
+      }
+      .qbank-meter-track {
+        height: 8px;
+        background: var(--surface2);
+        border-radius: 100px;
+        border: 1.5px solid var(--border);
+        overflow: visible;
+        position: relative;
+      }
+      .qbank-meter-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 100px;
+        transition: width 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow: 0 0 12px var(--accent-glow);
+      }
+      .qbank-meter-thumb {
+        position: absolute;
+        top: 50%;
+        left: 0%;
+        transform: translate(-50%, -50%);
+        width: 18px;
+        height: 18px;
+        background: var(--accent);
+        border: 3px solid var(--surface);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 2px var(--accent),
+          0 4px 12px var(--accent-glow);
+        transition: left 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .qbank-meter-ticks {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0 0;
+      }
+      .qbank-meter-tick {
+        font-size: 9px;
+        font-weight: 700;
+        font-family: var(--font-mono);
+        color: var(--muted);
+        text-align: center;
+        position: relative;
+      }
+      .qbank-meter-tick.active {
+        color: var(--accent);
+      }
+
+      /* ── Per-mode breakdown ── */
+      .qbank-modes-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+      .qbank-mode-item {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px 10px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          border-color 0.25s ease;
+      }
+      .qbank-mode-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .qbank-easy {
+        border-top: 3px solid #22c55e;
+      }
+      .qbank-medium {
+        border-top: 3px solid #f59e0b;
+      }
+      .qbank-hard {
+        border-top: 3px solid #ef4444;
+      }
+      .qbank-impossible {
+        border-top: 3px solid #8b5cf6;
+      }
+      .qbank-infinite {
+        border-top: 3px solid #14b8a6;
+      }
+      .qbank-mode-emoji {
+        font-size: 20px;
+      }
+      .qbank-mode-label {
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        font-family: var(--font-mono);
+      }
+      .qbank-mode-count {
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--accent);
+        font-family: var(--font-mono);
+        line-height: 1;
+      }
+      .qbank-mode-sub {
+        font-size: 9px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .qbank-mode-bar {
+        width: 100%;
+        height: 4px;
+        background: var(--surface2);
+        border-radius: 100px;
+        overflow: hidden;
+        margin-top: 4px;
+      }
+      .qbank-mode-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        border-radius: 100px;
+        transition: width 1.4s 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .qbank-mode-item.animated .qbank-mode-bar-fill {
+        width: var(--pct);
+      }
+
+      /* ── Topics cloud ── */
+      .qbank-categories-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.35em;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        margin-bottom: 12px;
+      }
+      .qbank-topics-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .qbank-topic {
+        padding: 5px 13px;
+        border-radius: var(--radius-pill);
+        background: var(--accent-soft);
+        border: 1px solid var(--accent-glow);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 600;
+        cursor: default;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .qbank-topic:hover {
+        background: var(--accent);
+        color: #fff;
+        transform: scale(1.06);
+      }
+
+      /* ═══════════════════════════════════════════════════
+   SCORE FORMULA CARD
+═══════════════════════════════════════════════════ */
+      .score-formula-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 28px 24px;
+        box-shadow: 0 4px 24px var(--shadow);
+      }
+      .score-formula-eq {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 28px;
+        padding-bottom: 22px;
+        border-bottom: 1.5px solid var(--border);
+      }
+      .sf-var {
+        padding: 8px 18px;
+        border-radius: var(--radius);
+        font-size: 13px;
+        font-weight: 800;
+        font-family: var(--font-mono);
+        letter-spacing: 0.05em;
+      }
+      .sf-acc {
+        background: rgba(34, 197, 94, 0.12);
+        color: #22c55e;
+        border: 1.5px solid rgba(34, 197, 94, 0.25);
+      }
+      .sf-spd {
+        background: rgba(245, 158, 11, 0.12);
+        color: #f59e0b;
+        border: 1.5px solid rgba(245, 158, 11, 0.25);
+      }
+      .sf-combo {
+        background: rgba(239, 68, 68, 0.12);
+        color: #ef4444;
+        border: 1.5px solid rgba(239, 68, 68, 0.25);
+      }
+      .sf-tier {
+        background: rgba(139, 92, 246, 0.12);
+        color: #8b5cf6;
+        border: 1.5px solid rgba(139, 92, 246, 0.25);
+      }
+      .sf-op {
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--muted);
+      }
+      .score-factors-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .sf-factor {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .sf-factor-icon {
+        font-size: 22px;
+      }
+      .sf-factor-name {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: 0.04em;
+      }
+      .sf-factor-desc {
+        font-size: 11px;
+        color: var(--text2);
+        line-height: 1.6;
+      }
+
+      /* ═══════════════════════════════════════════════════
+   BEGINNER TIPS
+═══════════════════════════════════════════════════ */
+      .beginner-tips-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .btip {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px 16px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        transition:
+          transform 0.25s ease,
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+      .btip:hover {
+        transform: translateY(-3px);
+        border-color: var(--accent);
+        box-shadow: 0 6px 20px var(--accent-glow);
+      }
+      .btip-num {
+        font-size: 28px;
+        font-weight: 900;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        opacity: 0.25;
+        line-height: 1;
+        flex-shrink: 0;
+        width: 36px;
+      }
+      .btip-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 5px;
+      }
+      .btip-desc {
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 768px) {
+        .qbank-modes-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .score-factors-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .beginner-tips-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 500px) {
+        .qbank-modes-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .qbank-digit-col {
+          width: 48px;
+          height: 60px;
+        }
+        .qbank-digit-inner span {
+          font-size: 34px;
+          height: 60px;
+        }
+        .qbank-plus span {
+          font-size: 34px;
+        }
+        .score-formula-eq {
+          gap: 6px;
+        }
+        .sf-var {
+          font-size: 11px;
+          padding: 6px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ════════════════════════════════════════════
+     FAB — Settings Gear
+════════════════════════════════════════════ -->
+    <div class="fab-cluster">
+      <button
+        id="fab-settings"
+        class="fab"
+        title="Settings"
+        aria-label="Open settings"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+     SETTINGS PANEL — Full Tabbed Drawer
+════════════════════════════════════════════ -->
+    <div
+      id="settings-overlay"
+      class="settings-overlay hidden"
+      aria-modal="true"
+      role="dialog"
+    >
+      <div class="settings-drawer">
+        <!-- Header -->
+        <div class="settings-header">
+          <div class="sh-left">
+            <div class="sh-avatar" id="sh-avatar">A</div>
+            <div class="sh-info">
+              <span class="sh-name" id="sh-display-name">Player</span>
+              <span
+                class="sh-sub"
+                id="sh-profession-sub"
+                style="
+                  display: block;
+                  font-size: 11px;
+                  color: var(--muted);
+                  font-family: var(--font-mono);
+                  font-weight: 500;
+                  letter-spacing: 0.04em;
+                  margin-top: 1px;
+                "
+                >APEX Profile</span
+              >
+            </div>
+          </div>
+          <button id="settings-close" class="settings-close" aria-label="Close">
+            ✕
+          </button>
+        </div>
+
+        <!-- Tab Bar -->
+        <div class="s-tabs">
+          <button class="s-tab active" data-tab="profile">👤 Profile</button>
+          <button class="s-tab" data-tab="comparison">📊 Stats</button>
+          <button class="s-tab" data-tab="appearance">🎨 Theme</button>
+          <button class="s-tab" data-tab="tips">💡 Tips</button>
+          <button class="s-tab" data-tab="faq">❓ FAQ</button>
+          <button class="s-tab" data-tab="feedback">💬 Feedback</button>
+        </div>
+
+        <!-- ── TAB: PROFILE ── -->
+        <div class="s-panel active" id="tab-profile">
+          <div class="prof-hero">
+            <div class="prof-avatar-wrap">
+              <div class="prof-avatar" id="prof-avatar">A</div>
+              <div class="prof-avatar-ring"></div>
+            </div>
+            <div class="prof-name-block">
+              <div class="prof-field-label">Display Name</div>
+              <div class="prof-name-edit">
+                <input
+                  id="prof-name-input"
+                  class="prof-input"
+                  type="text"
+                  maxlength="20"
+                  placeholder="Enter your name…"
+                />
+                <button id="prof-name-save" class="prof-save-btn">Save</button>
+              </div>
+              <div
+                id="prof-profession-display"
+                style="
+                  font-size: 11.5px;
+                  color: var(--muted);
+                  font-family: var(--font-mono);
+                  font-weight: 500;
+                  letter-spacing: 0.04em;
+                  margin-top: 5px;
+                "
+              ></div>
+            </div>
+          </div>
+          <div class="prof-stats-strip">
+            <div class="pss-item">
+              <span class="pss-val" id="pss-games">0</span
+              ><span class="pss-key">Games</span>
+            </div>
+            <div class="pss-item">
+              <span class="pss-val" id="pss-best">0</span
+              ><span class="pss-key">Best Score</span>
+            </div>
+            <div class="pss-item">
+              <span class="pss-val" id="pss-acc">0%</span
+              ><span class="pss-key">Avg Accuracy</span>
+            </div>
+            <div class="pss-item">
+              <span class="pss-val" id="pss-streak">0</span
+              ><span class="pss-key">Best Streak</span>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">SOUND</div>
+            <div class="settings-row">
+              <span class="settings-row-label"
+                ><span class="settings-row-icon">🔊</span> Sound Effects</span
+              >
+              <button id="btn-mute-toggle" class="toggle-pill" data-state="on">
+                <span class="toggle-pill-knob"></span>
+                <span class="toggle-pill-off">🔇 MUTED</span>
+                <span class="toggle-pill-on">🔊 ON</span>
+              </button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">HOW TO PLAY</div>
+            <div class="rules-accordion">
+              <button class="rules-toggle" id="rules-toggle">
+                <span>📖 Game Rules</span><span class="rules-chevron">▾</span>
+              </button>
+              <div class="rules-body" id="rules-body">
+                <ul class="rules-list">
+                  <li>Select a mode and question count to begin.</li>
+                  <li>Answer before the timer runs out.</li>
+                  <li>Every 2 wrong answers = 1 heart lost.</li>
+                  <li>Consecutive correct answers build a combo multiplier.</li>
+                  <li>
+                    <strong>Freeze (F)</strong> — pauses the timer for 5 s.
+                  </li>
+                  <li><strong>50-50 (H)</strong> — removes 2 wrong options.</li>
+                  <li><strong>Skip (S)</strong> — skips without penalty.</li>
+                  <li>Infinite mode runs until all 5 hearts are lost.</li>
+                  <li>Review all questions on the results screen.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">DATA</div>
+            <button id="btn-reset-data" class="danger-btn">
+              🗑 Reset All Progress
+            </button>
+          </div>
+        </div>
+
+        <!-- ── TAB: STATS ── -->
+        <div class="s-panel" id="tab-comparison">
+          <div class="comp-head">
+            <span class="comp-title">📊 Your Performance History</span>
+            <span class="comp-sub">Compared across all sessions</span>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">BEST SCORES BY MODE</div>
+            <div class="comp-mode-grid" id="comp-mode-grid"></div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">
+              ACCURACY TREND (LAST 10 GAMES)
+            </div>
+            <div class="comp-chart-wrap">
+              <canvas id="comp-chart" width="300" height="100"></canvas>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">ALL-TIME STATS</div>
+            <div class="comp-alltime" id="comp-alltime"></div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">RECENT SESSIONS</div>
+            <div class="comp-history" id="comp-history"></div>
+          </div>
+        </div>
+
+        <!-- ── TAB: APPEARANCE ── -->
+        <div class="s-panel" id="tab-appearance">
+          <div class="settings-section">
+            <div class="settings-section-label">APPEARANCE</div>
+            <div class="settings-row">
+              <span class="settings-row-label"
+                ><span class="settings-row-icon">🌓</span> Dark Mode</span
+              >
+              <button
+                id="btn-theme-toggle"
+                class="toggle-pill"
+                data-state="light"
+              >
+                <span class="toggle-pill-knob"></span>
+                <span class="toggle-pill-off">☀ LIGHT</span>
+                <span class="toggle-pill-on">🌙 DARK</span>
+              </button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">ACCENT COLOR</div>
+            <div class="color-palette">
+              <button
+                class="color-swatch active"
+                data-color="#6c63ff"
+                style="background: #6c63ff"
+                title="Violet (default)"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#3b82f6"
+                style="background: #3b82f6"
+                title="Blue"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#22c55e"
+                style="background: #22c55e"
+                title="Green"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#f59e0b"
+                style="background: #f59e0b"
+                title="Amber"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#ef4444"
+                style="background: #ef4444"
+                title="Red"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#ec4899"
+                style="background: #ec4899"
+                title="Pink"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#14b8a6"
+                style="background: #14b8a6"
+                title="Teal"
+              ></button>
+              <button
+                class="color-swatch"
+                data-color="#f97316"
+                style="background: #f97316"
+                title="Orange"
+              ></button>
+            </div>
+            <div class="color-custom-row">
+              <span class="settings-row-label" style="font-size: 12px"
+                >Custom color</span
+              >
+              <input
+                type="color"
+                id="color-custom-picker"
+                class="color-custom-input"
+                value="#6c63ff"
+              />
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">FONT SIZE</div>
+            <div class="font-size-row">
+              <button class="fs-btn" data-size="small">A<sub>s</sub></button>
+              <button class="fs-btn active" data-size="medium">A</button>
+              <button class="fs-btn" data-size="large">A<sup>+</sup></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB: TIPS ── -->
+        <div class="s-panel" id="tab-tips">
+          <div class="tips-hero">
+            <div class="tips-hero-icon">💡</div>
+            <div class="tips-hero-text">
+              <strong>Pro Tips &amp; Strategy</strong>
+              <span>Master every mode with expert advice</span>
+            </div>
+          </div>
+          <div class="tips-mode-selector">
+            <button class="tips-mode-btn active" data-tips-mode="easy">
+              <span class="tips-mode-ico">🌿</span><span>EASY</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="medium">
+              <span class="tips-mode-ico">⚡</span><span>MEDIUM</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="hard">
+              <span class="tips-mode-ico">🔥</span><span>HARD</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="impossible">
+              <span class="tips-mode-ico">💀</span><span>IMPOSSIBLE</span>
+            </button>
+            <button class="tips-mode-btn" data-tips-mode="infinite">
+              <span class="tips-mode-ico">♾️</span><span>INFINITE</span>
+            </button>
+          </div>
+          <div class="tips-content" id="tips-content"></div>
+        </div>
+
+        <!-- ── TAB: FAQ ── -->
+        <div class="s-panel" id="tab-faq">
+          <div class="faq-list" id="faq-list"></div>
+        </div>
+
+        <!-- ── TAB: FEEDBACK ── -->
+        <div class="s-panel" id="tab-feedback">
+          <div class="fb-hero">
+            <div class="fb-hero-icon">💬</div>
+            <div class="fb-hero-text">
+              <strong>Share your thoughts!</strong>
+              <span>Help us improve APEX</span>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">YOUR FEEDBACK</div>
+            <select id="fb-type" class="fb-select">
+              <option value="bug">🐛 Bug Report</option>
+              <option value="feature">💡 Feature Request</option>
+              <option value="general" selected>💬 General Feedback</option>
+              <option value="praise">🌟 Praise</option>
+            </select>
+            <textarea
+              id="fb-message"
+              class="fb-textarea"
+              rows="4"
+              placeholder="Write your feedback here…"
+              maxlength="500"
+            ></textarea>
+            <div class="fb-char-count"><span id="fb-char">0</span>/500</div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-label">SEND VIA</div>
+            <div class="fb-channels">
+              <a
+                class="fb-channel-btn"
+                id="fb-send-email"
+                href="#"
+                target="_blank"
+              >
+                <span class="fb-ch-icon">✉️</span>
+                <div class="fb-ch-info">
+                  <span class="fb-ch-name">Email</span
+                  ><span class="fb-ch-sub">Opens your mail app</span>
+                </div>
+                <span class="fb-ch-arrow">→</span>
+              </a>
+              <a
+                class="fb-channel-btn"
+                id="fb-send-wa"
+                href="#"
+                target="_blank"
+              >
+                <span class="fb-ch-icon">💚</span>
+                <div class="fb-ch-info">
+                  <span class="fb-ch-name">WhatsApp</span
+                  ><span class="fb-ch-sub">Opens WhatsApp</span>
+                </div>
+                <span class="fb-ch-arrow">→</span>
+              </a>
+              <a
+                class="fb-channel-btn"
+                href="https://www.linkedin.com/in/rahulnagv"
+                target="_blank"
+              >
+                <span class="fb-ch-icon">💼</span>
+                <div class="fb-ch-info">
+                  <span class="fb-ch-name">LinkedIn</span
+                  ><span class="fb-ch-sub">Connect with the developer</span>
+                </div>
+                <span class="fb-ch-arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          APEX — Aptitude Engine &nbsp;·&nbsp; Made with ❤️
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+     ABOUT PAGE CONTENT
+════════════════════════════════════════════ -->
+    <div class="about-page">
+      <!-- HERO -->
+      <section class="about-hero">
+        <div class="about-hero-inner">
+          <!-- Logo -->
+          <div class="about-logo-wrap">
+            <div class="about-logo-svg-wrap">
+              <div class="about-logo-rings">
+                <div class="about-logo-ring r1"></div>
+                <div class="about-logo-ring r2"></div>
+              </div>
+              <svg
+                class="about-logo-svg"
+                viewBox="0 0 220 220"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="APEX Logo"
+              >
+                <circle
+                  cx="110"
+                  cy="110"
+                  r="100"
+                  fill="none"
+                  stroke="url(#aRingGrad)"
+                  stroke-width="1.5"
+                  opacity="0.35"
+                />
+                <circle
+                  cx="110"
+                  cy="110"
+                  r="80"
+                  fill="none"
+                  stroke="url(#aRingGrad)"
+                  stroke-width="1"
+                  opacity="0.2"
+                />
+                <path
+                  d="M110 18 L178 48 L178 115 Q178 160 110 195 Q42 160 42 115 L42 48 Z"
+                  fill="url(#aShieldFill)"
+                  stroke="url(#aShieldStroke)"
+                  stroke-width="2.5"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M110 30 L166 55 L166 115 Q166 152 110 182 Q54 152 54 115 L54 55 Z"
+                  fill="url(#aShieldInner)"
+                  opacity="0.5"
+                />
+                <path
+                  d="M118 72 L98 110 L112 110 L102 148 L128 104 L113 104 Z"
+                  fill="url(#aBoltGrad)"
+                  filter="url(#aBoltGlow)"
+                />
+                <defs>
+                  <linearGradient
+                    id="aShieldFill"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      stop-color="#6c63ff"
+                      stop-opacity="0.22"
+                    />
+                    <stop
+                      offset="100%"
+                      stop-color="#a78bfa"
+                      stop-opacity="0.10"
+                    />
+                  </linearGradient>
+                  <linearGradient
+                    id="aShieldStroke"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#a78bfa" />
+                    <stop offset="100%" stop-color="#6c63ff" />
+                  </linearGradient>
+                  <linearGradient
+                    id="aShieldInner"
+                    x1="0%"
+                    y1="0%"
+                    x2="0%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      stop-color="#ffffff"
+                      stop-opacity="0.18"
+                    />
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                  </linearGradient>
+                  <linearGradient
+                    id="aBoltGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#fff" />
+                    <stop offset="100%" stop-color="#a78bfa" />
+                  </linearGradient>
+                  <linearGradient
+                    id="aRingGrad"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#6c63ff" />
+                    <stop offset="100%" stop-color="#a78bfa" />
+                  </linearGradient>
+                  <filter
+                    id="aBoltGlow"
+                    x="-50%"
+                    y="-50%"
+                    width="200%"
+                    height="200%"
+                  >
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+              </svg>
+            </div>
+
+            <!-- Title -->
+            <div class="about-title-block">
+              <span class="about-apex-text">APEX</span>
+              <span class="about-apex-full"
+                >Accelerated Path to Excellence</span
+              >
+            </div>
+          </div>
+
+          <!-- Tagline -->
+          <p class="about-hero-tagline">
+            A precision-engineered aptitude training engine — built to
+            <strong>sharpen your mind</strong>, build exam-ready speed, and push
+            your cognitive limits across every difficulty.
+          </p>
+
+          <!-- Badges -->
+          <div class="about-badge-row">
+            <span class="about-badge"
+              ><span class="about-badge-dot"></span> 5 Game Modes</span
+            >
+            <span class="about-badge"
+              ><span class="about-badge-dot"></span> Adaptive Difficulty</span
+            >
+            <span class="about-badge"
+              ><span class="about-badge-dot"></span> Combo System</span
+            >
+            <span class="about-badge"
+              ><span class="about-badge-dot"></span> Power-ups</span
+            >
+            <span class="about-badge"
+              ><span class="about-badge-dot"></span> Instant Review</span
+            >
+          </div>
+
+          <!-- Back button -->
+          <div class="about-hero-actions">
+            <a href="index.html" class="about-back-btn">← Back to Game</a>
+            <!-- <a href="index.html" class="about-cta-btn" style="font-size:13px;padding:10px 22px;">⚡ Play Now</a> -->
+          </div>
+        </div>
+
+        <!-- scroll hint -->
+        <div class="about-scroll-hint">
+          <span>SCROLL</span>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+      </section>
+
+      <!-- MAIN CONTENT -->
+      <main class="about-content">
+        <!-- WHAT IS APEX -->
+        <div class="about-section reveal">
+          <div class="about-section-label">What is APEX</div>
+          <div class="about-section-title">
+            Built for <span>Excellence</span>
+          </div>
+          <div class="about-pillars">
+            <div class="about-pillar">
+              <div class="about-pillar-icon">🎯</div>
+              <div class="about-pillar-title">PRECISION TRAINING</div>
+              <div class="about-pillar-desc">
+                Every question is crafted to expose real gaps in your aptitude
+                knowledge — from basic numeracy to complex verbal reasoning.
+              </div>
+            </div>
+            <div class="about-pillar">
+              <div class="about-pillar-icon">⚡</div>
+              <div class="about-pillar-title">ADAPTIVE DIFFICULTY</div>
+              <div class="about-pillar-desc">
+                The question tier rises and falls with your performance. Get
+                comfortable and the challenge follows — keeping you in the flow
+                state.
+              </div>
+            </div>
+            <div class="about-pillar">
+              <div class="about-pillar-icon">🔥</div>
+              <div class="about-pillar-title">COMBO MECHANICS</div>
+              <div class="about-pillar-desc">
+                Chain correct answers to stack score multipliers. Every streak
+                pushes your score further — rewarding focus and consistency.
+              </div>
+            </div>
+            <div class="about-pillar">
+              <div class="about-pillar-icon">📊</div>
+              <div class="about-pillar-title">DEEP ANALYTICS</div>
+              <div class="about-pillar-desc">
+                Session history, accuracy trends, category breakdowns, and
+                personal bests — all tracked and surfaced to guide your
+                improvement.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FULL FORM -->
+        <div class="about-section reveal">
+          <div class="about-section-label">The Name</div>
+          <div class="about-section-title">
+            <span>A</span>ccelerated <span>P</span>ath to
+            <span>Ex</span>cellence
+          </div>
+          <div class="about-stats">
+            <div class="about-stat">
+              <div class="about-stat-num">A</div>
+              <div class="about-stat-label">Accelerated</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-num">P</div>
+              <div class="about-stat-label">Path</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-num">E</div>
+              <div class="about-stat-label">to</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-num">X</div>
+              <div class="about-stat-label">Excellence</div>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: 13px;
+              color: var(--text2);
+              line-height: 1.8;
+              max-width: 660px;
+            "
+          >
+            APEX isn't just a quiz. It's a structured system designed to create
+            the fastest, most efficient path from where you are now to where you
+            need to be — whether that's an entrance exam, a placement test, or
+            simply peak mental performance.
+          </p>
+        </div>
+
+        <!-- GAME MODES -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Game Modes</div>
+          <div class="about-section-title">
+            Five Paths to <span>Mastery</span>
+          </div>
+          <div class="about-modes">
+            <div class="about-mode-card mc-easy">
+              <div class="about-mode-icon">🌿</div>
+              <div class="about-mode-name">EASY</div>
+              <div class="about-mode-timer">⏱ 20s per question</div>
+              <div class="about-mode-desc">
+                Build your foundation. Generous timer, adaptive question tier.
+                Perfect starting point.
+              </div>
+            </div>
+            <div class="about-mode-card mc-medium">
+              <div class="about-mode-icon">⚡</div>
+              <div class="about-mode-name">MEDIUM</div>
+              <div class="about-mode-timer">⏱ 60s per question</div>
+              <div class="about-mode-desc">
+                The true challenge begins. Combos matter. Protect your streak or
+                lose your multiplier.
+              </div>
+            </div>
+            <div class="about-mode-card mc-hard">
+              <div class="about-mode-icon">🔥</div>
+              <div class="about-mode-name">HARD</div>
+              <div class="about-mode-timer">⏱ 90s per question</div>
+              <div class="about-mode-desc">
+                Elite-level complexity. Long, multi-step questions. Every choice
+                has consequences.
+              </div>
+            </div>
+            <div class="about-mode-card mc-impossible">
+              <div class="about-mode-icon">💀</div>
+              <div class="about-mode-name">IMPOSSIBLE</div>
+              <div class="about-mode-timer">⏱ 120s per question</div>
+              <div class="about-mode-desc">
+                Brutal precision required. Questions designed to break you. For
+                true apex players only.
+              </div>
+            </div>
+            <div class="about-mode-card mc-infinite">
+              <div class="about-mode-icon">♾️</div>
+              <div class="about-mode-name">INFINITE</div>
+              <div class="about-mode-timer">⏱ 30s per question</div>
+              <div class="about-mode-desc">
+                Survival mode. Difficulty escalates every 4 correct answers.
+                Play until your hearts run out.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POWER-UPS -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Power-ups</div>
+          <div class="about-section-title">Your <span>Lifelines</span></div>
+          <div class="about-powerups">
+            <div class="about-pu">
+              <div class="about-pu-key">F</div>
+              <div class="about-pu-info">
+                <div class="about-pu-title">❄️ Freeze — Pause the Timer</div>
+                <div class="about-pu-desc">
+                  Adds 5 frozen seconds to the clock. Snowflake animation covers
+                  the screen while the timer holds. Use on calculation-heavy
+                  questions.
+                </div>
+              </div>
+            </div>
+            <div class="about-pu">
+              <div class="about-pu-key">H</div>
+              <div class="about-pu-info">
+                <div class="about-pu-title">
+                  ½ 50-50 — Eliminate Two Wrong Answers
+                </div>
+                <div class="about-pu-desc">
+                  Removes 2 of the 3 wrong options instantly. Converts a 25%
+                  guess into a 50% chance. Best used when you've narrowed it
+                  down but aren't sure.
+                </div>
+              </div>
+            </div>
+            <div class="about-pu">
+              <div class="about-pu-key">S</div>
+              <div class="about-pu-info">
+                <div class="about-pu-title">
+                  ↷ Skip — Move On Without Penalty
+                </div>
+                <div class="about-pu-desc">
+                  Skips the current question without losing a heart or combo.
+                  The question is still logged as skipped in the review screen.
+                  Your emergency exit.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUESTION BANK METER -->
+        <div class="about-section reveal" id="qbank-section">
+          <div class="about-section-label">Question Bank</div>
+          <div class="about-section-title">
+            <span>500+</span> Handcrafted Questions
+          </div>
+          <p
+            style="
+              font-size: 13px;
+              color: var(--text2);
+              line-height: 1.8;
+              max-width: 660px;
+              margin-bottom: 28px;
+            "
+          >
+            Every question is hand-written — no AI-generated filler. Each one
+            comes with a step-by-step SVG explanation diagram so you understand
+            <em>why</em>, not just <em>what</em>.
+          </p>
+
+          <!-- Animated odometer-style counter -->
+          <div class="qbank-odometer-wrap">
+            <div class="qbank-odometer-label">TOTAL QUESTIONS IN THE BANK</div>
+            <div class="qbank-odometer" id="qbank-odometer">
+              <div class="qbank-digit-col" data-target="6">
+                <div class="qbank-digit-inner">
+                  <span>0</span><span>1</span><span>2</span><span>3</span
+                  ><span>4</span><span>5</span><span>6</span>
+                </div>
+              </div>
+              <div class="qbank-digit-col" data-target="0">
+                <div class="qbank-digit-inner">
+                  <span>0</span><span>1</span><span>2</span><span>3</span
+                  ><span>4</span><span>5</span><span>6</span><span>7</span
+                  ><span>8</span><span>9</span><span>0</span>
+                </div>
+              </div>
+              <div class="qbank-digit-col" data-target="0">
+                <div class="qbank-digit-inner">
+                  <span>0</span><span>1</span><span>2</span><span>3</span
+                  ><span>4</span><span>5</span><span>6</span><span>7</span
+                  ><span>8</span><span>9</span><span>0</span>
+                </div>
+              </div>
+              <div class="qbank-digit-col qbank-plus"><span>+</span></div>
+            </div>
+            <!-- Gauge / meter track -->
+            <div class="qbank-meter-wrap">
+              <div class="qbank-meter-track">
+                <div class="qbank-meter-fill" id="qbank-meter-fill"></div>
+                <div class="qbank-meter-thumb" id="qbank-meter-thumb"></div>
+              </div>
+              <div class="qbank-meter-ticks" id="qbank-meter-ticks"></div>
+            </div>
+          </div>
+
+          <!-- Per-mode breakdown -->
+          <div class="qbank-modes-grid">
+            <div class="qbank-mode-item qbank-easy">
+              <div class="qbank-mode-emoji">🌿</div>
+              <div class="qbank-mode-label">EASY</div>
+              <div class="qbank-mode-count">165</div>
+              <div class="qbank-mode-sub">3 tiers × 55</div>
+              <div class="qbank-mode-bar">
+                <div class="qbank-mode-bar-fill" style="--pct: 33%"></div>
+              </div>
+            </div>
+            <div class="qbank-mode-item qbank-medium">
+              <div class="qbank-mode-emoji">⚡</div>
+              <div class="qbank-mode-label">MEDIUM</div>
+              <div class="qbank-mode-count">165</div>
+              <div class="qbank-mode-sub">3 tiers × 55</div>
+              <div class="qbank-mode-bar">
+                <div class="qbank-mode-bar-fill" style="--pct: 33%"></div>
+              </div>
+            </div>
+            <div class="qbank-mode-item qbank-hard">
+              <div class="qbank-mode-emoji">🔥</div>
+              <div class="qbank-mode-label">HARD</div>
+              <div class="qbank-mode-count">165</div>
+              <div class="qbank-mode-sub">3 tiers × 55</div>
+              <div class="qbank-mode-bar">
+                <div class="qbank-mode-bar-fill" style="--pct: 33%"></div>
+              </div>
+            </div>
+            <div class="qbank-mode-item qbank-impossible">
+              <div class="qbank-mode-emoji">💀</div>
+              <div class="qbank-mode-label">IMPOSSIBLE</div>
+              <div class="qbank-mode-count">165+</div>
+              <div class="qbank-mode-sub">Elite tier</div>
+              <div class="qbank-mode-bar">
+                <div class="qbank-mode-bar-fill" style="--pct: 33%"></div>
+              </div>
+            </div>
+            <div class="qbank-mode-item qbank-infinite">
+              <div class="qbank-mode-emoji">♾️</div>
+              <div class="qbank-mode-label">INFINITE</div>
+              <div class="qbank-mode-count">480+</div>
+              <div class="qbank-mode-sub">Endless pool</div>
+              <div class="qbank-mode-bar">
+                <div class="qbank-mode-bar-fill" style="--pct: 55%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic categories -->
+          <div class="qbank-categories-label">TOPICS COVERED</div>
+          <div class="qbank-topics-cloud">
+            <span class="qbank-topic">Number Series</span>
+            <span class="qbank-topic">Percentages</span>
+            <span class="qbank-topic">Profit &amp; Loss</span>
+            <span class="qbank-topic">Ratio &amp; Proportions</span>
+            <span class="qbank-topic">Averages</span>
+            <span class="qbank-topic">Simple Interest</span>
+            <span class="qbank-topic">Compound Interest</span>
+            <span class="qbank-topic">Time &amp; Work</span>
+            <span class="qbank-topic">Time-Speed-Distance</span>
+            <span class="qbank-topic">Clocks</span>
+            <span class="qbank-topic">Coding-Decoding</span>
+            <span class="qbank-topic">Blood Relations</span>
+            <span class="qbank-topic">Syllogisms</span>
+            <span class="qbank-topic">Data Interpretation</span>
+            <span class="qbank-topic">Verbal Reasoning</span>
+            <span class="qbank-topic">Probability</span>
+            <span class="qbank-topic">Mixtures &amp; Alligation</span>
+            <span class="qbank-topic">Advanced Probability</span>
+            <span class="qbank-topic">Graph + DP</span>
+            <span class="qbank-topic">Antonyms</span>
+          </div>
+        </div>
+
+        <!-- HOW SCORING WORKS — detailed breakdown -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Score Formula</div>
+          <div class="about-section-title">
+            How Your <span>Score</span> is Computed
+          </div>
+          <div class="score-formula-card">
+            <div class="score-formula-eq">
+              <span class="sf-var sf-acc">Accuracy</span>
+              <span class="sf-op">×</span>
+              <span class="sf-var sf-spd">Speed</span>
+              <span class="sf-op">×</span>
+              <span class="sf-var sf-combo">Combo</span>
+              <span class="sf-op">×</span>
+              <span class="sf-var sf-tier">Tier</span>
+            </div>
+            <div class="score-factors-grid">
+              <div class="sf-factor">
+                <div class="sf-factor-icon">🎯</div>
+                <div class="sf-factor-name">Accuracy</div>
+                <div class="sf-factor-desc">
+                  Base points per correct answer. Wrong answers lose partial
+                  credit.
+                </div>
+              </div>
+              <div class="sf-factor">
+                <div class="sf-factor-icon">⚡</div>
+                <div class="sf-factor-name">Speed Bonus</div>
+                <div class="sf-factor-desc">
+                  Answer faster than the midpoint of the timer to earn extra
+                  speed points.
+                </div>
+              </div>
+              <div class="sf-factor">
+                <div class="sf-factor-icon">🔥</div>
+                <div class="sf-factor-name">Combo Multiplier</div>
+                <div class="sf-factor-desc">
+                  3 correct in a row = ×2 · 6 in a row = ×3 · keeps stacking
+                  higher.
+                </div>
+              </div>
+              <div class="sf-factor">
+                <div class="sf-factor-icon">📈</div>
+                <div class="sf-factor-name">Tier Multiplier</div>
+                <div class="sf-factor-desc">
+                  T1 = 1× · T2 = 1.5× · T3 = 2× — harder tiers are worth much
+                  more.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TIPS FOR BEGINNERS -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Getting Started</div>
+          <div class="about-section-title">
+            Beginner's <span>Playbook</span>
+          </div>
+          <div class="beginner-tips-grid">
+            <div class="btip">
+              <div class="btip-num">01</div>
+              <div class="btip-content">
+                <div class="btip-title">Start on Easy, always</div>
+                <div class="btip-desc">
+                  Even if you're experienced, Easy mode calibrates your baseline
+                  and warms up your mental arithmetic — don't skip it.
+                </div>
+              </div>
+            </div>
+            <div class="btip">
+              <div class="btip-num">02</div>
+              <div class="btip-content">
+                <div class="btip-title">Read the SVG explanation</div>
+                <div class="btip-desc">
+                  Every wrong answer shows a visual step-by-step breakdown.
+                  Don't just retry — understand the diagram first.
+                </div>
+              </div>
+            </div>
+            <div class="btip">
+              <div class="btip-num">03</div>
+              <div class="btip-content">
+                <div class="btip-title">Save power-ups for T3</div>
+                <div class="btip-desc">
+                  Tier 3 questions are substantially harder. Hoard your Freeze
+                  and 50-50 tokens for the late-game crunch.
+                </div>
+              </div>
+            </div>
+            <div class="btip">
+              <div class="btip-num">04</div>
+              <div class="btip-content">
+                <div class="btip-title">Protect your streak above all</div>
+                <div class="btip-desc">
+                  A ×3 combo running through T3 is worth more than three
+                  separate correct answers. Skip rather than guess wrong.
+                </div>
+              </div>
+            </div>
+            <div class="btip">
+              <div class="btip-num">05</div>
+              <div class="btip-content">
+                <div class="btip-title">Check the category heatmap</div>
+                <div class="btip-desc">
+                  The results screen shows which topic categories you're weakest
+                  in. Focus your next session there specifically.
+                </div>
+              </div>
+            </div>
+            <div class="btip">
+              <div class="btip-num">06</div>
+              <div class="btip-content">
+                <div class="btip-title">Use Infinite to stress-test</div>
+                <div class="btip-desc">
+                  Infinite mode's ever-escalating difficulty is the best way to
+                  find your real ceiling — play it after every 5 standard
+                  sessions.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCORING & RANKS -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Scoring System</div>
+          <div class="about-section-title">
+            Rank Your <span>Performance</span>
+          </div>
+          <div class="about-ranks">
+            <div class="about-rank-row">
+              <div class="about-rank-pct">≥ 90%</div>
+              <div class="about-rank-name">🏆 APEX TIER — LEGENDARY</div>
+              <div class="about-rank-desc">Exceptional mastery</div>
+            </div>
+            <div class="about-rank-row">
+              <div class="about-rank-pct">≥ 75%</div>
+              <div class="about-rank-name">⭐ ELITE — EXCEPTIONAL</div>
+              <div class="about-rank-desc">Outstanding performance</div>
+            </div>
+            <div class="about-rank-row">
+              <div class="about-rank-pct">≥ 60%</div>
+              <div class="about-rank-name">✦ PROFICIENT — SOLID</div>
+              <div class="about-rank-desc">Strong and consistent</div>
+            </div>
+            <div class="about-rank-row">
+              <div class="about-rank-pct">≥ 40%</div>
+              <div class="about-rank-name">◈ INTERMEDIATE — KEEP GOING</div>
+              <div class="about-rank-desc">Improving, stay focused</div>
+            </div>
+            <div class="about-rank-row">
+              <div class="about-rank-pct">&lt; 40%</div>
+              <div class="about-rank-name">◉ NOVICE — TRAIN HARDER</div>
+              <div class="about-rank-desc">Start from Easy mode</div>
+            </div>
+          </div>
+          <p
+            style="
+              font-size: 12px;
+              color: var(--muted);
+              margin-top: 4px;
+              line-height: 1.7;
+            "
+          >
+            Scores are multiplied by your active combo — chain 3+ correct
+            answers to reach ×2, ×3, or higher multipliers. Higher tiers award
+            more base points per correct answer.
+          </p>
+        </div>
+
+        <!-- DEVELOPER -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Developer</div>
+          <div class="about-section-title">Meet the <span>Developer</span></div>
+          <div class="about-dev">
+            <div class="about-dev-avatar">
+              RN
+              <div class="about-dev-avatar-ring"></div>
+            </div>
+            <div class="about-dev-info">
+              <div class="about-dev-name">Rahul Nag V</div>
+              <div class="about-dev-role">APEX Engine · Frontend Developer</div>
+              <div class="about-dev-bio">
+                Designed and built APEX from scratch — every question, every
+                animation, every mechanic. Passionate about combining education
+                with engaging game design to create tools that genuinely improve
+                aptitude scores.
+              </div>
+              <div class="about-dev-links">
+                <a class="about-dev-link" href="rahulnagv888@gmail.com"
+                  >✉️ Email</a
+                >
+                <a
+                  class="about-dev-link"
+                  href="https://www.linkedin.com/in/rahulnagv"
+                  target="_blank"
+                  >💼 LinkedIn</a
+                >
+                <a
+                  class="about-dev-link"
+                  href="https://wa.me/919844616699"
+                  target="_blank"
+                  >💬 WhatsApp</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TECH STACK -->
+        <div class="about-section reveal">
+          <div class="about-section-label">Tech Stack</div>
+          <div class="about-section-title">
+            Built with <span>Zero Dependencies</span>
+          </div>
+          <div class="about-tech-grid">
+            <div class="about-tech-item">
+              <div class="about-tech-icon">🏗</div>
+              <div class="about-tech-name">HTML5</div>
+              <div class="about-tech-desc">Semantic & accessible markup</div>
+            </div>
+            <div class="about-tech-item">
+              <div class="about-tech-icon">🎨</div>
+              <div class="about-tech-name">CSS3</div>
+              <div class="about-tech-desc">
+                Custom properties, animations, Canvas
+              </div>
+            </div>
+            <div class="about-tech-item">
+              <div class="about-tech-icon">⚡</div>
+              <div class="about-tech-name">Vanilla JS</div>
+              <div class="about-tech-desc">ES6+ strict mode, no frameworks</div>
+            </div>
+            <div class="about-tech-item">
+              <div class="about-tech-icon">💾</div>
+              <div class="about-tech-name">localStorage</div>
+              <div class="about-tech-desc">Persistent stats & preferences</div>
+            </div>
+            <div class="about-tech-item">
+              <div class="about-tech-icon">📊</div>
+              <div class="about-tech-name">Canvas API</div>
+              <div class="about-tech-desc">Hand-rolled charts & particles</div>
+            </div>
+            <div class="about-tech-item">
+              <div class="about-tech-icon">🔤</div>
+              <div class="about-tech-name">Google Fonts</div>
+              <div class="about-tech-desc">Outfit + JetBrains Mono</div>
+            </div>
+          </div>
+          <div class="about-zero-dep">
+            <span class="about-zero-badge"
+              >🎯 Zero frameworks · Zero build tools · Zero dependencies</span
+            >
+          </div>
+        </div>
+
+        <!-- FEATURED PLAN / ROADMAP -->
+        <div class="about-section reveal">
+          <div class="about-section-label">What's Next</div>
+          <div class="about-section-title">Featured <span>Plan</span></div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.8;max-width:660px;margin-bottom:28px;">
+            APEX is actively developed. Here's the public roadmap — from features already shipped to what's being built next and what's on the horizon.
+          </p>
+
+          <div class="roadmap-grid">
+
+            <!-- Phase 1: Shipped -->
+            <div class="roadmap-phase-label">✅ Phase 1 — Shipped</div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot done"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">⚡ Core Game Engine v5.0</span>
+                  <span class="roadmap-tag tag-done">SHIPPED</span>
+                </div>
+                <div class="roadmap-desc">Full game loop with 5 modes, adaptive 3-tier difficulty, combo multiplier, 5-heart system, and countdown timer. The foundation everything is built on.</div>
+                <div class="roadmap-meta">v5.0 · Vanilla JS · No frameworks</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot done"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🪄 Power-Up System</span>
+                  <span class="roadmap-tag tag-done">SHIPPED</span>
+                </div>
+                <div class="roadmap-desc">Freeze (❄️), 50-50 (✂️) and Skip (⏭️) — each with keyboard shortcuts and visual animations. 3 uses per game, strategically placed.</div>
+                <div class="roadmap-meta">Keyboard: F · H · S</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot done"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">📊 Results & Analytics Dashboard</span>
+                  <span class="roadmap-tag tag-done">SHIPPED</span>
+                </div>
+                <div class="roadmap-desc">Full per-session breakdown with accuracy ring, category heatmap, question-by-question review, combo history, session bests, and accuracy trend chart.</div>
+                <div class="roadmap-meta">localStorage · Canvas charts</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot done"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🎨 Visual Effects Engine</span>
+                  <span class="roadmap-tag tag-done">SHIPPED</span>
+                </div>
+                <div class="roadmap-desc">Canvas-based particle explosions, snowflake animations, screen flash, shockwave overlay, warp transitions, and combo celebration bursts.</div>
+                <div class="roadmap-meta">Canvas API · CSS animations</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot done"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🌓 Theme & Accent System</span>
+                  <span class="roadmap-tag tag-done">SHIPPED</span>
+                </div>
+                <div class="roadmap-desc">Full light/dark mode with per-mode glow themes, 8-color accent palette, custom color picker, and font size controls — all persistent via localStorage.</div>
+                <div class="roadmap-meta">CSS custom properties · Cross-tab sync</div>
+              </div>
+            </div>
+
+            <!-- Phase 2: In Progress -->
+            <div class="roadmap-phase-label">🔨 Phase 2 — In Development</div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot in-progress"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🏆 Leaderboard Backend</span>
+                  <span class="roadmap-tag tag-in-progress">IN PROGRESS</span>
+                </div>
+                <div class="roadmap-desc">Global and mode-specific leaderboards powered by Firebase or Supabase. Anonymous ranking with optional username — see where you stand worldwide.</div>
+                <div class="roadmap-meta">Firebase / Supabase · Real-time sync</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot in-progress"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🏅 Achievement Badge System</span>
+                  <span class="roadmap-tag tag-in-progress">IN PROGRESS</span>
+                </div>
+                <div class="roadmap-desc">Unlock badges for milestones like first 500-point game, 10-answer streaks, completing all 5 modes, or hitting APEX TIER rank. Badges displayed on your profile.</div>
+                <div class="roadmap-meta">50+ badges planned</div>
+              </div>
+            </div>
+
+            <!-- Phase 3: Planned -->
+            <div class="roadmap-phase-label">📋 Phase 3 — Planned</div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">⚔️ Multiplayer Challenge Mode</span>
+                  <span class="roadmap-tag tag-planned">PLANNED</span>
+                </div>
+                <div class="roadmap-desc">Real-time head-to-head quiz battles via WebSockets. Challenge a friend with the same question pool — first to answer correctly wins the point.</div>
+                <div class="roadmap-meta">WebSockets · Room-based matchmaking</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">📱 PWA & Offline Support</span>
+                  <span class="roadmap-tag tag-planned">PLANNED</span>
+                </div>
+                <div class="roadmap-desc">Install APEX as a standalone app on any device. Service worker caching enables fully offline play — your stats and question bank, always available.</div>
+                <div class="roadmap-meta">Service Worker · Web App Manifest</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">📄 PDF Results Export</span>
+                  <span class="roadmap-tag tag-planned">PLANNED</span>
+                </div>
+                <div class="roadmap-desc">Export your full session summary — accuracy, category breakdown, per-question review — as a downloadable PDF report to track your progress over time.</div>
+                <div class="roadmap-meta">jsPDF / Canvas → PDF</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🧩 Expanded Question Categories</span>
+                  <span class="roadmap-tag tag-planned">PLANNED</span>
+                </div>
+                <div class="roadmap-desc">Adding 200+ new questions covering Verbal Reasoning, Data Interpretation deep-dives, Logical Puzzles, and Coding-Decoding at every difficulty level.</div>
+                <div class="roadmap-meta">Target: 700+ total questions</div>
+              </div>
+            </div>
+
+            <!-- Phase 4: Exploring -->
+            <div class="roadmap-phase-label">🔭 Phase 4 — Exploring</div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">📱 Native Mobile App</span>
+                  <span class="roadmap-tag tag-exploring">EXPLORING</span>
+                </div>
+                <div class="roadmap-desc">Wrap APEX in a native shell using Capacitor or Tauri for iOS and Android distribution. Full haptic feedback, push notification reminders, and native performance.</div>
+                <div class="roadmap-meta">Capacitor / Tauri · App Store release</div>
+              </div>
+            </div>
+
+            <div class="roadmap-item">
+              <div class="roadmap-dot-wrap">
+                <div class="roadmap-dot"></div>
+              </div>
+              <div class="roadmap-body">
+                <div class="roadmap-header">
+                  <span class="roadmap-title">🤖 AI-Adaptive Question Generation</span>
+                  <span class="roadmap-tag tag-exploring">EXPLORING</span>
+                </div>
+                <div class="roadmap-desc">Dynamically generate new questions tuned to your weak categories and difficulty ceiling using an AI backend — infinite, personalized practice at any level.</div>
+                <div class="roadmap-meta">LLM backend · Personalisation engine</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="about-cta reveal">
+          <div class="about-cta-inner">
+            <div class="about-cta-title">Ready to hit your APEX?</div>
+            <div class="about-cta-sub">
+              Pick a mode and start your ascent. Every session makes you
+              sharper.
+            </div>
+            <a href="index.html" class="about-cta-btn">⚡ Play APEX Now</a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script
+      data-cfasync="false"
+      src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"
+    ></script>
+    <script>
+      "use strict";
+
+      /* ── Storage ── */
+      const KEY = "apex_v5";
+      function storageLoad() {
+        try {
+          return JSON.parse(localStorage.getItem(KEY)) || {};
+        } catch {
+          return {};
+        }
+      }
+      function storageGet(k, def) {
+        const d = storageLoad();
+        return k in d ? d[k] : def;
+      }
+      function storageSet(k, v) {
+        const d = storageLoad();
+        d[k] = v;
+        try {
+          localStorage.setItem(KEY, JSON.stringify(d));
+        } catch {}
+      }
+      function storageReset() {
+        try {
+          localStorage.removeItem(KEY);
+        } catch {}
+      }
+
+      /* ── Theme & Accent persistence ── */
+      function applyTheme(dark) {
+        document.documentElement.setAttribute(
+          "data-theme",
+          dark ? "dark" : "light",
+        );
+        const btn = document.getElementById("btn-theme-toggle");
+        if (btn) btn.setAttribute("data-state", dark ? "on" : "off");
+        storageSet("theme", dark ? "dark" : "light");
+      }
+      function applyAccent(color) {
+        const r = document.documentElement;
+        r.style.setProperty("--accent", color);
+        const hex = color.replace("#", "");
+        const ri = parseInt(hex.substring(0, 2), 16),
+          gi = parseInt(hex.substring(2, 4), 16),
+          bi = parseInt(hex.substring(4, 6), 16);
+        r.style.setProperty("--accent-glow", `rgba(${ri},${gi},${bi},0.18)`);
+        r.style.setProperty("--accent-soft", `rgba(${ri},${gi},${bi},0.08)`);
+        r.style.setProperty("--accent2", color);
+        storageSet("accentColor", color);
+      }
+
+      // Load persisted prefs
+      (function () {
+        const theme = storageGet("theme", "light");
+        if (theme === "dark")
+          document.documentElement.setAttribute("data-theme", "dark");
+        const accent = storageGet("accentColor", "#6c63ff");
+        if (accent !== "#6c63ff") applyAccent(accent);
+      })();
+
+      /* ── Cross-tab theme sync via storage event ── */
+      window.addEventListener("storage", function (e) {
+        if (e.key !== "apex_v5") return;
+        try {
+          const data = JSON.parse(e.newValue) || {};
+          if ("theme" in data) {
+            const dark = data.theme === "dark";
+            document.documentElement.setAttribute("data-theme", data.theme);
+            const btn = document.getElementById("btn-theme-toggle");
+            if (btn) btn.setAttribute("data-state", dark ? "on" : "off");
+          }
+        } catch {}
+      });
+
+      /* ── Settings Panel open/close ── */
+      const overlay = document.getElementById("settings-overlay");
+      document.getElementById("fab-settings").addEventListener("click", () => {
+        overlay.classList.remove("hidden");
+        loadProfileStats();
+        loadComparisonTab();
+        initTipsTab();
+        initFAQTab();
+      });
+      document
+        .getElementById("settings-close")
+        .addEventListener("click", () => overlay.classList.add("hidden"));
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) overlay.classList.add("hidden");
+      });
+
+      /* ── Tabs ── */
+      document.querySelectorAll(".s-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document
+            .querySelectorAll(".s-tab")
+            .forEach((t) => t.classList.remove("active"));
+          document
+            .querySelectorAll(".s-panel")
+            .forEach((p) => p.classList.remove("active"));
+          tab.classList.add("active");
+          document
+            .getElementById("tab-" + tab.dataset.tab)
+            ?.classList.add("active");
+        });
+      });
+
+      /* ── Profile ── */
+      function loadProfileStats() {
+        const name = storageGet("playerName", "Player");
+        const prof = storageGet("playerProfession", "");
+        document.getElementById("sh-display-name").textContent = name;
+        document.getElementById("sh-avatar").textContent =
+          name[0]?.toUpperCase() || "A";
+        document.getElementById("prof-avatar").textContent =
+          name[0]?.toUpperCase() || "A";
+        document.getElementById("prof-name-input").value =
+          name === "Player" ? "" : name;
+        // Profession in header sub-line
+        const subEl = document.getElementById("sh-profession-sub");
+        if (subEl) subEl.textContent = prof || "APEX Profile";
+        // Profession in profile panel
+        const profDisp = document.getElementById("prof-profession-display");
+        if (profDisp) profDisp.textContent = prof ? "💼 " + prof : "";
+
+        const sessions = storageGet("sessions", []);
+        const games = sessions.length;
+        const best = Math.max(0, ...sessions.map((s) => s.score || 0));
+        const avgAcc = games
+          ? Math.round(
+              sessions.reduce((a, s) => a + (s.accuracy || 0), 0) / games,
+            )
+          : 0;
+        const streak = storageGet("bestStreak", 0);
+
+        document.getElementById("pss-games").textContent = games;
+        document.getElementById("pss-best").textContent = best;
+        document.getElementById("pss-acc").textContent = avgAcc + "%";
+        document.getElementById("pss-streak").textContent = streak;
+      }
+
+      document
+        .getElementById("prof-name-save")
+        .addEventListener("click", () => {
+          const name =
+            document.getElementById("prof-name-input").value.trim() || "Player";
+          storageSet("playerName", name);
+          document.getElementById("sh-display-name").textContent = name;
+          document.getElementById("sh-avatar").textContent =
+            name[0]?.toUpperCase() || "A";
+          document.getElementById("prof-avatar").textContent =
+            name[0]?.toUpperCase() || "A";
+          // Keep profession shown after name save
+          const prof = storageGet("playerProfession", "");
+          const subEl = document.getElementById("sh-profession-sub");
+          if (subEl) subEl.textContent = prof || "APEX Profile";
+          const profDisp = document.getElementById("prof-profession-display");
+          if (profDisp) profDisp.textContent = prof ? "💼 " + prof : "";
+        });
+
+      document
+        .getElementById("btn-mute-toggle")
+        .addEventListener("click", function () {
+          const on = this.dataset.state === "on";
+          this.dataset.state = on ? "off" : "on";
+          storageSet("muted", on);
+        });
+      (function () {
+        const m = storageGet("muted", false);
+        document.getElementById("btn-mute-toggle").dataset.state = m
+          ? "off"
+          : "on";
+      })();
+
+      document
+        .getElementById("btn-reset-data")
+        .addEventListener("click", () => {
+          if (confirm("Reset all APEX progress? This cannot be undone.")) {
+            storageReset();
+            // Redirect to login page so user re-enters their profile
+            window.location.replace("login.html");
+          }
+        });
+
+      document
+        .getElementById("rules-toggle")
+        .addEventListener("click", function () {
+          this.classList.toggle("open");
+          document.getElementById("rules-body").classList.toggle("open");
+        });
+
+      /* ── Comparison Tab ── */
+      function loadComparisonTab() {
+        const MODES = ["easy", "medium", "hard", "impossible", "infinite"];
+        const LABELS = {
+          easy: "🌿 EASY",
+          medium: "⚡ MEDIUM",
+          hard: "🔥 HARD",
+          impossible: "💀 IMPOSSIBLE",
+          infinite: "♾️ INFINITE",
+        };
+        const modeGrid = document.getElementById("comp-mode-grid");
+        modeGrid.innerHTML = MODES.map((m) => {
+          const best = storageGet("bestScore_" + m, 0);
+          return `<div class="comp-mode-card"><div class="cmc-mode">${LABELS[m]}</div><div class="cmc-score">${best}</div><div class="cmc-label">Best Score</div></div>`;
+        }).join("");
+
+        const sessions = storageGet("sessions", []);
+        const recent = sessions.slice(-10);
+        const ctx = document.getElementById("comp-chart");
+        if (ctx && recent.length) {
+          const c = ctx.getContext("2d");
+          const w = ctx.width,
+            h = ctx.height;
+          c.clearRect(0, 0, w, h);
+          const pts = recent.map((s) => s.accuracy || 0);
+          const max = 100,
+            min = 0;
+          c.strokeStyle =
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--accent")
+              .trim() || "#6c63ff";
+          c.lineWidth = 2;
+          c.lineJoin = "round";
+          c.lineCap = "round";
+          c.beginPath();
+          pts.forEach((p, i) => {
+            const x = (i / (pts.length - 1 || 1)) * (w - 20) + 10;
+            const y = h - ((p - min) / (max - min)) * (h - 20) - 10;
+            i === 0 ? c.moveTo(x, y) : c.lineTo(x, y);
+          });
+          c.stroke();
+        } else if (ctx) {
+          const c = ctx.getContext("2d");
+          c.fillStyle =
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--muted")
+              .trim() || "#888";
+          c.font = "11px Outfit, sans-serif";
+          c.textAlign = "center";
+          c.fillText("No sessions yet", ctx.width / 2, ctx.height / 2);
+        }
+
+        const alltime = document.getElementById("comp-alltime");
+        const total = sessions.length;
+        const totalQ = sessions.reduce((a, s) => a + (s.attempted || 0), 0);
+        const totalC = sessions.reduce((a, s) => a + (s.correct || 0), 0);
+        const overallAcc = totalQ ? Math.round((totalC / totalQ) * 100) : 0;
+        alltime.innerHTML = [
+          { val: total, key: "Total Games" },
+          { val: totalQ, key: "Questions Answered" },
+          { val: overallAcc + "%", key: "Overall Accuracy" },
+          { val: storageGet("bestStreak", 0), key: "Best Streak" },
+        ]
+          .map(
+            (x) =>
+              `<div class="cat-item"><div class="cat-val">${x.val}</div><div class="cat-key">${x.key}</div></div>`,
+          )
+          .join("");
+
+        const hist = document.getElementById("comp-history");
+        if (!sessions.length) {
+          hist.innerHTML =
+            '<div class="comp-empty">No sessions recorded yet.</div>';
+          return;
+        }
+        hist.innerHTML = sessions
+          .slice()
+          .reverse()
+          .slice(0, 8)
+          .map((s) => {
+            const acc = s.accuracy || 0;
+            const cls = acc >= 75 ? "" : acc >= 50 ? "mid" : "low";
+            return `<div class="ch-item">
+      <div class="chi-left"><div class="chi-mode">${(s.mode || "").toUpperCase()}</div><div class="chi-date">${s.date || ""}</div></div>
+      <div class="chi-right"><div class="chi-score">${s.score || 0}</div><div class="chi-acc ${cls}">${acc}%</div></div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      /* ── Appearance ── */
+      document
+        .getElementById("btn-theme-toggle")
+        .addEventListener("click", function () {
+          const isDark = this.dataset.state !== "on";
+          applyTheme(isDark);
+          this.dataset.state = isDark ? "on" : "off";
+        });
+      (function () {
+        const theme = storageGet("theme", "light");
+        document.getElementById("btn-theme-toggle").dataset.state =
+          theme === "dark" ? "on" : "off";
+      })();
+
+      document.querySelectorAll(".color-swatch").forEach((sw) => {
+        sw.addEventListener("click", function () {
+          document
+            .querySelectorAll(".color-swatch")
+            .forEach((s) => s.classList.remove("active"));
+          this.classList.add("active");
+          applyAccent(this.dataset.color);
+          document.getElementById("color-custom-picker").value =
+            this.dataset.color;
+        });
+      });
+      document
+        .getElementById("color-custom-picker")
+        .addEventListener("input", function () {
+          document
+            .querySelectorAll(".color-swatch")
+            .forEach((s) => s.classList.remove("active"));
+          applyAccent(this.value);
+        });
+      (function () {
+        const accent = storageGet("accentColor", "#6c63ff");
+        document.querySelectorAll(".color-swatch").forEach((sw) => {
+          if (sw.dataset.color === accent) sw.classList.add("active");
+          else sw.classList.remove("active");
+        });
+        document.getElementById("color-custom-picker").value = accent;
+      })();
+
+      document.querySelectorAll(".fs-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          document
+            .querySelectorAll(".fs-btn")
+            .forEach((b) => b.classList.remove("active"));
+          this.classList.add("active");
+          storageSet("fontSize", this.dataset.size);
+        });
+      });
+
+      /* ── Tips ── */
+      const TIPS_DATA = {
+        easy: {
+          badge: "EASY",
+          badgeClass: "badge-easy",
+          sub: "20s timer · Beginner friendly · Build fundamentals",
+          tips: [
+            {
+              icon: "⏱️",
+              title: "Don't Rush",
+              desc: "You have <strong>20 full seconds</strong> per question. Read each option before clicking.",
+            },
+            {
+              icon: "🌿",
+              title: "Build Your Streak Early",
+              desc: "Easy mode is perfect for chaining correct answers. <strong>3 in a row = ×2 multiplier</strong>.",
+            },
+            {
+              icon: "❄️",
+              title: "Save Freeze for Long Questions",
+              desc: "Use <strong>Freeze (F)</strong> to pause the timer on long question text.",
+            },
+            {
+              icon: "½",
+              title: "Use 50-50 on Guesses",
+              desc: "When genuinely unsure, activate <strong>50-50 (H)</strong> to eliminate 2 wrong choices.",
+            },
+            {
+              icon: "📖",
+              title: "Read the Explanations",
+              desc: "After every wrong answer, the explanation panel teaches you <strong>why</strong> you were wrong.",
+            },
+            {
+              icon: "❤️",
+              title: "Hearts Absorb 2 Wrongs",
+              desc: "You only lose a heart after <strong>2 wrong answers</strong>, not 1.",
+            },
+          ],
+          strategy: [
+            "Pick Easy first to calibrate your baseline.",
+            "Focus on accuracy before speed.",
+            "Use all 3 power-ups to understand when they're effective.",
+            "Review the category breakdown for weak spots.",
+          ],
+        },
+        medium: {
+          badge: "MEDIUM",
+          badgeClass: "badge-medium",
+          sub: "60s timer · Adaptive difficulty · For challengers",
+          tips: [
+            {
+              icon: "⚡",
+              title: "Longer Timer ≠ More Time",
+              desc: "Medium questions are longer. <strong>Pace yourself — don't stare at one for 40 seconds.</strong>",
+            },
+            {
+              icon: "📐",
+              title: "Eliminate Wrong Options First",
+              desc: "Mentally cross out obviously wrong answers before evaluating the rest.",
+            },
+            {
+              icon: "🔥",
+              title: "Combos Are Your Main Scorer",
+              desc: "At ×3 or ×4 combo, each correct earns <strong>3–4× base points</strong>. Protect your streak.",
+            },
+            {
+              icon: "↷",
+              title: "Skip Wisely",
+              desc: "Use <strong>Skip (S)</strong> on questions where you have zero idea to preserve hearts and combo.",
+            },
+          ],
+          strategy: [
+            "Aim to answer within the first 30 seconds.",
+            "Protect your combo above all else.",
+            "Use 50-50 to stay accurate on uncertain questions.",
+          ],
+        },
+        hard: {
+          badge: "HARD",
+          badgeClass: "badge-hard",
+          sub: "90s timer · Elite level · High-pressure precision",
+          tips: [
+            {
+              icon: "🔥",
+              title: "Pressure is the Real Enemy",
+              desc: "Hard mode questions are long and tricky. <strong>Slow down and re-read</strong> before answering.",
+            },
+            {
+              icon: "⏳",
+              title: "90 Seconds Feels Short",
+              desc: "Complex problems can eat 60+ seconds. Use <strong>50-50 (H)</strong> to narrow choices.",
+            },
+            {
+              icon: "🧮",
+              title: "Work Through Calculations",
+              desc: "<strong>Work out the answer step-by-step</strong> rather than scanning options.",
+            },
+            {
+              icon: "❄️",
+              title: "Freeze Buys Critical Time",
+              desc: "Freeze is most valuable on calculation-heavy questions — <strong>5 extra seconds to compute</strong>.",
+            },
+          ],
+          strategy: [
+            "Spend the first 15 seconds re-reading the question.",
+            "Use Freeze + 50-50 together on the hardest question.",
+            "Protect at least 3 hearts.",
+          ],
+        },
+        impossible: {
+          badge: "IMPOSSIBLE",
+          badgeClass: "badge-impossible",
+          sub: "120s timer · Brutal precision · No room for error",
+          tips: [
+            {
+              icon: "💀",
+              title: "Train for Brutal Precision",
+              desc: "Impossible questions push your limits to the maximum. There is <strong>no margin for guessing</strong>.",
+            },
+            {
+              icon: "⚡",
+              title: "First Instinct Matters",
+              desc: "If you've studied the topic, <strong>your gut answer is usually right</strong>. Overthinking loses points.",
+            },
+            {
+              icon: "½",
+              title: "50-50 Beats Blind Guessing",
+              desc: "Use <strong>50-50 (H)</strong> to cut the field in half — a 50% chance beats 25% every time.",
+            },
+            {
+              icon: "❄️",
+              title: "Freeze is a Lifeline",
+              desc: "Use Freeze for questions you <strong>know you can solve</strong> with just a little more time.",
+            },
+          ],
+          strategy: [
+            "Scan all 4 options first — eliminate the obviously wrong.",
+            "Use power-ups within the first 5 questions.",
+            "If you lose 2 hearts early, restart.",
+          ],
+        },
+        infinite: {
+          badge: "INFINITE",
+          badgeClass: "badge-inf",
+          sub: "30s timer · Survival · Difficulty escalates every 4 corrects",
+          tips: [
+            {
+              icon: "♾️",
+              title: "Survival is the Goal",
+              desc: "No question limit — the game ends when <strong>5 hearts are gone</strong>. Every decision is about survival.",
+            },
+            {
+              icon: "⚡",
+              title: "Difficulty Escalates Dynamically",
+              desc: "Every 4 correct answers push the difficulty up. <strong>Stay mentally ready</strong> for harder questions.",
+            },
+            {
+              icon: "⏰",
+              title: "30 Seconds Goes Fast",
+              desc: "If you don't know within 15 seconds, use a power-up or make your best guess.",
+            },
+            {
+              icon: "💎",
+              title: "Power-ups = Lives",
+              desc: "Use 50-50 and Skip to <strong>prevent heart loss</strong>. Score matters less than survival here.",
+            },
+          ],
+          strategy: [
+            "Lose a heart? Treat the next question as a completely fresh start.",
+            "Save Skip for mid-game when difficulty has spiked.",
+            "Don't chase combo — focus on not losing hearts.",
+          ],
+        },
+      };
+
+      function initTipsTab() {
+        const content = document.getElementById("tips-content");
+        if (content.dataset.built) return;
+        content.dataset.built = "1";
+        content.innerHTML = Object.entries(TIPS_DATA)
+          .map(
+            ([mode, data]) => `
+    <div class="tips-panel ${mode === "easy" ? "active" : ""}" id="tips-panel-${mode}">
+      <div class="tips-panel-hero">
+        <span class="tips-badge ${data.badgeClass}">${data.badge}</span>
+        <span class="tips-panel-sub">${data.sub}</span>
+      </div>
+      <div class="tips-list">
+        ${data.tips.map((t) => `<div class="tips-card"><div class="tips-card-icon">${t.icon}</div><div class="tips-card-body"><div class="tips-card-title">${t.title}</div><div class="tips-card-desc">${t.desc}</div></div></div>`).join("")}
+      </div>
+      <div class="tips-strategy-section">
+        <div class="tips-strategy-title">STRATEGY</div>
+        <div class="tips-strategy-list">
+          ${data.strategy.map((s, i) => `<div class="tips-strategy-item"><div class="tips-strategy-num">${i + 1}</div><span>${s}</span></div>`).join("")}
+        </div>
+      </div>
+    </div>
+  `,
+          )
+          .join("");
+
+        document.querySelectorAll(".tips-mode-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document
+              .querySelectorAll(".tips-mode-btn")
+              .forEach((b) => b.classList.remove("active"));
+            document
+              .querySelectorAll(".tips-panel")
+              .forEach((p) => p.classList.remove("active"));
+            this.classList.add("active");
+            document
+              .getElementById("tips-panel-" + this.dataset.tipsMode)
+              ?.classList.add("active");
+          });
+        });
+      }
+
+      /* ── FAQ ── */
+      const FAQ_DATA = [
+        {
+          q: "What does APEX stand for?",
+          a: "APEX stands for Accelerated Path to Excellence — a name that reflects the system's goal: the fastest, most effective route from where you are to peak aptitude performance.",
+        },
+        {
+          q: "How is the score calculated?",
+          a: "Each correct answer earns base points (higher on harder modes). These are multiplied by your active combo multiplier (×1 to ×4+). Consecutive correct answers build the multiplier.",
+        },
+        {
+          q: "What happens when I lose a heart?",
+          a: "Every 2 wrong answers costs 1 heart. You start with 5 hearts. Lose all 5 and the game ends (in infinite mode) or you finish the round with 0 health.",
+        },
+        {
+          q: "Can I replay the same questions?",
+          a: "APEX tracks used questions per session and avoids repeats. Once a tier's pool is exhausted, it resets. You may see some questions repeated across sessions.",
+        },
+        {
+          q: "What is the Combo Multiplier?",
+          a: "Every 3 consecutive correct answers increases your multiplier by ×1. One wrong answer resets it to ×1. High multipliers are the fastest way to a high score.",
+        },
+        {
+          q: "Are my scores saved?",
+          a: "Yes — scores, accuracy history, best streaks, and session logs are all saved to your browser's localStorage. Use 'Reset All Progress' to clear them.",
+        },
+        {
+          q: "What is Infinite mode?",
+          a: "Infinite mode has no question limit. Difficulty escalates every 4 correct answers. The game only ends when all 5 hearts are lost. It's the ultimate survival challenge.",
+        },
+        {
+          q: "How do I contact the developer?",
+          a: "Go to Settings → Feedback tab to send a message via Email, WhatsApp, or LinkedIn. All contact details are listed there.",
+        },
+      ];
+
+      function initFAQTab() {
+        const list = document.getElementById("faq-list");
+        if (list.dataset.built) return;
+        list.dataset.built = "1";
+        list.innerHTML = FAQ_DATA.map(
+          (item, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <button class="faq-q"><span>${item.q}</span><span class="faq-chevron">▾</span></button>
+      <div class="faq-a">${item.a}</div>
+    </div>
+  `,
+        ).join("");
+        list.querySelectorAll(".faq-q").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const item = btn.closest(".faq-item");
+            const wasOpen = item.classList.contains("open");
+            list
+              .querySelectorAll(".faq-item")
+              .forEach((i) => i.classList.remove("open"));
+            if (!wasOpen) item.classList.add("open");
+          });
+        });
+      }
+
+      /* ── Feedback ── */
+      document
+        .getElementById("fb-message")
+        .addEventListener("input", function () {
+          document.getElementById("fb-char").textContent = this.value.length;
+        });
+      function updateFbLinks() {
+        const type = document.getElementById("fb-type").value;
+        const msg = encodeURIComponent(
+          `[APEX Feedback — ${type}]\n${document.getElementById("fb-message").value}`,
+        );
+        document.getElementById("fb-send-email").href =
+          `mailto:rahulnagv888@gmail.com?subject=APEX Feedback — ${type}&body=${msg}`;
+        document.getElementById("fb-send-wa").href =
+          `https://wa.me/919844616699?text=${msg}`;
+      }
+      document
+        .getElementById("fb-type")
+        .addEventListener("change", updateFbLinks);
+      document
+        .getElementById("fb-message")
+        .addEventListener("input", updateFbLinks);
+      updateFbLinks();
+
+      /* ── Scroll Reveal ── */
+      const revealEls = document.querySelectorAll(".reveal");
+      const revealObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              revealObs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      revealEls.forEach((el) => revealObs.observe(el));
+    </script>
+
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+      /* ── Default cursor restored ── */
+
+      /* ── Glowing Blob Cursor ── */
+      /* ── No scrollbar ── */
+      html,
+      body {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overflow-x: hidden;
+      }
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        display: none;
+      }
+      .about-page {
+        scrollbar-width: none;
+      }
+      .about-page::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ── Grid Background on hero section ── */
+      .about-hero::before {
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px) !important;
+        background-size: 44px 44px !important;
+        opacity: 0.45 !important;
+        animation: heroGridShift 28s linear infinite !important;
+      }
+      [data-theme="dark"] .about-hero::before {
+        opacity: 0.22 !important;
+      }
+      @keyframes heroGridShift {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(44px, 44px);
+        }
+      }
+
+      /* ── Ripple ── */
+      @keyframes rippleOut {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 0.45;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(4);
+          opacity: 0;
+        }
+      }
+      .apex-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: var(--accent);
+        width: 80px;
+        height: 80px;
+        pointer-events: none;
+        animation: rippleOut 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        opacity: 0.28;
+        z-index: 10;
+      }
+
+      /* ── Enhanced Button Hovers ── */
+      .about-back-btn,
+      .about-cta-btn,
+      .about-dev-link,
+      .about-badge {
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.22s ease,
+          box-shadow 0.22s ease,
+          border-color 0.22s ease,
+          color 0.22s ease !important;
+      }
+      .about-back-btn:hover {
+        transform: translateY(-3px) scale(1.04) !important;
+        box-shadow: 0 10px 28px var(--accent-glow) !important;
+      }
+      .about-back-btn:active {
+        transform: scale(0.96) !important;
+      }
+      .about-cta-btn:hover {
+        transform: translateY(-4px) scale(1.05) !important;
+        box-shadow: 0 14px 40px var(--accent-glow) !important;
+      }
+      .about-cta-btn:active {
+        transform: scale(0.96) !important;
+      }
+      .about-dev-link:hover {
+        transform: translateY(-2px) scale(1.06) !important;
+      }
+      .about-badge:hover {
+        transform: translateY(-3px) scale(1.04) !important;
+        box-shadow: 0 6px 20px var(--accent-glow) !important;
+      }
+
+      /* ── Card hovers ── */
+      .about-pillar,
+      .about-mode-card,
+      .about-pu,
+      .about-stat,
+      .about-rank-row {
+        transition:
+          transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.25s ease,
+          border-color 0.25s ease !important;
+      }
+      .about-pillar:hover {
+        transform: translateY(-6px) scale(1.015) !important;
+      }
+      .about-mode-card:hover {
+        transform: translateY(-4px) scale(1.02) !important;
+      }
+      .about-stat:hover {
+        transform: translateY(-4px) scale(1.03) !important;
+      }
+      .about-rank-row:hover {
+        transform: translateX(6px) !important;
+      }
+      .about-dev {
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          border-color 0.25s ease !important;
+      }
+      .about-dev:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 12px 40px var(--accent-glow) !important;
+      }
+
+      /* ── Mode indicator badge ── */
+      #about-mode-indicator {
+        position: fixed;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px 16px;
+        border-radius: var(--radius-pill);
+        background: var(--accent);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        font-family: var(--font-mono);
+        z-index: 9001;
+        opacity: 0;
+        transition:
+          opacity 0.4s ease,
+          background 0.4s ease;
+        pointer-events: none;
+        box-shadow: 0 4px 18px var(--accent-glow);
+      }
+      #about-mode-indicator.visible {
+        opacity: 1;
+      }
+    </style>
+
+    <!-- Mode indicator badge -->
+    <div id="about-mode-indicator"></div>
+
+    <script>
+      "use strict";
+
+      /* ── Read last-played mode from localStorage ── */
+      (function () {
+        try {
+          const d = JSON.parse(localStorage.getItem("apex_v5")) || {};
+          const mode = d.lastMode || "default";
+          if (mode !== "default") {
+            document.documentElement.setAttribute("data-mode", mode);
+            const modeNames = {
+              easy: "🌿 EASY",
+              medium: "⚡ MEDIUM",
+              hard: "🔥 HARD",
+              impossible: "💀 IMPOSSIBLE",
+              infinite: "♾️ INFINITE",
+            };
+            const ind = document.getElementById("about-mode-indicator");
+            if (ind) {
+              ind.textContent = modeNames[mode] || "";
+              setTimeout(() => ind.classList.add("visible"), 600);
+              setTimeout(() => ind.classList.remove("visible"), 3200);
+            }
+          }
+        } catch (e) {}
+      })();
+
+      /* ── Ripple on buttons ── */
+      (function () {
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest(
+            "a.about-back-btn, a.about-cta-btn, a.about-dev-link, .fab, button",
+          );
+          if (!btn) return;
+          const rect = btn.getBoundingClientRect();
+          const r = document.createElement("span");
+          r.className = "apex-ripple";
+          r.style.left = e.clientX - rect.left + "px";
+          r.style.top = e.clientY - rect.top + "px";
+          btn.appendChild(r);
+          setTimeout(() => r.remove(), 600);
+        });
+      })();
+
+      /* ── GSAP ScrollTrigger Animations ── */
+      window.addEventListener("load", function () {
+        gsap.registerPlugin(ScrollTrigger);
+
+        /* ── Hero section — staggered entrance ── */
+        const heroTl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        heroTl
+          .from(
+            ".about-logo-svg-wrap",
+            { opacity: 0, y: -40, scale: 0.8, duration: 1 },
+            0,
+          )
+          .from(".about-apex-text", { opacity: 0, y: 30, duration: 0.9 }, 0.2)
+          .from(".about-apex-full", { opacity: 0, y: 15, duration: 0.7 }, 0.35)
+          .from(
+            ".about-hero-tagline",
+            { opacity: 0, y: 20, duration: 0.8 },
+            0.45,
+          )
+          .from(
+            ".about-badge",
+            { opacity: 0, y: 12, scale: 0.9, stagger: 0.1, duration: 0.6 },
+            0.55,
+          )
+          .from(".about-back-btn", { opacity: 0, y: 10, duration: 0.6 }, 0.75);
+
+        /* ── Section labels ── */
+        gsap.utils.toArray(".about-section-label").forEach((el) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            x: -30,
+            duration: 0.7,
+            ease: "power2.out",
+          });
+        });
+
+        /* ── Section titles ── */
+        gsap.utils.toArray(".about-section-title").forEach((el) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            y: 30,
+            duration: 0.85,
+            ease: "power3.out",
+          });
+        });
+
+        /* ── Pillars stagger ── */
+        gsap.utils.toArray(".about-pillar").forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            y: 50,
+            scale: 0.94,
+            duration: 0.75,
+            delay: i * 0.1,
+            ease: "power3.out",
+          });
+        });
+
+        /* ── Mode cards stagger ── */
+        gsap.utils.toArray(".about-mode-card").forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            y: 40,
+            rotation: i % 2 === 0 ? -3 : 3,
+            duration: 0.65,
+            delay: i * 0.09,
+            ease: "back.out(1.4)",
+          });
+        });
+
+        /* ── Stats ── */
+        gsap.utils.toArray(".about-stat").forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            scale: 0.75,
+            duration: 0.6,
+            delay: i * 0.12,
+            ease: "back.out(1.6)",
+          });
+        });
+
+        /* ── Power-ups ── */
+        gsap.utils.toArray(".about-pu").forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            x: -50,
+            duration: 0.65,
+            delay: i * 0.12,
+            ease: "power3.out",
+          });
+        });
+
+        /* ── Rank rows ── */
+        gsap.utils.toArray(".about-rank-row").forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            x: i % 2 === 0 ? -30 : 30,
+            duration: 0.6,
+            delay: i * 0.08,
+            ease: "power2.out",
+          });
+        });
+
+        /* ── Dev card ── */
+        gsap.from(".about-dev", {
+          scrollTrigger: {
+            trigger: ".about-dev",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: 40,
+          scale: 0.96,
+          duration: 0.85,
+          ease: "power3.out",
+        });
+
+        /* ── Roadmap items stagger ── */
+        gsap.utils.toArray(".roadmap-item").forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: {
+              trigger: el,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            opacity: 0,
+            x: -40,
+            duration: 0.6,
+            delay: i * 0.05,
+            ease: "power2.out",
+          });
+        });
+
+        /* ── CTA ── */
+        gsap.from(".about-cta-inner", {
+          scrollTrigger: {
+            trigger: ".about-cta",
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          scale: 0.9,
+          duration: 0.9,
+          ease: "back.out(1.4)",
+        });
+
+        /* ── Continuous float on logo ── */
+        gsap.to(".about-logo-svg", {
+          y: -12,
+          duration: 3,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+
+        /* ── Parallax on hero grid ── */
+        gsap.to(".about-hero::before", {
+          scrollTrigger: {
+            trigger: ".about-hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+          y: 60,
+          ease: "none",
+        });
+
+        /* ── Question bank odometer & meter ── */
+        (function () {
+          const section = document.getElementById("qbank-section");
+          if (!section) return;
+          const TOTAL = 500;
+          const MILESTONES = [
+            0,
+            50,
+            100,
+            150,
+            200,
+            250,
+            300,
+            350,
+            400,
+            450,
+            "500+",
+          ];
+
+          // Build ticks
+          const tickWrap = document.getElementById("qbank-meter-ticks");
+          if (tickWrap) {
+            MILESTONES.forEach((m, i) => {
+              const t = document.createElement("span");
+              t.className = "qbank-meter-tick";
+              t.textContent = m;
+              tickWrap.appendChild(t);
+            });
+          }
+
+          // Animate when in view
+          const obs = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                obs.disconnect();
+
+                // Fill meter to 100% (representing 500+)
+                const fill = document.getElementById("qbank-meter-fill");
+                const thumb = document.getElementById("qbank-meter-thumb");
+                if (fill) fill.style.width = "100%";
+                if (thumb) thumb.style.left = "100%";
+
+                // Highlight last tick
+                const ticks = tickWrap?.querySelectorAll(".qbank-meter-tick");
+                if (ticks) {
+                  setTimeout(
+                    () => ticks[ticks.length - 1].classList.add("active"),
+                    1700,
+                  );
+                }
+
+                // Spin odometer digits
+                const cols = document.querySelectorAll(
+                  ".qbank-digit-col[data-target]",
+                );
+                cols.forEach((col, idx) => {
+                  const target = parseInt(col.dataset.target);
+                  const inner = col.querySelector(".qbank-digit-inner");
+                  if (!inner) return;
+                  const totalSlots = inner.children.length;
+                  // delay each digit for cascade effect
+                  setTimeout(
+                    () => {
+                      // scroll so target digit is centered
+                      inner.style.transform = `translateY(-${target * (col.offsetHeight || 76)}px)`;
+                    },
+                    200 + idx * 160,
+                  );
+                });
+
+                // Animate mode bar fills
+                document
+                  .querySelectorAll(".qbank-mode-item")
+                  .forEach((item, i) => {
+                    setTimeout(
+                      () => item.classList.add("animated"),
+                      400 + i * 100,
+                    );
+                  });
+              });
+            },
+            { threshold: 0.25 },
+          );
+          obs.observe(section);
+        })();
+
+        /* ── Number counters in stat nums ── */
+        gsap.utils.toArray(".about-stat-num").forEach((el) => {
+          if (/^[A-Z]$/.test(el.textContent.trim())) return; // skip letter-only
+          const target = parseInt(el.textContent);
+          if (isNaN(target)) return;
+          gsap.from(
+            { val: 0 },
+            {
+              scrollTrigger: { trigger: el, start: "top 88%" },
+              val: target,
+              duration: 1.2,
+              ease: "power2.out",
+              onUpdate: function () {
+                el.textContent = Math.round(this.targets()[0].val);
+              },
+            },
+          );
+        });
+
+        /* ── CTA spinning background ── */
+        gsap.to(".about-cta::before", {
+          rotation: 360,
+          duration: 10,
+          ease: "none",
+          repeat: -1,
+        });
+      });
+    </script>
+  </body>
+</html>
