@@ -1,10 +1,4 @@
-/* ═══════════════════════════════════════════════
-   APEX v5.0 — Enhanced Game Engine
-   Features: Separated mode question banks (easy/medium/hard/infinite)
-             Particle explosions · Entrance animations
-             Screen transitions · Combo celebration effects
-             Glowing mode themes · Enhanced HUD animations
-═══════════════════════════════════════════════ */
+
 "use strict";
 
 /* ══════════════════════════════════════════════
