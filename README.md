@@ -4,7 +4,7 @@
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Play_Now-6c63ff?style=for-the-badge&logoColor=white)](https://your-demo-link.com)
+[![Live Demo]([https://img.shields.io/badge/🚀_Live_Demo-Play_Now-6c63ff?style=for-the-badge&logoColor=white)](https://your-demo-link.com](https://rahulnag-v.github.io/APEX--AptitudeChallengeEngine.github.io/index.html))
 [![GitHub Stars](https://img.shields.io/github/stars/yourusername/apex?style=for-the-badge&color=f59e0b&logo=github)](https://github.com/yourusername/apex/stargazers)
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
