@@ -1,7 +1,4 @@
-/* ═══════════════════════════════════════════════
-   APEX — MEDIUM MODE QUESTIONS
-   ⚡ Challenger · 60s per question · Adaptive tiers
-═══════════════════════════════════════════════ */
+
 const MEDIUM_QUESTIONS = {
   tier1: [
     /* ─────────────────────────────
