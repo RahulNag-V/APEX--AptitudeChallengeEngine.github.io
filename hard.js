@@ -1,7 +1,4 @@
-/* ═══════════════════════════════════════════════
-   APEX — HARD MODE QUESTIONS
-   🔥 Elite · 120s per question · Adaptive tiers
-═══════════════════════════════════════════════ */
+
 const HARD_QUESTIONS = {
   tier1: [
     /* ── Q1 ── */
