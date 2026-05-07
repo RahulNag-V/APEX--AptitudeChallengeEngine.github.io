@@ -1499,7 +1499,7 @@
     } catch {}
   }
   document.getElementById("fab-theme").addEventListener("click", toggleTheme);
-  document.getElementById("btn-theme-nav").addEventListener("click", toggleTheme);
+  document.getElementById("btn-theme-nav")?.addEventListener("click", toggleTheme);
 
   /* ─── Ripple effect ─── */
   document.addEventListener("click", e => {
@@ -1534,3 +1534,4 @@
 
 </body>
 </html>
+
