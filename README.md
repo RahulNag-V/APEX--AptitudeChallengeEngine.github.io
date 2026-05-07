@@ -26,9 +26,10 @@
 
 **APEX** *(Aptitude Performance & Excellence eXperience)* is a full-featured, browser-based quiz game designed to sharpen your quantitative aptitude and logical reasoning skills. Whether you're prepping for placement exams, competitive tests, or just love a good brain workout — APEX delivers it with style.
 
-Think of it as your personal aptitude dojo — complete with combo multipliers, power-ups, particle explosions, and a robust stats dashboard.
+Think of it as your personal aptitude dojo — complete with combo multipliers, power-ups, particle explosions, and a robust stats dashboard. Top performers earn a personalized **Certificate of Aptitude** to showcase their mastery.
 
 ---
+
 ## 📸 Screenshots
 
 ---
@@ -36,48 +37,48 @@ Think of it as your personal aptitude dojo — complete with combo multipliers, 
 ### 🏠 Home Screen — Choose Your Battleground
 
 <p align="center">
-  <img src="./APEX-homescreen.png" width="90%">
+  <img src="./APEX-homescreen.png" width="90%" style="border-radius: 12px; box-shadow: 0 8px 32px rgba(108,99,255,0.3);"/>
 </p>
-
-<p align="center">
-  <em>Five difficulty modes, each with its own personality. Pick your poison.</em>
-</p>
+<p align="center"><em>Five difficulty modes, each with its own personality. Pick your poison.</em></p>
 
 ---
 
 ### ⚔️ Game Screen — Fight Every Second
 
 <p align="center">
-  <img src="./APEX-questions.png" width="90%">
+  <img src="./APEX-questions.png" width="90%" style="border-radius: 12px; box-shadow: 0 8px 32px rgba(108,99,255,0.3);"/>
 </p>
-
-<p align="center">
-  <em>Combo streaks, countdown timers, power-ups, and SVG diagrams — all in the heat of battle.</em>
-</p>
+<p align="center"><em>Combo streaks, countdown timers, power-ups, and SVG diagrams — all in the heat of battle.</em></p>
 
 ---
 
 ### 📊 Results Screen — Know Your Numbers
 
-<div align="center">
-  <img src="APEX-results.png" width="90%" style="border-radius: 12px; box-shadow: 0 8px 32px rgba(108,99,255,0.4);"/>
-  <br/><br/>
-  <p><em>Full session breakdown — accuracy, category heatmap, per-question review, and personal bests.</em></p>
-</div>
+<p align="center">
+  <img src="./APEX-results.png" width="90%" style="border-radius: 12px; box-shadow: 0 8px 32px rgba(108,99,255,0.4);"/>
+</p>
+<p align="center"><em>Full session breakdown — accuracy, category heatmap, per-question review, and personal bests.</em></p>
 
-<br/>
+---
+
+### 🏆 Certificate of Aptitude — Earn Your Badge
+
+<p align="center">
+  <img src="./APEX_Certificate_easy_Rahul_Nag_V.png" width="75%" style="border-radius: 12px; box-shadow: 0 8px 32px rgba(34,197,94,0.3);"/>
+</p>
+<p align="center"><em>Complete a mode with top accuracy and receive a personalized, downloadable certificate.</em></p>
 
 ---
 
 ## 🎮 Game Modes
 
-| Mode | Description | Difficulty |
-|:----:|-------------|:----------:|
-| 🟢 **Easy** | Core fundamentals — perfect for warming up | Beginner |
-| 🟡 **Medium** | Stepping it up — tests your depth | Intermediate |
-| 🔴 **Hard** | Serious challengers only | Advanced |
-| 💀 **Impossible** | Elite tier — for the fearless | Expert |
-| ♾️ **Infinite** | Endless questions until your hearts run out | Endless |
+| Mode | Description | Timer | Difficulty |
+|:----:|-------------|:-----:|:----------:|
+| 🟢 **Easy** | Core fundamentals — perfect for warming up | 20s | Beginner |
+| 🟡 **Medium** | Stepping it up — tests your depth | 60s | Intermediate |
+| 🔴 **Hard** | Serious challengers only | 90s | Advanced |
+| 💀 **Impossible** | Elite tier — for the fearless | 120s | Expert |
+| ♾️ **Infinite** | Endless questions until your hearts run out | 30s | Endless |
 
 Each mode features **3 internal tiers (T1 → T2 → T3)** that progressively unlock as you perform better, creating a smooth difficulty ramp within a single session.
 
@@ -126,6 +127,12 @@ Each mode features **3 internal tiers (T1 → T2 → T3)** that progressively un
 - **Session history** — chronological log of recent games
 - **All-time stats** — total games played, best score, average accuracy, best streak
 
+### 🏅 Certificate of Aptitude
+
+- Auto-generated on completing a mode with high accuracy
+- Personalized with your name, score, accuracy, mode, and date
+- Downloadable as a PNG with one click
+
 ### 🎨 Theming
 
 - **Light & Dark mode** — full theme toggle via CSS variable system
@@ -146,6 +153,7 @@ apex/
 │
 ├── index.html          # Main game shell & all screen layouts
 ├── about.html          # About / credits page
+├── login.html          # Login / user profile screen
 ├── style.css           # Full design system (tokens, themes, components)
 │
 ├── script.js           # 🧠 Core game engine (v5.0)
@@ -156,6 +164,8 @@ apex/
 │                       #    ├─ GameState & Logic
 │                       #    ├─ Timer & Combo Tracker
 │                       #    └─ Stats / localStorage persistence
+│
+├── certificate.js      # 🏅 Certificate generation & download logic
 │
 ├── easy.js             # 🟢 Easy question bank   (165 questions, 3 tiers)
 ├── medium.js           # 🟡 Medium question bank (165 questions, 3 tiers)
@@ -175,7 +185,24 @@ apex/
 5. **Use power-ups wisely** — you only get 3 of each per game (`F` Freeze · `H` 50-50 · `S` Skip)
 6. **Survive** — lose all 5 hearts and the game ends
 7. **Review your results** — full breakdown with per-question review, category accuracy, and session bests
-8. **Track your progress** via the 📊 Stats tab in settings
+8. **Download your certificate** — if you score high enough, claim your Certificate of Aptitude!
+
+---
+
+## 🚀 Getting Started
+
+No build tools, no install step. Just clone and open:
+
+```bash
+git clone https://github.com/RahulNag-V/APEX--AptitudeChallengeEngine.github.io.git
+cd APEX--AptitudeChallengeEngine.github.io
+
+# Open in your browser
+open index.html
+# or just double-click index.html
+```
+
+Or play the [**live demo →**](https://rahulnag-v.github.io/APEX--AptitudeChallengeEngine.github.io/index.html)
 
 ---
 
@@ -188,6 +215,7 @@ apex/
 | Logic | Vanilla JavaScript ES6+ (strict mode) |
 | Persistence | Web `localStorage` API |
 | Charts | HTML5 Canvas (hand-rolled, zero dependencies) |
+| Certificates | HTML5 Canvas → PNG export |
 | Fonts | Outfit + JetBrains Mono (Google Fonts) |
 
 **Zero frameworks. Zero build tools. Zero dependencies.** 🎯
@@ -245,7 +273,7 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fo
 
 <br/>
 
-*Built with ❤️ and a lot of caffeine.*
+*Built with ❤️ and a lot of caffeine by [Rahul Nag V](https://github.com/RahulNag-V)*
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=6c63ff&height=100&section=footer" width="100%"/>
 
