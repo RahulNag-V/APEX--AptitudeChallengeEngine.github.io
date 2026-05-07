@@ -350,6 +350,37 @@ body {
 }
 .settings-row-icon { font-size: 16px; }
 
+/* ── Achievements Redirect Link ── */
+a.settings-row {
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  transition: background var(--transition), border-color var(--transition);
+}
+a.settings-row:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface2));
+  border-color: var(--accent);
+}
+a.settings-row .settings-row-label {
+  color: var(--text2);
+  transition: color var(--transition);
+}
+a.settings-row:hover .settings-row-label {
+  color: var(--text);
+}
+a.settings-row .ach-arrow {
+  font-size: 16px;
+  color: var(--muted);
+  transition: color var(--transition), transform var(--transition);
+}
+a.settings-row:hover .ach-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
 /* ── Toggle Pill ── */
 .toggle-pill {
   position: relative;
@@ -4249,4 +4280,5 @@ body.fx-freeze-shake {
     flex: none;
   }
 }
+
 
