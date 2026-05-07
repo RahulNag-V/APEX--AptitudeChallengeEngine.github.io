@@ -109,7 +109,7 @@
       border-bottom: 1px solid var(--border);
       padding: 56px 24px 48px;
       text-align: center; position: relative; overflow: hidden;
-      height: 100vh;
+      
     }
     .page-hero::before {
       content: "";
@@ -631,6 +631,7 @@
     <div class="nav-right">
       <a href="index.html" class="nav-btn"><span class="nav-btn-icon">🏠</span> Home</a>
       <a href="about.html" class="nav-btn"><span class="nav-btn-icon">ℹ</span> About</a>
+      <button class="nav-btn" id="btn-theme-nav" title="Toggle theme" aria-label="Toggle theme">🌓</button>
     </div>
   </nav>
 
@@ -1499,7 +1500,7 @@
     } catch {}
   }
   document.getElementById("fab-theme").addEventListener("click", toggleTheme);
-  document.getElementById("btn-theme-nav")?.addEventListener("click", toggleTheme);
+  document.getElementById("btn-theme-nav").addEventListener("click", toggleTheme);
 
   /* ─── Ripple effect ─── */
   document.addEventListener("click", e => {
@@ -1534,4 +1535,3 @@
 
 </body>
 </html>
-
