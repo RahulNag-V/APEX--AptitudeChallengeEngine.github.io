@@ -1,0 +1,1536 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>APEX — Achievements & Certifications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════
+       APEX DESIGN TOKENS
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #f4f6fb;
+      --bg2:          #eef0f7;
+      --surface:      #ffffff;
+      --surface2:     #f0f2fa;
+      --border:       #e2e6f0;
+      --border-hi:    #c8cfe4;
+      --text:         #1a1d2e;
+      --text2:        #4a5068;
+      --muted:        #8890aa;
+      --dim:          #d4d8e8;
+      --shadow:       rgba(30,40,80,0.10);
+      --shadow-lg:    rgba(30,40,80,0.18);
+      --accent:       #6c63ff;
+      --accent2:      #8b85ff;
+      --accent-glow:  rgba(108,99,255,0.18);
+      --accent-soft:  rgba(108,99,255,0.08);
+      --green:  #22c55e; --red:    #ef4444;
+      --yellow: #f59e0b; --blue:   #3b82f6;
+      --violet: #8b5cf6; --orange: #f97316; --teal: #14b8a6;
+      --font-display: "Outfit", system-ui, sans-serif;
+      --font-mono:    "JetBrains Mono", "Courier New", monospace;
+      --radius:       10px; --radius-lg: 16px; --radius-pill: 100px;
+      --transition:   0.22s cubic-bezier(0.22,1,0.36,1);
+    }
+    [data-theme="dark"] {
+      --bg:        #0f1020; --bg2:      #151728;
+      --surface:   #1c1f35; --surface2: #222540;
+      --border:    #2a2e4a; --border-hi:#3d4268;
+      --text:      #e8eaf6; --text2:    #9fa3c8;
+      --muted:     #5a6088; --dim:      #272b48;
+      --shadow:    rgba(0,0,0,0.35); --shadow-lg: rgba(0,0,0,0.55);
+    }
+
+    html, body {
+      width: 100%; min-height: 100%;
+      background: var(--bg); color: var(--text);
+      font-family: var(--font-display); font-size: 14px;
+      line-height: 1.5; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV BAR
+    ═══════════════════════════════════════════ */
+    .page-nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--surface);
+      border-bottom: 1.5px solid var(--border);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 24px; height: 56px;
+      box-shadow: 0 2px 16px var(--shadow);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; box-shadow: 0 4px 12px var(--accent-glow);
+    }
+    .nav-title {
+      font-size: 15px; font-weight: 800;
+      color: var(--text); letter-spacing: -0.01em;
+    }
+    .nav-title span { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .nav-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border);
+      background: var(--surface2); color: var(--text2);
+      font-family: var(--font-display); font-size: 12px;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: all var(--transition);
+    }
+    .nav-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+    .nav-btn-icon { font-size: 14px; }
+    #btn-theme-nav {
+      width: 36px; height: 36px; padding: 0; border-radius: 50%;
+      justify-content: center; font-size: 16px;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    .page-hero {
+      background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 70%);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 24px 48px;
+      text-align: center; position: relative; overflow: hidden;
+      height: 100vh;
+    }
+    .page-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, var(--accent-glow), transparent);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 14px; border-radius: var(--radius-pill);
+      background: var(--accent-soft); border: 1px solid var(--accent-glow);
+      font-size: 10px; font-weight: 800; letter-spacing: 0.3em;
+      color: var(--accent); font-family: var(--font-mono);
+      margin-bottom: 18px; text-transform: uppercase;
+    }
+    .hero-title {
+      font-size: clamp(28px, 5vw, 44px); font-weight: 900;
+      color: var(--text); letter-spacing: -0.03em;
+      line-height: 1.1; margin-bottom: 12px;
+    }
+    .hero-title span { color: var(--accent); }
+    .hero-sub {
+      font-size: 14px; color: var(--muted); max-width: 460px;
+      margin: 0 auto 32px; line-height: 1.7;
+    }
+    .hero-stats {
+      display: flex; align-items: center; justify-content: center;
+      gap: 32px; flex-wrap: wrap;
+    }
+    .hero-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .hero-stat-val {
+      font-size: 28px; font-weight: 900; color: var(--accent);
+      font-family: var(--font-mono); line-height: 1;
+    }
+    .hero-stat-key {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.3em;
+      color: var(--muted); text-transform: uppercase;
+    }
+    .hero-stat-sep { width: 1px; height: 36px; background: var(--border); }
+
+    /* ═══════════════════════════════════════════
+       PAGE LAYOUT
+    ═══════════════════════════════════════════ */
+    .page-wrap {
+      max-width: 1100px; margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: flex; flex-direction: column; gap: 48px;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION HEADERS
+    ═══════════════════════════════════════════ */
+    .section-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 12px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.4em;
+      color: var(--muted); font-family: var(--font-mono);
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .section-title {
+      font-size: 22px; font-weight: 800;
+      color: var(--text); letter-spacing: -0.02em; line-height: 1.2;
+    }
+    .section-title span { color: var(--accent); }
+    .section-count {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 12px; border-radius: var(--radius-pill);
+      background: var(--surface2); border: 1.5px solid var(--border);
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      font-family: var(--font-mono); white-space: nowrap;
+    }
+    .section-count strong { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════
+       RARITY FILTER BAR
+    ═══════════════════════════════════════════ */
+    .filter-bar {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filter-btn {
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border);
+      background: var(--surface2); color: var(--muted);
+      font-family: var(--font-display); font-size: 11px;
+      font-weight: 700; cursor: pointer;
+      transition: all var(--transition); white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--border-hi); color: var(--text2); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .filter-btn[data-rarity="bronze"].active  { background: #cd7f32; border-color: #cd7f32; }
+    .filter-btn[data-rarity="silver"].active  { background: #9ca3af; border-color: #9ca3af; }
+    .filter-btn[data-rarity="gold"].active    { background: #f5c842; border-color: #f5c842; color: #1a1200; }
+    .filter-btn[data-rarity="plat"].active    { background: #8b5cf6; border-color: #8b5cf6; }
+    .filter-btn[data-rarity="diamond"].active { background: #14b8a6; border-color: #14b8a6; }
+
+    /* ═══════════════════════════════════════════
+       BADGE GRID
+    ═══════════════════════════════════════════ */
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .badge-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 16px 16px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+      text-align: center;
+      transition: all var(--transition);
+      position: relative; overflow: visible;
+      cursor: default;
+    }
+    .badge-card::before {
+      content: ""; position: absolute;
+      inset: 0; border-radius: inherit;
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .badge-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px var(--shadow-lg); }
+    .badge-card.earned { border-color: var(--badge-col, var(--accent)); }
+    .badge-card.earned::before { background: radial-gradient(ellipse at top, var(--badge-glow-col, var(--accent-glow)), transparent 70%); opacity: 1; }
+    .badge-card.locked { opacity: 0.55; }
+
+    .badge-icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; position: relative; z-index: 1;
+      background: var(--surface2); border: 2px solid var(--border);
+      transition: all var(--transition);
+    }
+    .badge-card.earned .badge-icon-wrap {
+      background: var(--badge-col-soft, var(--accent-soft));
+      border-color: var(--badge-col, var(--accent));
+      box-shadow: 0 0 20px var(--badge-glow-col, var(--accent-glow));
+    }
+    .badge-rarity-pill {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+      padding: 2px 8px; border-radius: var(--radius-pill);
+      font-size: 8px; font-weight: 800; letter-spacing: 0.2em;
+      font-family: var(--font-mono); text-transform: uppercase;
+      background: var(--surface2); color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .badge-card.earned .badge-rarity-pill {
+      background: var(--badge-col, var(--accent));
+      border-color: transparent; color: #fff;
+    }
+    .badge-name {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      position: relative; z-index: 1; line-height: 1.3;
+    }
+    .badge-desc {
+      font-size: 11px; color: var(--muted); line-height: 1.55;
+      position: relative; z-index: 1;
+    }
+    .badge-earned-tick {
+      position: absolute; bottom: 10px; right: 10px; z-index: 2;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--badge-col, var(--accent));
+      display: none; align-items: center; justify-content: center;
+      font-size: 9px; color: #fff; font-weight: 900;
+    }
+    .badge-card.earned .badge-earned-tick { display: flex; }
+
+    /* ═══════════════════════════════════════════
+       PROGRESS BAR (badges)
+    ═══════════════════════════════════════════ */
+    .progress-wrap {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .progress-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .progress-label { font-size: 12px; font-weight: 600; color: var(--text2); }
+    .progress-nums {
+      font-size: 22px; font-weight: 900; color: var(--accent);
+      font-family: var(--font-mono);
+    }
+    .progress-nums span { font-size: 14px; color: var(--muted); font-weight: 500; }
+    .progress-track {
+      height: 8px; border-radius: var(--radius-pill);
+      background: var(--surface2); border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .rarity-breakdown {
+      display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+    }
+    .rarity-chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      font-size: 10px; font-weight: 700;
+      font-family: var(--font-mono); border: 1px solid;
+    }
+    .rarity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════
+       CERTIFICATES GRID
+    ═══════════════════════════════════════════ */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .cert-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition);
+      position: relative;
+    }
+    .cert-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px var(--shadow-lg); }
+    .cert-card.locked-cert { opacity: 0.5; }
+
+    .cert-card-top {
+      padding: 20px 20px 16px;
+      display: flex; align-items: center; gap: 14px;
+      position: relative;
+    }
+    .cert-mode-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+      border: 2px solid; transition: all var(--transition);
+    }
+    .cert-card-info { flex: 1; }
+    .cert-mode-label {
+      font-size: 9px; font-weight: 800; letter-spacing: 0.35em;
+      font-family: var(--font-mono); text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .cert-name {
+      font-size: 14px; font-weight: 800; color: var(--text);
+      line-height: 1.3; margin-bottom: 2px;
+    }
+    .cert-sub { font-size: 10px; color: var(--muted); }
+
+    .cert-status-badge {
+      position: absolute; top: 14px; right: 14px;
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      font-size: 8px; font-weight: 800; letter-spacing: 0.2em;
+      font-family: var(--font-mono); text-transform: uppercase;
+    }
+    .cert-status-badge.earned-badge { background: rgba(34,197,94,0.15); color: #16a34a; border: 1px solid rgba(34,197,94,0.3); }
+    .cert-status-badge.locked-badge { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+    .cert-card-body {
+      padding: 0 20px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .cert-stats-row {
+      display: flex; gap: 8px;
+    }
+    .cert-stat-chip {
+      flex: 1; background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 10px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .cert-stat-val {
+      font-size: 16px; font-weight: 900;
+      font-family: var(--font-mono); color: var(--text);
+    }
+    .cert-stat-key {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--muted); text-transform: uppercase;
+    }
+
+    .cert-card-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .cert-date { font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
+    .cert-view-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 16px; border-radius: var(--radius-pill);
+      border: 1.5px solid; background: transparent;
+      font-family: var(--font-display); font-size: 11px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition); text-decoration: none;
+    }
+    .cert-view-btn:hover { transform: translateY(-1px); }
+
+    .cert-locked-msg {
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ═══════════════════════════════════════════
+       EMPTY STATE
+    ═══════════════════════════════════════════ */
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 48px 24px; text-align: center;
+      background: var(--surface); border: 1.5px dashed var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
+    .empty-title { font-size: 15px; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
+    .empty-sub { font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .empty-sub strong { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════
+       CERT MODAL
+    ═══════════════════════════════════════════ */
+    .cert-modal-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(10,12,30,0.75); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; animation: fadeIn 0.2s ease;
+    }
+    .cert-modal-overlay.hidden { display: none; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .cert-modal {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px; width: min(560px, 100%);
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+      animation: slideUp 0.3s cubic-bezier(0.22,1,0.36,1);
+      scrollbar-width: thin;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    .cert-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px; border-bottom: 1px solid var(--border);
+    }
+    .cert-modal-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .cert-modal-close {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: transparent; border: 1.5px solid var(--border);
+      color: var(--muted); font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
+    }
+    .cert-modal-close:hover { border-color: var(--red); color: var(--red); background: rgba(239,68,68,0.07); }
+    .cert-modal-canvas-wrap { padding: 20px; background: var(--bg2); border-bottom: 1px solid var(--border); }
+    .cert-modal-canvas-wrap canvas { width: 100% !important; border-radius: 10px; display: block; box-shadow: 0 8px 32px var(--shadow-lg); }
+    .cert-modal-actions { padding: 16px 20px; display: flex; gap: 10px; justify-content: flex-end; }
+    .cert-modal-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 20px; border-radius: var(--radius-pill);
+      font-family: var(--font-display); font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all var(--transition); border: 1.5px solid;
+    }
+    .cert-modal-btn.primary {
+      background: var(--cert-accent, var(--accent));
+      border-color: var(--cert-accent, var(--accent));
+      color: #fff;
+      box-shadow: 0 4px 16px var(--cert-glow, var(--accent-glow));
+    }
+    .cert-modal-btn.primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .cert-modal-btn.secondary {
+      background: transparent; border-color: var(--border); color: var(--text2);
+    }
+    .cert-modal-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ═══════════════════════════════════════════
+       FAB CLUSTER (back + theme)
+    ═══════════════════════════════════════════ */
+    .fab-cluster {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 500; display: flex; flex-direction: column;
+      gap: 10px; align-items: flex-end;
+    }
+    .fab {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--surface); border: 1.5px solid var(--border);
+      color: var(--text2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px var(--shadow); font-size: 18px;
+      transition: all var(--transition);
+    }
+    .fab:hover { transform: scale(1.1); border-color: var(--accent); color: var(--accent); box-shadow: 0 8px 24px var(--accent-glow); }
+
+    /* ═══════════════════════════════════════════
+       RIPPLE
+    ═══════════════════════════════════════════ */
+    .apex-ripple {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      width: 8px; height: 8px; margin: -4px;
+      background: rgba(108,99,255,0.25);
+      animation: ripple 0.6s ease-out forwards;
+    }
+    @keyframes ripple { to { width: 200px; height: 200px; margin: -100px; opacity: 0; } }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .page-nav { padding: 0 16px; }
+      .page-hero { padding: 40px 16px 36px; }
+      .page-wrap { padding: 28px 16px 60px; gap: 36px; }
+      .hero-stats { gap: 20px; }
+      .badge-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .cert-grid  { grid-template-columns: 1fr; }
+      .hero-stat-sep { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════
+       BADGE TOOLTIP
+    ═══════════════════════════════════════════ */
+    .badge-tooltip {
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: rgba(15,16,32,0.92);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      line-height: 1.6;
+      width: 210px;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+      z-index: 20;
+      text-align: left;
+    }
+    .badge-card:hover .badge-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+    .badge-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: rgba(15,16,32,0.92) transparent transparent transparent;
+    }
+    .badge-tooltip .tt-mode {
+      font-size: 9px; font-weight: 800; letter-spacing: 0.3em;
+      text-transform: uppercase; margin-bottom: 4px;
+      font-family: var(--font-mono);
+    }
+    .badge-tooltip .tt-name {
+      font-size: 13px; font-weight: 700; margin-bottom: 4px;
+    }
+    .badge-tooltip .tt-desc {
+      color: rgba(255,255,255,0.65); font-size: 10.5px; margin-bottom: 8px;
+    }
+    .badge-tooltip .tt-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 6px 0;
+    }
+    .badge-tooltip .tt-progress { margin-bottom: 2px; }
+    .badge-tooltip .tt-status-earned { color: #4ade80; font-weight: 700; }
+    .badge-tooltip .tt-status-locked { color: #f87171; font-weight: 700; }
+    .badge-tooltip .tt-rarity { color: rgba(255,255,255,0.5); font-size: 10px; }
+
+    /* ═══════════════════════════════════════════
+       CERTIFICATE CARD TOOLTIP
+    ═══════════════════════════════════════════ */
+    .cert-tooltip {
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: rgba(15,16,32,0.95);
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      opacity: 0;
+      transition: 0.2s ease;
+      pointer-events: none;
+      width: 200px;
+      z-index: 10;
+      line-height: 1.6;
+    }
+    .cert-card:hover .cert-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .badge-card { animation: none; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="page-nav">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo">⚡</div>
+      <span class="nav-title">APE<span>X</span></span>
+    </a>
+    <div class="nav-right">
+      <a href="index.html" class="nav-btn"><span class="nav-btn-icon">🏠</span> Home</a>
+      <a href="about.html" class="nav-btn"><span class="nav-btn-icon">ℹ</span> About</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="page-hero">
+    <div class="hero-eyebrow">🏅 APEX — Phase 2</div>
+    <h1 class="hero-title">Achievements &amp; <span>Certifications</span></h1>
+    <p class="hero-sub">Track every badge you've earned and every certificate you've unlocked. Score 85%+ on any mode to claim your certificate.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="hero-earned">0</div>
+        <div class="hero-stat-key">Badges Earned</div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="hero-total">54</div>
+        <div class="hero-stat-key">Total Badges</div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="hero-certs">0</div>
+        <div class="hero-stat-key">Certificates</div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="hero-pct">0%</div>
+        <div class="hero-stat-key">Completion</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="page-wrap">
+
+    <!-- ── ACHIEVEMENTS ── -->
+    <section class="reveal" id="sec-achievements">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Phase 2 · Unlock System</div>
+          <h2 class="section-title">🏅 <span>Achievements</span></h2>
+        </div>
+        <div class="section-count" id="badge-count-label"><strong>0</strong> / 54 earned</div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-wrap reveal">
+        <div class="progress-top">
+          <span class="progress-label">Overall Progress</span>
+          <span class="progress-nums" id="prog-nums">0 <span>/ 24</span></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+        <div class="rarity-breakdown" id="rarity-breakdown"></div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar" id="badge-filter-bar">
+        <button class="filter-btn active" data-rarity="all">All</button>
+        <button class="filter-btn" data-rarity="bronze">🥉 Bronze</button>
+        <button class="filter-btn" data-rarity="silver">🥈 Silver</button>
+        <button class="filter-btn" data-rarity="gold">🥇 Gold</button>
+        <button class="filter-btn" data-rarity="plat">💜 Platinum</button>
+        <button class="filter-btn" data-rarity="diamond">💎 Diamond</button>
+        <button class="filter-btn" data-rarity="earned">✅ Earned</button>
+        <button class="filter-btn" data-rarity="locked">🔒 Locked</button>
+      </div>
+
+      <!-- Badge grid -->
+      <div class="badge-grid" id="badge-grid"></div>
+    </section>
+
+    <!-- ── CERTIFICATIONS ── -->
+    <section class="reveal" id="sec-certs">
+      <div class="section-header">
+        <div>
+          <div class="section-label">Score 85%+ on any mode</div>
+          <h2 class="section-title">🎓 <span>Certifications</span></h2>
+        </div>
+        <div class="section-count" id="cert-count-label"><strong>0</strong> / 13 earned</div>
+      </div>
+      <div class="cert-grid" id="cert-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- CERT MODAL -->
+  <div class="cert-modal-overlay hidden" id="cert-modal-overlay">
+    <div class="cert-modal" id="cert-modal">
+      <div class="cert-modal-header">
+        <span class="cert-modal-title" id="cert-modal-title">Certificate</span>
+        <button class="cert-modal-close" id="cert-modal-close">✕</button>
+      </div>
+      <div class="cert-modal-canvas-wrap">
+        <canvas id="cert-modal-canvas" width="800" height="560"></canvas>
+      </div>
+      <div class="cert-modal-actions">
+        <button class="cert-modal-btn secondary" id="cert-modal-cancel">Close</button>
+        <button class="cert-modal-btn primary" id="cert-modal-download" style="--cert-accent:#6c63ff;--cert-glow:rgba(108,99,255,0.3);">
+          ⬇ Download PNG
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <div class="fab-cluster">
+    <button class="fab" id="fab-theme" title="Toggle theme" aria-label="Toggle theme">🌓</button>
+  </div>
+
+  <script>
+  "use strict";
+
+  /* ─── Storage ─── */
+  const KEY = "apex_v5";
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }
+  function get(k, def) { const d = load(); return k in d ? d[k] : def; }
+
+  /* ─── Theme ─── */
+  function applyTheme(dark) {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  }
+  function applyAccent(color) {
+    const r = document.documentElement;
+    r.style.setProperty("--accent", color);
+    const hex = color.replace("#","");
+    const ri = parseInt(hex.slice(0,2),16), gi = parseInt(hex.slice(2,4),16), bi = parseInt(hex.slice(4,6),16);
+    r.style.setProperty("--accent-glow",`rgba(${ri},${gi},${bi},0.18)`);
+    r.style.setProperty("--accent-soft",`rgba(${ri},${gi},${bi},0.08)`);
+    r.style.setProperty("--accent2", color);
+  }
+  (function() {
+    const theme = get("theme","light"); applyTheme(theme === "dark");
+    const acc   = get("accentColor","#6c63ff"); if (acc !== "#6c63ff") applyAccent(acc);
+  })();
+
+  /* ─── Badge & Cert Definitions — Game Progression Engine ─── */
+
+  /* ── Rarity by target value ── */
+  function rarityByTarget(val) {
+    if (val >= 100) return "diamond";
+    if (val >= 50)  return "plat";
+    if (val >= 30)  return "gold";
+    if (val >= 20)  return "silver";
+    return "bronze";
+  }
+
+  /* ── Mode display labels ── */
+  const MODE_LABELS = { easy:"EASY", medium:"MEDIUM", hard:"HARD", impossible:"IMPOSSIBLE", infinite:"INFINITE" };
+
+  /* ── Per-mode icon map ── */
+  const MODE_ICONS = {
+    easy:       { complete:"🌿", no_damage:"💚", no_power:"🍃", combo:"🌀", save_power:"🌱" },
+    medium:     { complete:"⚡", no_damage:"🛡️", no_power:"🎯", combo:"💥", save_power:"💡" },
+    hard:       { complete:"🔥", no_damage:"❤️‍🔥", no_power:"🚫", combo:"🌪️", save_power:"🔐" },
+    impossible: { complete:"💀", no_damage:"☠️", no_power:"🧊", combo:"☄️", save_power:"💎" },
+  };
+
+  /* ────────────────────────────────────────────────────────────
+     GENERATOR: achievements for easy / medium / hard / impossible
+  ──────────────────────────────────────────────────────────── */
+  function generateModeAchievements(mode) {
+    const M     = mode.toUpperCase();
+    const icons = MODE_ICONS[mode];
+    const out   = [];
+
+    // 1. BASE COMPLETION
+    out.push({ id:`${mode}_complete_first`, icon:icons.complete,
+      name:`${M} - First Game`,
+      desc:`Complete your first ${M} mode game`,
+      rarity:"bronze", mode, type:"complete", target:1 });
+    [10, 20, 30, 50].forEach(n => {
+      out.push({ id:`${mode}_complete_${n}`, icon:icons.complete,
+        name:`${M} - Complete ${n}`,
+        desc:`Answer ${n} questions in ${M} mode`,
+        rarity:rarityByTarget(n), mode, type:"complete", target:n });
+    });
+
+    // 2. PERFECT RUN (no damage)
+    [10, 20, 30, 50].forEach(n => {
+      out.push({ id:`${mode}_no_damage_${n}`, icon:icons.no_damage,
+        name:`${M} - Perfect ${n}`,
+        desc:`Complete ${n} questions in ${M} without losing a heart`,
+        rarity:rarityByTarget(n), mode, type:"no_damage", target:n });
+    });
+
+    // 3. NO POWER-UPS
+    [10, 20, 30, 50].forEach(n => {
+      out.push({ id:`${mode}_no_power_${n}`, icon:icons.no_power,
+        name:`${M} - No Power ${n}`,
+        desc:`Complete ${n} questions in ${M} without using any power-ups`,
+        rarity:rarityByTarget(n), mode, type:"no_power", target:n });
+    });
+
+    // 4. COMBO SYSTEM
+    [10, 20, 30, 50].forEach(n => {
+      out.push({ id:`${mode}_combo_${n}`, icon:icons.combo,
+        name:`${M} - Combo ${n}`,
+        desc:`Build a combo streak within ${n} questions in ${M} mode`,
+        rarity:rarityByTarget(n), mode, type:"combo", target:n });
+    });
+
+    // 5. RESOURCE SAVING
+    [1, 2].forEach(n => {
+      out.push({ id:`${mode}_save_power_${n}`, icon:icons.save_power,
+        name:`${M} - Save ${n} Power-Up${n>1?"s":""}`,
+        desc:`Finish a ${M} game with at least ${n} power-up${n>1?"s":""} unused`,
+        rarity: n === 1 ? "silver" : "gold", mode, type:"save_power", target:n });
+    });
+
+    return out;
+  }
+
+  /* ────────────────────────────────────────────────────────────
+     GENERATOR: INFINITE MODE milestones
+  ──────────────────────────────────────────────────────────── */
+  function generateInfiniteAchievements() {
+    const out = [];
+
+    // Milestone badges
+    [10,20,30,40,50,60,80,100,150,175,200,250,300,400,500,550,600,700].forEach(n => {
+      out.push({ id:`infinite_milestone_${n}`, icon:"♾️",
+        name:`INFINITE - ${n} Streak`,
+        desc:`Reach a streak of ${n} in Infinite mode`,
+        rarity:rarityByTarget(n), mode:"infinite", type:"milestone", target:n });
+    });
+
+    // No-power-up milestones
+    [20,30,40,50,60,80,100,150,175,200,250,300,400,500,550,600,700].forEach(n => {
+      out.push({ id:`infinite_no_power_${n}`, icon:"🚫",
+        name:`INFINITE - No Power ${n}`,
+        desc:`Reach a streak of ${n} in Infinite mode without using any power-ups`,
+        rarity:rarityByTarget(n), mode:"infinite", type:"no_power", target:n });
+    });
+
+    return out;
+  }
+
+  /* ── Assemble full BADGES_DEF ── */
+  const BADGES_DEF = [
+    ...generateModeAchievements("easy"),
+    ...generateModeAchievements("medium"),
+    ...generateModeAchievements("hard"),
+    ...generateModeAchievements("impossible"),
+    ...generateInfiniteAchievements(),
+    // ── Legacy / Cert / Cross-mode badges (preserved) ──
+    { id:"cert_easy",        icon:"🌿", name:"Easy Graduate",       desc:"Score 85%+ on Easy mode",                  rarity:"gold",    mode:"easy"       },
+    { id:"cert_medium",      icon:"⚡", name:"Medium Master",       desc:"Score 85%+ on Medium mode",                rarity:"gold",    mode:"medium"     },
+    { id:"cert_hard",        icon:"🔥", name:"Hard Champion",       desc:"Score 85%+ on Hard mode",                  rarity:"plat",    mode:"hard"       },
+    { id:"cert_impossible",  icon:"💀", name:"Impossible Legend",   desc:"Score 85%+ on Impossible mode",            rarity:"diamond", mode:"impossible" },
+    { id:"cert_infinite",    icon:"♾️", name:"Infinity Survivor",   desc:"Score 85%+ in Infinite mode",              rarity:"diamond", mode:"infinite"   },
+    { id:"first_blood",      icon:"🎯", name:"First Blood",         desc:"Complete your first game",                  rarity:"bronze"  },
+    { id:"welcome",          icon:"👋", name:"Welcome Aboard",      desc:"Log in for the very first time",            rarity:"bronze"  },
+    { id:"first_perfect",    icon:"✨", name:"First Perfection",    desc:"Get a perfect score for the first time",    rarity:"silver"  },
+    { id:"first_cert",       icon:"📜", name:"Certified!",          desc:"Earn your first certificate",               rarity:"silver"  },
+    { id:"streak_3",         icon:"🔗", name:"Triple Threat",       desc:"Build a 3-answer streak",                  rarity:"bronze"  },
+    { id:"streak_5",         icon:"🔥", name:"On Fire",             desc:"Build a 5-answer streak",                  rarity:"silver"  },
+    { id:"streak_10",        icon:"⚡", name:"Thunderstruck",       desc:"Build a 10-answer streak",                 rarity:"gold"    },
+    { id:"streak_15",        icon:"🌪️", name:"Unstoppable",         desc:"Build a 15-answer streak",                 rarity:"plat"    },
+    { id:"streak_20",        icon:"☄️", name:"Comet Strike",        desc:"Build a 20-answer streak",                 rarity:"diamond" },
+    { id:"streak_25",        icon:"🌌", name:"Galactic Run",        desc:"Build a 25-answer streak",                 rarity:"diamond" },
+    { id:"elite_tier",       icon:"⭐", name:"Elite Performer",     desc:"Score 75%+ accuracy in any game",          rarity:"gold"    },
+    { id:"apex_tier",        icon:"🏆", name:"APEX TIER",           desc:"Score 90%+ accuracy in any game",          rarity:"diamond" },
+    { id:"perfect_health",   icon:"❤️", name:"Untouchable",         desc:"Finish a game with full health",            rarity:"silver"  },
+    { id:"survivor",         icon:"🛡️", name:"Survivor",            desc:"Finish with only 1 heart left",            rarity:"silver"  },
+    { id:"power_saver",      icon:"🧊", name:"Lifeline Saver",      desc:"Finish a game using 0 power-ups",          rarity:"silver"  },
+    { id:"explorer",         icon:"🗺️", name:"Explorer",            desc:"Play 10 games total",                      rarity:"bronze"  },
+    { id:"veteran",          icon:"🎗️", name:"Veteran",             desc:"Play 50 games total",                      rarity:"gold"    },
+    { id:"century",          icon:"💯", name:"Century Club",        desc:"Play 100 games total",                     rarity:"plat"    },
+    { id:"legend_plays",     icon:"📖", name:"Legendary Scholar",   desc:"Play 250 games total",                     rarity:"diamond" },
+    { id:"five_modes",       icon:"🏅", name:"Grand Tour",          desc:"Play all 5 modes at least once",           rarity:"silver"  },
+    { id:"all_modes",        icon:"🎖️", name:"Polymath",            desc:"Complete all 5 game modes with 85%+",      rarity:"diamond" },
+    { id:"perfect_score",    icon:"🌟", name:"Perfect Score",       desc:"Answer every question correctly",          rarity:"diamond" },
+    { id:"daily_devotee",    icon:"📅", name:"Daily Devotee",       desc:"Play at least once for 7 days in a row",  rarity:"gold"    },
+    { id:"comeback_kid",     icon:"🔄", name:"Comeback Kid",        desc:"Bounce back from 3 wrong answers to win",  rarity:"gold"    },
+  ];
+
+  /* ────────────────────────────────────────────────────────────
+     PROGRESS HELPER — reads localStorage keys set by game engine
+  ──────────────────────────────────────────────────────────── */
+  function getProgress(def) {
+    if (!def.type || !def.target) return null; // no trackable progress
+    const target = def.target;
+    let current  = 0;
+
+    try {
+      switch (def.type) {
+        case "complete":
+          current = parseInt(localStorage.getItem(`${def.mode}_totalQuestions`) || "0", 10);
+          break;
+        case "no_damage":
+          current = parseInt(localStorage.getItem(`${def.mode}_perfectRun`) || "0", 10);
+          break;
+        case "no_power":
+          current = parseInt(localStorage.getItem(`${def.mode}_noPowerRun`) || "0", 10);
+          break;
+        case "combo":
+          current = parseInt(localStorage.getItem(`${def.mode}_maxCombo`) || "0", 10);
+          break;
+        case "save_power":
+          current = parseInt(localStorage.getItem(`${def.mode}_powerUpsSaved`) || "0", 10);
+          break;
+        case "milestone":
+          current = parseInt(localStorage.getItem("infiniteBest") || "0", 10);
+          break;
+        default:
+          current = 0;
+      }
+    } catch { current = 0; }
+
+    // Clamp to target max for display
+    return { current: Math.min(current, target), target };
+  }
+
+  const RARITY_CONFIG = {
+    bronze:  { label:"Bronze",  bg:"#cd7f32", glow:"rgba(205,127,50,0.35)",  soft:"rgba(205,127,50,0.1)",  star:"#e8a84a" },
+    silver:  { label:"Silver",  bg:"#9ca3af", glow:"rgba(156,163,175,0.35)", soft:"rgba(156,163,175,0.1)", star:"#d4d5d9" },
+    gold:    { label:"Gold",    bg:"#f5c842", glow:"rgba(245,200,66,0.4)",   soft:"rgba(245,200,66,0.1)",  star:"#ffe168" },
+    plat:    { label:"Plat",    bg:"#8b5cf6", glow:"rgba(139,92,246,0.45)",  soft:"rgba(139,92,246,0.1)",  star:"#c4b5fd" },
+    diamond: { label:"Diamond", bg:"#14b8a6", glow:"rgba(20,184,166,0.5)",   soft:"rgba(20,184,166,0.1)",  star:"#5eead4" },
+  };
+
+  const CERTS = {
+    easy:       { title:"Certificate of Aptitude",          subtitle:"Easy Mode — Beginner Mastery",       accentA:"#22c55e", accentB:"#16a34a", glowCol:"rgba(34,197,94,0.25)",  tier:"🌿 EASY",       badge:"🌿", seal:"BEGINNER\nMASTERY"     },
+    medium:     { title:"Certificate of Proficiency",       subtitle:"Medium Mode — Intermediate Mastery", accentA:"#f59e0b", accentB:"#d97706", glowCol:"rgba(245,158,11,0.25)", tier:"⚡ MEDIUM",     badge:"⚡", seal:"INTERMEDIATE\nMASTERY" },
+    hard:       { title:"Certificate of Excellence",        subtitle:"Hard Mode — Advanced Mastery",       accentA:"#ef4444", accentB:"#dc2626", glowCol:"rgba(239,68,68,0.25)",  tier:"🔥 HARD",       badge:"🔥", seal:"ADVANCED\nMASTERY"     },
+    impossible: { title:"Certificate of Legendary Mastery", subtitle:"Impossible Mode — Elite Mastery",    accentA:"#8b5cf6", accentB:"#7c3aed", glowCol:"rgba(139,92,246,0.3)",  tier:"💀 IMPOSSIBLE", badge:"💀", seal:"ELITE\nMASTERY"        },
+    infinite:   { title:"Infinite Endurance Certificate",   subtitle:"Infinite Mode — Milestone Mastery",  accentA:"#14b8a6", accentB:"#0f766e", glowCol:"rgba(20,184,166,0.3)",  tier:"♾️ INFINITE",   badge:"♾️", seal:"SURVIVAL\nMASTERY"     },
+  };
+
+  const INFINITE_MILESTONES = [100, 200, 300, 400];
+
+  const MODE_META = {
+    easy:         { icon:"🌿", color:"#22c55e", colorB:"#16a34a" },
+    medium:       { icon:"⚡", color:"#f59e0b", colorB:"#d97706" },
+    hard:         { icon:"🔥", color:"#ef4444", colorB:"#dc2626" },
+    impossible:   { icon:"💀", color:"#8b5cf6", colorB:"#7c3aed" },
+    infinite:     { icon:"♾️", color:"#14b8a6", colorB:"#0f766e" },
+    blitz:        { icon:"⚡", color:"#f97316", colorB:"#ea580c" },
+    zen:          { icon:"🧘", color:"#3b82f6", colorB:"#2563eb" },
+    challenge:    { icon:"🎯", color:"#ec4899", colorB:"#db2777" },
+    speed_run:    { icon:"💨", color:"#facc15", colorB:"#eab308" },
+    accuracy:     { icon:"🔭", color:"#06b6d4", colorB:"#0891b2" },
+    streak_master:{ icon:"🔗", color:"#d946ef", colorB:"#c026d3" },
+    polymath:     { icon:"🎖️", color:"#10b981", colorB:"#059669" },
+    champion:     { icon:"👑", color:"#6366f1", colorB:"#4f46e5" },
+  };
+
+  /* ─── State ─── */
+  const earned    = get("badges", []);
+  const certs     = get("certificates", {});
+  const MODES     = ["easy","medium","hard","impossible","infinite"];
+  let   curFilter = "all";
+
+  /* ─── Hero stats ─── */
+  const earnedCount = earned.length;
+  const normalCertCount   = ["easy","medium","hard","impossible"].filter(m => certs[m] && certs[m].length > 0).length;
+  const infiniteMilestoneCount = ((certs.infinite) || []).length;
+  const certCount   = normalCertCount + infiniteMilestoneCount;
+  const totalCerts  = 4 + INFINITE_MILESTONES.length; // 4 normal + 4 milestones = 8
+  const pct         = Math.round((earnedCount / BADGES_DEF.length) * 100);
+
+  document.getElementById("hero-earned").textContent = earnedCount;
+  document.getElementById("hero-total").textContent  = BADGES_DEF.length;
+  document.getElementById("hero-certs").textContent  = certCount + " / " + totalCerts;
+  document.getElementById("hero-pct").textContent    = pct + "%";
+
+  /* ─── Progress bar ─── */
+  document.getElementById("prog-nums").innerHTML = `${earnedCount} <span>/ ${BADGES_DEF.length}</span>`;
+  setTimeout(() => {
+    document.getElementById("prog-fill").style.width = pct + "%";
+  }, 200);
+
+  /* ─── Rarity breakdown ─── */
+  const rarityBreakdown = document.getElementById("rarity-breakdown");
+  const rarOrder = ["diamond","plat","gold","silver","bronze"];
+  rarOrder.forEach(r => {
+    const cfg   = RARITY_CONFIG[r];
+    const total = BADGES_DEF.filter(b => b.rarity === r).length;
+    const got   = BADGES_DEF.filter(b => b.rarity === r && earned.includes(b.id)).length;
+    const chip  = document.createElement("div");
+    chip.className = "rarity-chip";
+    chip.style.cssText = `color:${cfg.bg};border-color:${cfg.bg}33;background:${cfg.soft};`;
+    chip.innerHTML = `<div class="rarity-dot" style="background:${cfg.bg}"></div>${cfg.label}: ${got}/${total}`;
+    rarityBreakdown.appendChild(chip);
+  });
+
+  /* ─── Badge count label ─── */
+  function updateBadgeCount() {
+    const visible = document.querySelectorAll(".badge-card:not([style*='display: none'])").length;
+    document.getElementById("badge-count-label").innerHTML = `<strong>${earnedCount}</strong> / ${BADGES_DEF.length} earned`;
+  }
+
+  /* ─── Render badges ─── */
+  function renderBadges(filter) {
+    const grid = document.getElementById("badge-grid");
+    grid.innerHTML = "";
+
+    let list = BADGES_DEF;
+    if (filter === "earned") list = BADGES_DEF.filter(b => earned.includes(b.id));
+    else if (filter === "locked") list = BADGES_DEF.filter(b => !earned.includes(b.id));
+    else if (filter !== "all") list = BADGES_DEF.filter(b => b.rarity === filter);
+
+    // Always sort: earned badges rise to the top
+    list = [...list].sort((a, b) => {
+      const aE = earned.includes(a.id) ? 0 : 1;
+      const bE = earned.includes(b.id) ? 0 : 1;
+      return aE - bE;
+    });
+
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No badges here</div><div class="empty-sub">Play more games to unlock badges in this category.</div></div>`;
+      return;
+    }
+
+    list.forEach((def, idx) => {
+      const isEarned = earned.includes(def.id);
+      const rar = RARITY_CONFIG[def.rarity] || RARITY_CONFIG.bronze;
+
+      const card = document.createElement("div");
+      card.className = `badge-card ${isEarned ? "earned" : "locked"} reveal`;
+      card.style.transitionDelay = (idx * 0.03) + "s";
+      if (isEarned) {
+        card.style.setProperty("--badge-col", rar.bg);
+        card.style.setProperty("--badge-glow-col", rar.glow);
+        card.style.setProperty("--badge-col-soft", rar.soft);
+      }
+      // Progress & tooltip data
+      const prog = getProgress(def);
+      const progressText = prog ? `${prog.current} / ${prog.target}` : "—";
+      const modeLabel = def.mode ? (MODE_LABELS[def.mode] || def.mode.toUpperCase()) : "GENERAL";
+
+      // Tooltip accent color matches rarity
+      const ttAccent = rar.bg;
+
+      card.innerHTML = `
+        <div class="badge-rarity-pill">${rar.label}</div>
+        <div class="badge-icon-wrap">${isEarned ? def.icon : "🔒"}</div>
+        <div class="badge-name">${def.name}</div>
+        <div class="badge-desc">${def.desc}</div>
+        <div class="badge-earned-tick">✓</div>
+        <div class="badge-tooltip">
+          <div class="tt-mode" style="color:${ttAccent}">${modeLabel} MODE</div>
+          <div class="tt-name">${def.name}</div>
+          <div class="tt-desc">${def.desc}</div>
+          <hr class="tt-divider"/>
+          <div class="tt-progress">Progress: <strong>${progressText}</strong></div>
+          <div>Status: <span class="${isEarned ? "tt-status-earned" : "tt-status-locked"}">${isEarned ? "✓ Earned" : "🔒 Locked"}</span></div>
+          <div class="tt-rarity">Rarity: ${rar.label}</div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Trigger reveals
+    requestAnimationFrame(() => {
+      grid.querySelectorAll(".badge-card.reveal").forEach(el => {
+        setTimeout(() => el.classList.add("visible"), 50);
+      });
+    });
+  }
+
+  renderBadges("all");
+
+  /* ─── Filter bar ─── */
+  document.getElementById("badge-filter-bar").addEventListener("click", e => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    curFilter = btn.dataset.rarity;
+    renderBadges(curFilter);
+  });
+
+  /* ─── Render certificates ─── */
+  function renderCerts() {
+    const grid = document.getElementById("cert-grid");
+    grid.innerHTML = "";
+
+    // ── Normal modes: easy / medium / hard / impossible ──
+    const normalModes = ["easy","medium","hard","impossible"];
+    normalModes.forEach((mode, idx) => {
+      const modeCerts = certs[mode] || [];
+      const isEarned  = modeCerts.length > 0;
+      const meta      = MODE_META[mode];
+      const cDef      = CERTS[mode];
+      const best      = isEarned ? [...modeCerts].sort((a,b) => (b.accuracy||0)-(a.accuracy||0))[0] : null;
+
+      const card = document.createElement("div");
+      card.className = `cert-card ${isEarned ? "" : "locked-cert"} reveal`;
+      card.style.transitionDelay = (idx * 0.06) + "s";
+
+      const description = `Score 85%+ on ${mode.charAt(0).toUpperCase()+mode.slice(1)} mode`;
+
+      card.innerHTML = `
+        <div class="cert-card-top">
+          <div class="cert-mode-icon" style="background:${meta.color}15;border-color:${meta.color}55;color:${meta.color};">${meta.icon}</div>
+          <div class="cert-card-info">
+            <div class="cert-mode-label" style="color:${meta.color};">${mode.toUpperCase()}</div>
+            <div class="cert-name">${cDef.title}</div>
+            <div class="cert-sub">${cDef.subtitle}</div>
+          </div>
+          <div class="cert-status-badge ${isEarned ? "earned-badge" : "locked-badge"}">${isEarned ? "✓ EARNED" : "LOCKED"}</div>
+        </div>
+        ${isEarned && best ? `
+        <div class="cert-card-body">
+          <div class="cert-stats-row">
+            <div class="cert-stat-chip">
+              <div class="cert-stat-val" style="color:${meta.color}">${best.accuracy}%</div>
+              <div class="cert-stat-key">Accuracy</div>
+            </div>
+            <div class="cert-stat-chip">
+              <div class="cert-stat-val">${best.score}</div>
+              <div class="cert-stat-key">Score</div>
+            </div>
+            <div class="cert-stat-chip">
+              <div class="cert-stat-val">${modeCerts.length}</div>
+              <div class="cert-stat-key">Times Earned</div>
+            </div>
+          </div>
+        </div>
+        <div class="cert-card-footer">
+          <span class="cert-date">🗓 ${best.date || ""}</span>
+          <button class="cert-view-btn" data-mode="${mode}" data-idx="0"
+            style="color:${meta.color};border-color:${meta.color}55;">
+            👁 View Certificate →
+          </button>
+        </div>
+        ` : `
+        <div class="cert-locked-msg">
+          🔒 Score <strong style="color:var(--accent);margin:0 3px;">85%+</strong> on ${mode.charAt(0).toUpperCase()+mode.slice(1)} mode to earn this certificate.
+        </div>
+        `}
+        <div class="cert-tooltip">
+          <strong>${cDef.title}</strong><br/>
+          Mode: ${mode.toUpperCase()}<br/>
+          ${description}<br/><br/>
+          Status: ${isEarned ? "Earned" : "Locked"}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // ── Infinite mode: one card per milestone ──
+    const infiniteMeta = MODE_META.infinite;
+    const infiniteDef  = CERTS.infinite;
+    const earnedInfinite = certs.infinite || [];
+
+    INFINITE_MILESTONES.forEach((level, idx) => {
+      const milestoneEntry = earnedInfinite.find(e => e.level === level);
+      const isEarned = !!milestoneEntry;
+      const card = document.createElement("div");
+      card.className = `cert-card ${isEarned ? "" : "locked-cert"} reveal`;
+      card.style.transitionDelay = ((normalModes.length + idx) * 0.06) + "s";
+
+      const description = `Complete ${level} questions in Infinite mode`;
+
+      card.innerHTML = `
+        <div class="cert-card-top">
+          <div class="cert-mode-icon" style="background:${infiniteMeta.color}15;border-color:${infiniteMeta.color}55;color:${infiniteMeta.color};">${infiniteMeta.icon}</div>
+          <div class="cert-card-info">
+            <div class="cert-mode-label" style="color:${infiniteMeta.color};">INFINITE — ${level}Q MILESTONE</div>
+            <div class="cert-name">${infiniteDef.title}</div>
+            <div class="cert-sub">Completed ${level} Questions</div>
+          </div>
+          <div class="cert-status-badge ${isEarned ? "earned-badge" : "locked-badge"}">${isEarned ? "✓ EARNED" : "LOCKED"}</div>
+        </div>
+        ${isEarned && milestoneEntry ? `
+        <div class="cert-card-body">
+          <div class="cert-stats-row">
+            <div class="cert-stat-chip">
+              <div class="cert-stat-val" style="color:${infiniteMeta.color}">${milestoneEntry.accuracy}%</div>
+              <div class="cert-stat-key">Accuracy</div>
+            </div>
+            <div class="cert-stat-chip">
+              <div class="cert-stat-val">${milestoneEntry.score}</div>
+              <div class="cert-stat-key">Score</div>
+            </div>
+            <div class="cert-stat-chip">
+              <div class="cert-stat-val">${level}</div>
+              <div class="cert-stat-key">Questions</div>
+            </div>
+          </div>
+        </div>
+        <div class="cert-card-footer">
+          <span class="cert-date">🗓 ${milestoneEntry.date || ""}</span>
+          <button class="cert-view-btn" data-mode="infinite" data-level="${level}"
+            style="color:${infiniteMeta.color};border-color:${infiniteMeta.color}55;">
+            👁 View Certificate →
+          </button>
+        </div>
+        ` : `
+        <div class="cert-locked-msg">
+          🔒 Reach <strong style="color:var(--accent);margin:0 3px;">${level} questions</strong> in Infinite mode to earn this milestone.
+        </div>
+        `}
+        <div class="cert-tooltip">
+          <strong>${infiniteDef.title}</strong><br/>
+          Mode: INFINITE<br/>
+          ${description}<br/><br/>
+          Status: ${isEarned ? "Earned" : "Locked"}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Update count label
+    const certCountEl = document.getElementById("cert-count-label");
+    certCountEl.innerHTML = `<strong>${certCount}</strong> / ${totalCerts} earned`;
+
+    // Trigger reveals
+    requestAnimationFrame(() => {
+      grid.querySelectorAll(".cert-card.reveal").forEach((el,i) => {
+        setTimeout(() => el.classList.add("visible"), 60 + i*60);
+      });
+    });
+
+    // View button clicks — normal modes
+    grid.querySelectorAll(".cert-view-btn[data-mode]:not([data-level])").forEach(btn => {
+      btn.addEventListener("click", () => openCertModal(btn.dataset.mode, 0));
+    });
+
+    // View button clicks — infinite milestones
+    grid.querySelectorAll(".cert-view-btn[data-level]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const level = parseInt(btn.dataset.level);
+        const entry = (certs.infinite || []).find(e => e.level === level);
+        if (entry) openCertModalInfinite(level, entry);
+      });
+    });
+  }
+
+  renderCerts();
+
+  /* ─── Certificate Canvas Drawing ─── */
+  function drawCertificate(canvas, mode, certData, playerName) {
+    const cDef = CERTS[mode];
+    if (!cDef) return;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // Determine if infinite milestone
+    const isInfinite = (mode === "infinite");
+    const level = certData.level || null;
+
+    // Effective title / subtitle / tier for infinite milestones
+    const effectiveTitle    = isInfinite && level ? "Infinite Endurance Certificate" : cDef.title;
+    const effectiveSubtitle = isInfinite && level ? `Completed ${level} Questions`   : cDef.subtitle;
+    const effectiveTier     = isInfinite && level ? `MILESTONE ${level}`              : cDef.tier;
+
+    // Background
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, W, H);
+
+    // Outer border double
+    ctx.strokeStyle = cDef.accentA + "88";
+    ctx.lineWidth = 3; ctx.strokeRect(18, 18, W-36, H-36);
+    ctx.strokeStyle = cDef.accentA + "44";
+    ctx.lineWidth = 1; ctx.strokeRect(26, 26, W-52, H-52);
+
+    // Top accent band
+    const grad = ctx.createLinearGradient(0,0,W,0);
+    grad.addColorStop(0, cDef.accentA); grad.addColorStop(1, cDef.accentB);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, 8);
+
+    // Subtle grid pattern
+    ctx.strokeStyle = cDef.accentA + "09";
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < W; x += 32) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += 32) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // Corner ornaments
+    [[36,36],[W-36,36],[36,H-36],[W-36,H-36]].forEach(([cx,cy]) => {
+      ctx.beginPath();
+      ctx.arc(cx,cy,14,0,Math.PI*2);
+      ctx.strokeStyle = cDef.accentA + "55"; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx,cy,8,0,Math.PI*2);
+      ctx.fillStyle = cDef.accentA + "22"; ctx.fill();
+    });
+
+    // Mode tier badge
+    ctx.fillStyle = cDef.accentA + "18";
+    roundRect(ctx, W/2-70, 52, 140, 28, 14);
+    ctx.fill();
+    ctx.font = `800 12px "JetBrains Mono", monospace`;
+    ctx.fillStyle = cDef.accentA; ctx.textAlign = "center";
+    ctx.fillText(effectiveTier, W/2, 70);
+
+    // Main title
+    ctx.font = `800 32px "Outfit", sans-serif`;
+    ctx.fillStyle = "#1a1d2e"; ctx.textAlign = "center";
+    ctx.fillText(effectiveTitle, W/2, 130);
+
+    // Subtitle line
+    ctx.fillStyle = cDef.accentA + "cc";
+    ctx.fillRect(W/2-120, 144, 240, 2);
+
+    // Presented to
+    ctx.font = `400 14px "Outfit", sans-serif`;
+    ctx.fillStyle = "#8890aa";
+    ctx.fillText("This is to certify that", W/2, 178);
+
+    // Player name
+    ctx.font = `900 40px "Outfit", sans-serif`;
+    ctx.fillStyle = "#1a1d2e";
+    ctx.fillText(playerName || "Player", W/2, 228);
+
+    // Name underline
+    const nameW = ctx.measureText(playerName || "Player").width;
+    const uGrad = ctx.createLinearGradient(W/2-nameW/2, 0, W/2+nameW/2, 0);
+    uGrad.addColorStop(0, "transparent"); uGrad.addColorStop(0.2, cDef.accentA); uGrad.addColorStop(0.8, cDef.accentA); uGrad.addColorStop(1,"transparent");
+    ctx.strokeStyle = uGrad; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(W/2-nameW/2,238); ctx.lineTo(W/2+nameW/2,238); ctx.stroke();
+
+    // Descriptor
+    ctx.font = `400 14px "Outfit", sans-serif`;
+    ctx.fillStyle = "#8890aa";
+    ctx.fillText("has successfully demonstrated mastery in", W/2, 268);
+
+    ctx.font = `700 18px "Outfit", sans-serif`;
+    ctx.fillStyle = "#1a1d2e";
+    ctx.fillText(effectiveSubtitle, W/2, 296);
+
+    // Stats row
+    const stats = [
+      { label:"ACCURACY",  val: (certData.accuracy||0)+"%"  },
+      { label:"SCORE",     val: certData.score || 0         },
+      { label:"DATE",      val: certData.date || ""         },
+    ];
+    const boxW = 140, boxH = 52, boxY = 324, gap = 12;
+    const totalW = stats.length * boxW + (stats.length-1)*gap;
+    let bx = W/2 - totalW/2;
+    stats.forEach(s => {
+      ctx.fillStyle = cDef.accentA + "12";
+      roundRect(ctx, bx, boxY, boxW, boxH, 10); ctx.fill();
+      ctx.strokeStyle = cDef.accentA + "44"; ctx.lineWidth = 1;
+      roundRect(ctx, bx, boxY, boxW, boxH, 10); ctx.stroke();
+      ctx.font = `900 20px "JetBrains Mono", monospace`;
+      ctx.fillStyle = cDef.accentA; ctx.textAlign = "center";
+      ctx.fillText(s.val, bx+boxW/2, boxY+28);
+      ctx.font = `700 9px "Outfit", sans-serif`;
+      ctx.fillStyle = "#8890aa";
+      ctx.fillText(s.label, bx+boxW/2, boxY+44);
+      bx += boxW + gap;
+    });
+
+    // Seal circle (right)
+    const sealX = W-90, sealY = H-90;
+    ctx.beginPath(); ctx.arc(sealX,sealY,44,0,Math.PI*2);
+    const sealGrad = ctx.createRadialGradient(sealX,sealY,10,sealX,sealY,44);
+    sealGrad.addColorStop(0, cDef.accentA); sealGrad.addColorStop(1, cDef.accentB);
+    ctx.fillStyle = sealGrad; ctx.fill();
+    ctx.beginPath(); ctx.arc(sealX,sealY,38,0,Math.PI*2);
+    ctx.strokeStyle = "rgba(255,255,255,0.35)"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = `900 22px "Outfit", sans-serif`;
+    ctx.fillStyle = "#fff"; ctx.textAlign = "center";
+    ctx.fillText(cDef.badge, sealX, sealY+8);
+    // Seal text around circle
+    const sealLines = cDef.seal.split("\n");
+    ctx.font = `800 8px "JetBrains Mono", monospace`;
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.fillText(sealLines[0]||"", sealX, sealY+26);
+    if (sealLines[1]) ctx.fillText(sealLines[1], sealX, sealY+36);
+
+    // Signature line
+    ctx.strokeStyle = "#1a1d2e33"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(72, H-62); ctx.lineTo(220, H-62); ctx.stroke();
+    ctx.font = `600 13px "JetBrains Mono", monospace`;
+    ctx.fillStyle = "#1a1d2e99"; ctx.textAlign = "center";
+    ctx.fillText("APEX Engine", 146, H-48);
+    ctx.font = `400 10px "Outfit", sans-serif`;
+    ctx.fillStyle = "#8890aa";
+    ctx.fillText("Authorised Signature", 146, H-34);
+
+    // Bottom accent band
+    ctx.fillStyle = grad; ctx.fillRect(0, H-8, W, 8);
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+  }
+
+  /* ─── Cert Modal ─── */
+  let currentMode = null;
+  function openCertModal(mode, idx) {
+    const modeCerts = certs[mode] || [];
+    if (!modeCerts.length) return;
+    const certData   = [...modeCerts].sort((a,b) => (b.accuracy||0)-(a.accuracy||0))[0];
+    const playerName = get("playerName","Player");
+    const cDef       = CERTS[mode];
+    currentMode      = mode;
+
+    const modal   = document.getElementById("cert-modal-overlay");
+    const canvas  = document.getElementById("cert-modal-canvas");
+    const titleEl = document.getElementById("cert-modal-title");
+    const dlBtn   = document.getElementById("cert-modal-download");
+    const meta    = MODE_META[mode];
+
+    titleEl.textContent = cDef.title;
+    dlBtn.style.setProperty("--cert-accent", meta.color);
+    dlBtn.style.setProperty("--cert-glow", `rgba(0,0,0,0.2)`);
+
+    modal.classList.remove("hidden");
+    requestAnimationFrame(() => drawCertificate(canvas, mode, certData, playerName));
+
+    dlBtn.onclick = () => {
+      const link = document.createElement("a");
+      link.download = `APEX_Certificate_${mode}_${(playerName||"Player").replace(/\s+/g,"_")}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    };
+  }
+
+  function openCertModalInfinite(level, entry) {
+    if (!entry) return;
+    const playerName = get("playerName","Player");
+    const cDef       = CERTS.infinite;
+    const meta       = MODE_META.infinite;
+    currentMode      = "infinite";
+
+    const modal   = document.getElementById("cert-modal-overlay");
+    const canvas  = document.getElementById("cert-modal-canvas");
+    const titleEl = document.getElementById("cert-modal-title");
+    const dlBtn   = document.getElementById("cert-modal-download");
+
+    titleEl.textContent = `Infinite Endurance — ${level}Q Milestone`;
+    dlBtn.style.setProperty("--cert-accent", meta.color);
+    dlBtn.style.setProperty("--cert-glow", `rgba(0,0,0,0.2)`);
+
+    modal.classList.remove("hidden");
+    requestAnimationFrame(() => drawCertificate(canvas, "infinite", entry, playerName));
+
+    dlBtn.onclick = () => {
+      const link = document.createElement("a");
+      link.download = `APEX_Certificate_Infinite_${level}Q_${(playerName||"Player").replace(/\s+/g,"_")}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    };
+  }
+
+  document.getElementById("cert-modal-close").addEventListener("click", () => {
+    document.getElementById("cert-modal-overlay").classList.add("hidden");
+  });
+  document.getElementById("cert-modal-cancel").addEventListener("click", () => {
+    document.getElementById("cert-modal-overlay").classList.add("hidden");
+  });
+  document.getElementById("cert-modal-overlay").addEventListener("click", e => {
+    if (e.target === document.getElementById("cert-modal-overlay"))
+      document.getElementById("cert-modal-overlay").classList.add("hidden");
+  });
+
+  /* ─── Theme toggle ─── */
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    applyTheme(!isDark);
+    try {
+      const d = load();
+      d.theme = !isDark ? "dark" : "light";
+      localStorage.setItem(KEY, JSON.stringify(d));
+    } catch {}
+  }
+  document.getElementById("fab-theme").addEventListener("click", toggleTheme);
+  document.getElementById("btn-theme-nav").addEventListener("click", toggleTheme);
+
+  /* ─── Ripple effect ─── */
+  document.addEventListener("click", e => {
+    const btn = e.target.closest("button, .filter-btn, .cert-view-btn, .nav-btn");
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const r = document.createElement("span");
+    r.className = "apex-ripple";
+    r.style.left = (e.clientX - rect.left) + "px";
+    r.style.top  = (e.clientY - rect.top)  + "px";
+    btn.style.position = "relative"; btn.style.overflow = "hidden";
+    btn.appendChild(r);
+    setTimeout(() => r.remove(), 600);
+  });
+
+  /* ─── Scroll reveal ─── */
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); ro.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll(".reveal").forEach(el => ro.observe(el));
+
+  /* ─── Cross-tab sync (theme/accent from game) ─── */
+  window.addEventListener("storage", e => {
+    if (e.key !== KEY) return;
+    try {
+      const data = JSON.parse(e.newValue) || {};
+      if ("theme" in data)      applyTheme(data.theme === "dark");
+      if ("accentColor" in data) applyAccent(data.accentColor);
+    } catch {}
+  });
+  </script>
+
+</body>
+</html>
