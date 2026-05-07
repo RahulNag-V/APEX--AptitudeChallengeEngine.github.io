@@ -1197,6 +1197,25 @@ const UIController = (() => {
     if (pct >= 70) {
       setTimeout(() => ParticleSystem.correctBurst(), 500);
     }
+
+    // ── Phase 2: Fire certificate & badge system ──
+    setTimeout(() => {
+      const sessionPayload = {
+        mode:            st.mode,
+        accuracy:        pct,
+        score:           st.score,
+        correct:         st.correct,
+        attempted:       st.attempted,
+        health:          st.health,
+        bestStreak:      st.bestStreak   || 0,
+        bestMultiplier:  st.bestMultiplier || 1,
+        powerUpsUsed:    (st.usedFreeze  ? 1 : 0) +
+                         (st.usedHalf    ? 1 : 0) +
+                         (st.usedSkip    ? 1 : 0),
+        speedAnswers:    st.speedAnswers  || 0,
+      };
+      window.dispatchEvent(new CustomEvent("apex:sessionComplete", { detail: sessionPayload }));
+    }, 400);
   }
 
   function renderPerformance(st, pct, log) {
@@ -2081,6 +2100,8 @@ const SettingsController = (() => {
       ctx.textAlign = "center";
       ctx.fillText(accs[i] + "%", p.x, Math.max(p.y - 7, 10));
     });
+
+    // Achievements moved to achievements.html
   }
 
   function _getFeedbackText() {
@@ -2656,3 +2677,6 @@ window.addEventListener("storage", function (e) {
     }
   } catch {}
 });
+
+/* Expose ReviewLog globally for certificate.js */
+window.ReviewLog = ReviewLog;
